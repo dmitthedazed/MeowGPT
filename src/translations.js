@@ -27,6 +27,7 @@ export const translations = {
     upgradePlan: "Upgrade plan",
     settings: "Settings",
     help: "Help",
+    madeBy: "Made by dimka and Github Copilot",
 
     // Settings Modal
     settingsTitle: "Settings",
@@ -108,6 +109,7 @@ export const translations = {
     upgradePlan: "Улучшить тариф",
     settings: "Настройки",
     help: "Помощь",
+    madeBy: "Создано dimka и Github Copilot",
 
     // Settings Modal
     settingsTitle: "Настройки",
@@ -194,6 +196,7 @@ export const translations = {
     upgradePlan: "Покращити план",
     settings: "Налаштування",
     help: "Допомога",
+    madeBy: "Створено dimka та Github Copilot",
 
     // Settings Modal
     settingsTitle: "Налаштування",
@@ -275,6 +278,7 @@ export const translations = {
     upgradePlan: "Vylepšiť plán",
     settings: "Nastavenia",
     help: "Pomoc",
+    madeBy: "Vytvoril dimka a Github Copilot",
 
     // Settings Modal
     settingsTitle: "Nastavenia",
@@ -356,6 +360,7 @@ export const translations = {
     upgradePlan: "Ulepsz plan",
     settings: "Ustawienia",
     help: "Pomoc",
+    madeBy: "Stworzone przez dimka i Github Copilot",
 
     // Settings Modal
     settingsTitle: "Ustawienia",
@@ -437,6 +442,7 @@ export const translations = {
     upgradePlan: "Meshaloob Plerg",
     settings: "Blarfy Nooboo",
     help: "Whippna Sul",
+    madeBy: "Meshaloob dimka sul Github Copilot",
 
     // Settings Modal
     settingsTitle: "Blarfy Nooboo",
@@ -517,6 +523,7 @@ export const translations = {
     upgradePlan: "Meow meow",
     settings: "Meow meow",
     help: "Meow meow",
+    madeBy: "Meow meow dimka meow Github Copilot",
 
     // Settings Modal
     settingsTitle: "Meow meow",

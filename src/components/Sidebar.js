@@ -45,23 +45,23 @@ const Sidebar = ({
               onClick={isOpen ? onReturnHome : onToggle}
             >
               <div className="logo-icon">
-                <svg 
-                  width="16" 
-                  height="16" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M12 16c-2.5 0-4.5-2-4.5-4.5S9.5 7 12 7s4.5 2 4.5 4.5S14.5 16 12 16z"/>
-                  <path d="M9 9h.01"/>
-                  <path d="M15 9h.01"/>
-                  <path d="M10.5 13.5s1 1 1.5 1 1.5-1 1.5-1"/>
-                  <path d="M4 6l2 2"/>
-                  <path d="M20 6l-2 2"/>
-                  <path d="M12 2v2"/>
+                  <path d="M12 16c-2.5 0-4.5-2-4.5-4.5S9.5 7 12 7s4.5 2 4.5 4.5S14.5 16 12 16z" />
+                  <path d="M9 9h.01" />
+                  <path d="M15 9h.01" />
+                  <path d="M10.5 13.5s1 1 1.5 1 1.5-1 1.5-1" />
+                  <path d="M4 6l2 2" />
+                  <path d="M20 6l-2 2" />
+                  <path d="M12 2v2" />
                 </svg>
               </div>
             </button>

@@ -8,6 +8,7 @@ import {
   FiLogOut,
   FiChevronRight,
   FiZap,
+  FiGithub,
   FiMessageCircle,
   FiCopy,
   FiThumbsUp,
@@ -16,6 +17,7 @@ import {
   FiShare,
   FiX,
 } from "react-icons/fi";
+import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useTranslation } from "../translations";
 
 const ChatInterface = ({
@@ -35,6 +37,7 @@ const ChatInterface = ({
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("MeowGPT");
+  const [messageRatings, setMessageRatings] = useState({});
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -170,6 +173,22 @@ const ChatInterface = ({
     }
   };
 
+  const handleRateMessage = (messageId, rating) => {
+    setMessageRatings((prev) => {
+      const newRatings = { ...prev };
+
+      // If clicking the same rating, remove it
+      if (newRatings[messageId] === rating) {
+        delete newRatings[messageId];
+      } else {
+        // Otherwise, set the new rating (this automatically overrides any previous rating)
+        newRatings[messageId] = rating;
+      }
+
+      return newRatings;
+    });
+  };
+
   const handleOpenSettings = () => {
     setIsSettingsModalOpen(true);
     setIsAccountDropdownOpen(false);
@@ -241,8 +260,15 @@ const ChatInterface = ({
             {isAccountDropdownOpen && (
               <div className="account-dropdown-menu">
                 <div className="account-info">
-                  <FiUser size={16} />
-                  <span>dmitriyuzat@gmail.com</span>
+                  <FiGithub size={16} />
+                  <a
+                    href="https://github.com/dmitthedazed"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    {t("madeBy")}
+                  </a>
                 </div>
 
                 <div className="dropdown-divider"></div>
@@ -306,13 +332,38 @@ const ChatInterface = ({
                           <FiCopy size={14} />
                         </button>
                         <button
-                          className="action-btn"
+                          className={`action-btn ${
+                            messageRatings[message.id] === "thumbsUp"
+                              ? "active"
+                              : ""
+                          }`}
                           title={t("goodResponse")}
+                          onClick={() =>
+                            handleRateMessage(message.id, "thumbsUp")
+                          }
                         >
-                          <FiThumbsUp size={14} />
+                          {messageRatings[message.id] === "thumbsUp" ? (
+                            <AiFillLike size={14} />
+                          ) : (
+                            <FiThumbsUp size={14} />
+                          )}
                         </button>
-                        <button className="action-btn" title={t("badResponse")}>
-                          <FiThumbsDown size={14} />
+                        <button
+                          className={`action-btn ${
+                            messageRatings[message.id] === "thumbsDown"
+                              ? "active"
+                              : ""
+                          }`}
+                          title={t("badResponse")}
+                          onClick={() =>
+                            handleRateMessage(message.id, "thumbsDown")
+                          }
+                        >
+                          {messageRatings[message.id] === "thumbsDown" ? (
+                            <AiFillDislike size={14} />
+                          ) : (
+                            <FiThumbsDown size={14} />
+                          )}
                         </button>
                         <button
                           className="action-btn"

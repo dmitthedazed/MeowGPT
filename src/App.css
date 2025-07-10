@@ -837,6 +837,15 @@ body {
   color: #374151;
 }
 
+.action-btn.active {
+  color: #6b7280;
+}
+
+.action-btn.active:hover {
+  background-color: var(--hover-bg);
+  color: #374151;
+}
+
 .chat-input-container {
   position: fixed;
   bottom: 20px;
@@ -1097,34 +1106,49 @@ body {
 }
 
 .settings-select {
-  padding: 12px 16px;
-  border: 1px solid var(--border-secondary);
-  border-radius: 8px;
+  padding: 14px 16px;
+  border: 2px solid var(--border-primary);
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
   color: var(--text-primary);
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   cursor: pointer;
-  min-width: 140px;
-  transition: all 0.2s ease;
+  min-width: 160px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='%23374151' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
-  background-position: right 12px center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='%23374151' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+  background-position: right 14px center;
   background-repeat: no-repeat;
-  background-size: 16px;
-  padding-right: 40px;
+  background-size: 18px;
+  padding-right: 44px;
+  position: relative;
 }
 
 .settings-select:hover {
   border-color: var(--accent-primary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--bg-primary);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.15);
 }
 
 .settings-select:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.15),
+    0 4px 12px rgba(16, 163, 127, 0.15);
+}
+
+.settings-select:active {
+  box-shadow: 0 2px 8px rgba(16, 163, 127, 0.3);
 }
 
 /* Dark theme styles for settings modal */
@@ -1168,20 +1192,72 @@ body {
 }
 
 [data-theme="dark"] .settings-select {
-  border: 1px solid var(--border-secondary);
+  border: 2px solid var(--border-primary);
   color: var(--text-primary);
-  background: var(--bg-primary);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+  background: var(--bg-secondary);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3e%3cpath stroke='%23f9fafb' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+  background-position: right 14px center;
+  background-repeat: no-repeat;
+  background-size: 18px;
 }
 
 [data-theme="dark"] .settings-select:hover {
   border-color: var(--accent-primary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  background: var(--bg-primary);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.25);
 }
 
 [data-theme="dark"] .settings-select:focus {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.2);
+  background: var(--bg-primary);
+  box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.25),
+    0 4px 12px rgba(16, 163, 127, 0.25);
+}
+
+[data-theme="dark"] .settings-select:active {
+  box-shadow: 0 2px 8px rgba(16, 163, 127, 0.3);
+}
+
+/* Enhanced dropdown options styling */
+.settings-select option {
+  padding: 12px 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.settings-select option:hover {
+  background: var(--bg-secondary);
+  color: var(--accent-primary);
+}
+
+.settings-select option:checked {
+  background: var(--accent-primary);
+  color: white;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .settings-select option {
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+[data-theme="dark"] .settings-select option:hover {
+  background: var(--bg-secondary);
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .settings-select option:checked {
+  background: var(--accent-primary);
+  color: white;
 }
 
 /* Responsive design for settings modal */
