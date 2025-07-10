@@ -5,10 +5,10 @@ import ChatInterface from "./components/ChatInterface";
 
 // LocalStorage keys
 const STORAGE_KEYS = {
-  CHATS: "chatgpt-clone-chats",
-  CURRENT_CHAT: "chatgpt-clone-current-chat",
-  THEME: "chatgpt-clone-theme",
-  LANGUAGE: "chatgpt-clone-language",
+  CHATS: "meowgpt-chats",
+  CURRENT_CHAT: "meowgpt-current-chat",
+  THEME: "meowgpt-theme",
+  LANGUAGE: "meowgpt-language",
 };
 
 // Storage utility functions

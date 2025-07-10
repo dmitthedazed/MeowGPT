@@ -32,7 +32,7 @@ const ChatInterface = ({
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("ChatGPT");
+  const [selectedModel, setSelectedModel] = useState("MeowGPT");
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -40,9 +40,17 @@ const ChatInterface = ({
   const settingsModalRef = useRef(null);
 
   const models = [
-    { id: "gpt-4", name: "ChatGPT", description: "Great for most tasks" },
-    { id: "gpt-4-turbo", name: "GPT-4 Turbo", description: "Faster responses" },
-    { id: "gpt-3.5", name: "GPT-3.5", description: "Quick and efficient" },
+    { id: "gpt-4", name: "MeowGPT", description: "Purrfect for most tasks 🐱" },
+    {
+      id: "gpt-4-turbo",
+      name: "MeowGPT Turbo",
+      description: "Fast as a cheetah 🐆",
+    },
+    {
+      id: "gpt-3.5",
+      name: "MeowGPT Mini",
+      description: "Kitten-sized efficiency 🐾",
+    },
   ];
 
   const themes = [
@@ -150,7 +158,7 @@ const ChatInterface = ({
   const handleShareMessage = (content) => {
     if (navigator.share) {
       navigator.share({
-        title: "ChatGPT Message",
+        title: "MeowGPT Message",
         text: content,
       });
     } else {
@@ -239,11 +247,6 @@ const ChatInterface = ({
                 <div className="account-menu-item">
                   <FiZap size={16} />
                   <span>Upgrade plan</span>
-                </div>
-
-                <div className="account-menu-item">
-                  <FiSettings size={16} />
-                  <span>Customize ChatGPT</span>
                 </div>
 
                 <div className="account-menu-item" onClick={handleOpenSettings}>
@@ -370,7 +373,7 @@ const ChatInterface = ({
           </form>
         </div>
         <div className="chat-info-text">
-          ChatGPT can make mistakes. Check important info.
+          MeowGPT can make mistakes. Always double-check important info! 🐾
         </div>
       </div>
 
