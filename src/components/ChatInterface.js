@@ -16,6 +16,7 @@ import {
   FiShare,
   FiX,
 } from "react-icons/fi";
+import { useTranslation } from "../translations";
 
 const ChatInterface = ({
   currentChat,
@@ -27,6 +28,7 @@ const ChatInterface = ({
   onThemeChange,
   onLanguageChange,
 }) => {
+  const { t } = useTranslation(language);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
@@ -40,36 +42,37 @@ const ChatInterface = ({
   const settingsModalRef = useRef(null);
 
   const models = [
-    { id: "gpt-4", name: "MeowGPT", description: "Purrfect for most tasks 🐱" },
+    {
+      id: "gpt-4",
+      name: t("models.MeowGPT"),
+      description: t("modelDescriptions.MeowGPT"),
+    },
     {
       id: "gpt-4-turbo",
-      name: "MeowGPT Turbo",
-      description: "Fast as a cheetah 🐆",
+      name: t("models.MeowGPT Turbo"),
+      description: t("modelDescriptions.MeowGPT Turbo"),
     },
     {
       id: "gpt-3.5",
-      name: "MeowGPT Mini",
-      description: "Kitten-sized efficiency 🐾",
+      name: t("models.MeowGPT Mini"),
+      description: t("modelDescriptions.MeowGPT Mini"),
     },
   ];
 
   const themes = [
-    { id: "light", name: "Light" },
-    { id: "dark", name: "Dark" },
-    { id: "system", name: "System" },
+    { id: "light", name: t("themes.light") },
+    { id: "dark", name: t("themes.dark") },
+    { id: "system", name: t("themes.system") },
   ];
 
   const languages = [
-    { id: "en", name: "English" },
-    { id: "es", name: "Spanish" },
-    { id: "fr", name: "French" },
-    { id: "de", name: "German" },
-    { id: "it", name: "Italian" },
-    { id: "pt", name: "Portuguese" },
-    { id: "ru", name: "Russian" },
-    { id: "zh", name: "Chinese" },
-    { id: "ja", name: "Japanese" },
-    { id: "ko", name: "Korean" },
+    { id: "en", name: t("languages.en") },
+    { id: "ru", name: t("languages.ru") },
+    { id: "uk", name: t("languages.uk") },
+    { id: "sk", name: t("languages.sk") },
+    { id: "pl", name: t("languages.pl") },
+    { id: "sim", name: t("languages.sim") },
+    { id: "meow", name: t("languages.meow") },
   ];
 
   const scrollToBottom = () => {
@@ -223,7 +226,7 @@ const ChatInterface = ({
         </div>
 
         <div className="header-right">
-          <button className="temporary-chat-btn" title="Turn on temporary chat">
+          <button className="temporary-chat-btn" title={t("temporaryChat")}>
             <FiMessageCircle size={16} />
           </button>
 
@@ -246,25 +249,25 @@ const ChatInterface = ({
 
                 <div className="account-menu-item">
                   <FiZap size={16} />
-                  <span>Upgrade plan</span>
+                  <span>{t("upgradePlan")}</span>
                 </div>
 
                 <div className="account-menu-item" onClick={handleOpenSettings}>
                   <FiSettings size={16} />
-                  <span>Settings</span>
+                  <span>{t("settings")}</span>
                 </div>
 
                 <div className="dropdown-divider"></div>
 
                 <div className="account-menu-item">
                   <FiHelpCircle size={16} />
-                  <span>Help</span>
+                  <span>{t("help")}</span>
                   <FiChevronRight size={16} className="menu-arrow" />
                 </div>
 
                 <div className="account-menu-item">
                   <FiLogOut size={16} />
-                  <span>Log out</span>
+                  <span>{t("logOut")}</span>
                 </div>
               </div>
             )}
@@ -276,10 +279,8 @@ const ChatInterface = ({
         {!currentChat || currentChat.messages.length === 0 ? (
           <div className="welcome-screen">
             <div className="welcome-cat">🐱</div>
-            <h1 className="welcome-title">Chat with MeowGPT</h1>
-            <p className="welcome-subtitle">
-              Ask me anything and I'll respond with meows! 🐾
-            </p>
+            <h1 className="welcome-title">{t("welcomeTitle")}</h1>
+            <p className="welcome-subtitle">{t("welcomeSubtitle")}</p>
           </div>
         ) : (
           <>
@@ -300,27 +301,30 @@ const ChatInterface = ({
                         <button
                           className="action-btn"
                           onClick={() => handleCopyMessage(message.content)}
-                          title="Copy"
+                          title={t("copy")}
                         >
                           <FiCopy size={14} />
                         </button>
-                        <button className="action-btn" title="Good response">
+                        <button
+                          className="action-btn"
+                          title={t("goodResponse")}
+                        >
                           <FiThumbsUp size={14} />
                         </button>
-                        <button className="action-btn" title="Bad response">
+                        <button className="action-btn" title={t("badResponse")}>
                           <FiThumbsDown size={14} />
                         </button>
                         <button
                           className="action-btn"
                           onClick={() => handleRegenerateResponse(message.id)}
-                          title="Regenerate"
+                          title={t("regenerate")}
                         >
                           <FiRefreshCw size={14} />
                         </button>
                         <button
                           className="action-btn"
                           onClick={() => handleShareMessage(message.content)}
-                          title="Share"
+                          title={t("share")}
                         >
                           <FiShare size={14} />
                         </button>
@@ -357,7 +361,7 @@ const ChatInterface = ({
             <textarea
               ref={textareaRef}
               className="chat-input"
-              placeholder="Ask anything"
+              placeholder={t("messagePlaceholder")}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -372,9 +376,7 @@ const ChatInterface = ({
             </button>
           </form>
         </div>
-        <div className="chat-info-text">
-          MeowGPT can make mistakes. Always double-check important info! 🐾
-        </div>
+        <div className="chat-info-text">{t("disclaimer")}</div>
       </div>
 
       {/* Settings Modal */}
@@ -386,7 +388,7 @@ const ChatInterface = ({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="settings-modal-header">
-              <h2>Settings</h2>
+              <h2>{t("settingsTitle")}</h2>
               <button
                 className="settings-close-btn"
                 onClick={handleCloseSettings}
@@ -397,9 +399,9 @@ const ChatInterface = ({
 
             <div className="settings-modal-content">
               <div className="settings-section">
-                <h3>Appearance</h3>
+                <h3>{t("appearance")}</h3>
                 <div className="settings-item">
-                  <label>Theme</label>
+                  <label>{t("theme")}</label>
                   <select
                     className="settings-select"
                     value={theme}
@@ -415,9 +417,9 @@ const ChatInterface = ({
               </div>
 
               <div className="settings-section">
-                <h3>General</h3>
+                <h3>{t("general")}</h3>
                 <div className="settings-item">
-                  <label>Language</label>
+                  <label>{t("language")}</label>
                   <select
                     className="settings-select"
                     value={language}

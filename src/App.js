@@ -402,6 +402,7 @@ function App() {
         onSelectChat={handleSelectChat}
         onReturnHome={handleReturnHome}
         onDeleteChat={handleDeleteChat}
+        language={language}
       />
       <ChatInterface
         currentChat={currentChat}

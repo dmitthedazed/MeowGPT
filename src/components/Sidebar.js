@@ -12,6 +12,7 @@ import {
   FiTrash2,
   FiMoreHorizontal,
 } from "react-icons/fi";
+import { useTranslation } from "../translations";
 
 const Sidebar = ({
   isOpen,
@@ -22,7 +23,9 @@ const Sidebar = ({
   onSelectChat,
   onReturnHome,
   onDeleteChat,
+  language,
 }) => {
+  const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
 
   const handleDeleteChat = (e, chatId) => {
@@ -42,7 +45,24 @@ const Sidebar = ({
               onClick={isOpen ? onReturnHome : onToggle}
             >
               <div className="logo-icon">
-                <FiZap size={16} />
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 16c-2.5 0-4.5-2-4.5-4.5S9.5 7 12 7s4.5 2 4.5 4.5S14.5 16 12 16z"/>
+                  <path d="M9 9h.01"/>
+                  <path d="M15 9h.01"/>
+                  <path d="M10.5 13.5s1 1 1.5 1 1.5-1 1.5-1"/>
+                  <path d="M4 6l2 2"/>
+                  <path d="M20 6l-2 2"/>
+                  <path d="M12 2v2"/>
+                </svg>
               </div>
             </button>
           </div>
@@ -54,17 +74,17 @@ const Sidebar = ({
         </div>
         <button className="new-chat-btn" onClick={onNewChat}>
           <FiPlus size={16} />
-          <span>New chat</span>
+          <span>{t("newChat")}</span>
         </button>
         <button className="search-chat-btn">
           <FiSearch size={16} />
-          <span>Search chats</span>
+          <span>{t("searchChats")}</span>
         </button>
       </div>
 
       <div className="sidebar-content">
         {chats.length === 0 ? (
-          <div className="no-chats">No chats yet</div>
+          <div className="no-chats">{t("noChats")}</div>
         ) : (
           chats.map((chat) => (
             <div
@@ -86,7 +106,7 @@ const Sidebar = ({
                 <button
                   className="delete-chat-btn"
                   onClick={(e) => handleDeleteChat(e, chat.id)}
-                  title="Delete chat"
+                  title={t("deleteChat")}
                 >
                   <FiTrash2 size={14} />
                 </button>
@@ -100,10 +120,8 @@ const Sidebar = ({
         <button className="upgrade-plan-btn">
           <FiZap size={20} />
           <div className="upgrade-text">
-            <div className="upgrade-title">Upgrade plan</div>
-            <div className="upgrade-subtitle">
-              More access to the best models
-            </div>
+            <div className="upgrade-title">{t("upgradeTitle")}</div>
+            <div className="upgrade-subtitle">{t("upgradeSubtitle")}</div>
           </div>
         </button>
       </div>
