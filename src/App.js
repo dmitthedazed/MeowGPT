@@ -1,7 +1,59 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+  CHATS: "chatgpt-clone-chats",
+  CURRENT_CHAT: "chatgpt-clone-current-chat",
+  THEME: "chatgpt-clone-theme",
+  LANGUAGE: "chatgpt-clone-language",
+};
+
+// Storage utility functions
+const StorageUtils = {
+  save: (key, value) => {
+    try {
+      const serializedValue = JSON.stringify(value);
+      localStorage.setItem(key, serializedValue);
+      console.log(`✅ Saved ${key}:`, value);
+      return true;
+    } catch (error) {
+      console.error(`❌ Error saving ${key}:`, error);
+      return false;
+    }
+  },
+
+  load: (key, defaultValue = null) => {
+    try {
+      const item = localStorage.getItem(key);
+      if (item === null || item === "undefined" || item === "null") {
+        console.log(
+          `📦 No data found for ${key}, using default:`,
+          defaultValue
+        );
+        return defaultValue;
+      }
+      const parsed = JSON.parse(item);
+      console.log(`📦 Loaded ${key}:`, parsed);
+      return parsed;
+    } catch (error) {
+      console.error(`❌ Error loading ${key}:`, error);
+      localStorage.removeItem(key);
+      return defaultValue;
+    }
+  },
+
+  remove: (key) => {
+    try {
+      localStorage.removeItem(key);
+      console.log(`🗑️ Removed ${key}`);
+    } catch (error) {
+      console.error(`❌ Error removing ${key}:`, error);
+    }
+  },
+};
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -9,84 +61,66 @@ function App() {
   const [currentChat, setCurrentChat] = useState(null);
   const [theme, setTheme] = useState("light");
   const [language, setLanguage] = useState("en");
-  const hasLoadedFromStorage = useRef(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load saved data from localStorage
+  // Initialize app data from localStorage
   useEffect(() => {
-    console.log("Loading from localStorage...");
+    const initializeApp = () => {
+      console.log("🚀 Initializing app...");
 
-    // Debug: Show all localStorage items
-    console.log("All localStorage items:");
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key);
-      console.log(`${key}: ${value}`);
-    }
+      // Load settings first
+      const savedTheme = StorageUtils.load(STORAGE_KEYS.THEME, "light");
+      const savedLanguage = StorageUtils.load(STORAGE_KEYS.LANGUAGE, "en");
 
-    const savedChats = localStorage.getItem("chatgpt-clone-chats");
-    const savedCurrentChat = localStorage.getItem("chatgpt-clone-current-chat");
-    const savedTheme = localStorage.getItem("chatgpt-clone-theme");
-    const savedLanguage = localStorage.getItem("chatgpt-clone-language");
-
-    console.log("Saved chats raw:", savedChats);
-    console.log("Saved current chat raw:", savedCurrentChat);
-    console.log("Saved theme:", savedTheme);
-    console.log("Saved language:", savedLanguage);
-
-    // Load theme and language immediately
-    if (savedTheme) {
       setTheme(savedTheme);
-      console.log("Theme loaded:", savedTheme);
-    }
-    if (savedLanguage) {
       setLanguage(savedLanguage);
-      console.log("Language loaded:", savedLanguage);
-    }
 
-    if (savedChats && savedChats !== "undefined" && savedChats !== "null") {
-      try {
-        const parsedChats = JSON.parse(savedChats);
-        if (Array.isArray(parsedChats)) {
-          setChats(parsedChats);
-          console.log("Chats loaded:", parsedChats);
-        }
-      } catch (error) {
-        console.error("Error parsing saved chats:", error);
-        localStorage.removeItem("chatgpt-clone-chats");
+      // Load chats
+      const savedChats = StorageUtils.load(STORAGE_KEYS.CHATS, []);
+      const savedCurrentChat = StorageUtils.load(
+        STORAGE_KEYS.CURRENT_CHAT,
+        null
+      );
+
+      // Validate and set chats
+      if (Array.isArray(savedChats)) {
+        setChats(savedChats);
+      } else {
+        console.warn("Invalid chats data, resetting...");
+        setChats([]);
       }
-    }
 
-    if (
-      savedCurrentChat &&
-      savedCurrentChat !== "undefined" &&
-      savedCurrentChat !== "null"
-    ) {
-      try {
-        const parsedCurrentChat = JSON.parse(savedCurrentChat);
-        setCurrentChat(parsedCurrentChat);
-        console.log("Current chat loaded:", parsedCurrentChat);
-      } catch (error) {
-        console.error("Error parsing saved current chat:", error);
-        localStorage.removeItem("chatgpt-clone-current-chat");
+      // Validate and set current chat
+      if (
+        savedCurrentChat &&
+        typeof savedCurrentChat === "object" &&
+        savedCurrentChat.id
+      ) {
+        setCurrentChat(savedCurrentChat);
+      } else {
+        setCurrentChat(null);
       }
-    }
 
-    hasLoadedFromStorage.current = true;
-    console.log("hasLoadedFromStorage set to true");
+      setIsInitialized(true);
+      console.log("✅ App initialized successfully");
+    };
+
+    initializeApp();
   }, []);
 
   // Apply theme to document
   useEffect(() => {
     const applyTheme = (themeToApply) => {
+      let actualTheme = themeToApply;
+
       if (themeToApply === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
+        actualTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
-        document.documentElement.setAttribute("data-theme", systemTheme);
-      } else {
-        document.documentElement.setAttribute("data-theme", themeToApply);
       }
+
+      document.documentElement.setAttribute("data-theme", actualTheme);
+      console.log(`🎨 Theme applied: ${actualTheme} (from ${themeToApply})`);
     };
 
     applyTheme(theme);
@@ -95,10 +129,9 @@ function App() {
     if (theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       const handleSystemThemeChange = (e) => {
-        document.documentElement.setAttribute(
-          "data-theme",
-          e.matches ? "dark" : "light"
-        );
+        const newTheme = e.matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", newTheme);
+        console.log(`🎨 System theme changed to: ${newTheme}`);
       };
 
       mediaQuery.addEventListener("change", handleSystemThemeChange);
@@ -107,62 +140,37 @@ function App() {
     }
   }, [theme]);
 
-  // Save data to localStorage whenever it changes
+  // Save chats to localStorage
   useEffect(() => {
-    // Only save if we've loaded from storage first (prevent saving initial empty state)
-    if (hasLoadedFromStorage.current) {
-      try {
-        localStorage.setItem("chatgpt-clone-chats", JSON.stringify(chats));
-        console.log("Chats saved:", chats);
-      } catch (error) {
-        console.error("Error saving chats to localStorage:", error);
-      }
-    }
-  }, [chats]);
+    if (!isInitialized) return;
 
-  useEffect(() => {
-    // Only save if we've loaded from storage first
-    if (hasLoadedFromStorage.current) {
-      try {
-        if (currentChat) {
-          localStorage.setItem(
-            "chatgpt-clone-current-chat",
-            JSON.stringify(currentChat)
-          );
-          console.log("Current chat saved:", currentChat);
-        } else {
-          localStorage.removeItem("chatgpt-clone-current-chat");
-          console.log("Current chat cleared");
-        }
-      } catch (error) {
-        console.error("Error saving current chat to localStorage:", error);
-      }
-    }
-  }, [currentChat]);
+    StorageUtils.save(STORAGE_KEYS.CHATS, chats);
+  }, [chats, isInitialized]);
 
+  // Save current chat to localStorage
   useEffect(() => {
-    // Save theme changes, but only after initial load or if it's not the default
-    if (hasLoadedFromStorage.current || theme !== "light") {
-      try {
-        localStorage.setItem("chatgpt-clone-theme", theme);
-        console.log("Theme saved:", theme);
-      } catch (error) {
-        console.error("Error saving theme to localStorage:", error);
-      }
-    }
-  }, [theme]);
+    if (!isInitialized) return;
 
-  useEffect(() => {
-    // Save language changes, but only after initial load or if it's not the default
-    if (hasLoadedFromStorage.current || language !== "en") {
-      try {
-        localStorage.setItem("chatgpt-clone-language", language);
-        console.log("Language saved:", language);
-      } catch (error) {
-        console.error("Error saving language to localStorage:", error);
-      }
+    if (currentChat) {
+      StorageUtils.save(STORAGE_KEYS.CURRENT_CHAT, currentChat);
+    } else {
+      StorageUtils.remove(STORAGE_KEYS.CURRENT_CHAT);
     }
-  }, [language]);
+  }, [currentChat, isInitialized]);
+
+  // Save theme to localStorage
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    StorageUtils.save(STORAGE_KEYS.THEME, theme);
+  }, [theme, isInitialized]);
+
+  // Save language to localStorage
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    StorageUtils.save(STORAGE_KEYS.LANGUAGE, language);
+  }, [language, isInitialized]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -173,23 +181,32 @@ function App() {
       id: Date.now(),
       title: "New Chat",
       messages: [],
-      createdAt: new Date(),
+      createdAt: Date.now(), // Use timestamp instead of Date object
     };
-    setChats([newChat, ...chats]);
+
+    console.log("🆕 Creating new chat:", newChat);
+    setChats((prevChats) => [newChat, ...prevChats]);
     setCurrentChat(newChat);
   };
 
   const handleSelectChat = (chat) => {
+    console.log("📱 Selecting chat:", chat);
     setCurrentChat(chat);
   };
 
   const handleReturnHome = () => {
+    console.log("🏠 Returning to home");
     setCurrentChat(null);
   };
 
   const handleDeleteChat = (chatId) => {
-    const updatedChats = chats.filter((chat) => chat.id !== chatId);
-    setChats(updatedChats);
+    console.log("🗑️ Deleting chat:", chatId);
+
+    setChats((prevChats) => {
+      const updatedChats = prevChats.filter((chat) => chat.id !== chatId);
+      console.log("Updated chats after deletion:", updatedChats);
+      return updatedChats;
+    });
 
     if (currentChat?.id === chatId) {
       setCurrentChat(null);
@@ -197,16 +214,26 @@ function App() {
   };
 
   const handleSendMessage = (message) => {
+    const messageWithTimestamp = {
+      ...message,
+      timestamp: Date.now(), // Use timestamp instead of Date object
+    };
+
     if (!currentChat) {
       // Create new chat first
       const newChat = {
         id: Date.now(),
-        title: message.content.slice(0, 30) + "...",
-        messages: [message],
-        createdAt: new Date(),
+        title:
+          message.content.length > 30
+            ? message.content.slice(0, 30) + "..."
+            : message.content,
+        messages: [messageWithTimestamp],
+        createdAt: Date.now(),
       };
 
-      setChats([newChat, ...chats]);
+      console.log("💬 Creating new chat with message:", newChat);
+
+      setChats((prevChats) => [newChat, ...prevChats]);
       setCurrentChat(newChat);
 
       // Add AI response after a delay
@@ -215,13 +242,15 @@ function App() {
           id: Date.now() + 1,
           content: "Meow! 🐱",
           sender: "ai",
-          timestamp: new Date(),
+          timestamp: Date.now(),
         };
 
         const finalChat = {
           ...newChat,
           messages: [...newChat.messages, aiResponse],
         };
+
+        console.log("🤖 Adding AI response to new chat:", finalChat);
 
         setCurrentChat(finalChat);
         setChats((prevChats) =>
@@ -233,16 +262,20 @@ function App() {
 
     const updatedChat = {
       ...currentChat,
-      messages: [...currentChat.messages, message],
+      messages: [...currentChat.messages, messageWithTimestamp],
       title:
         currentChat.title === "New Chat"
-          ? message.content.slice(0, 30) + "..."
+          ? message.content.length > 30
+            ? message.content.slice(0, 30) + "..."
+            : message.content
           : currentChat.title,
     };
 
+    console.log("💬 Adding message to existing chat:", updatedChat);
+
     setCurrentChat(updatedChat);
-    setChats(
-      chats.map((chat) => (chat.id === currentChat.id ? updatedChat : chat))
+    setChats((prevChats) =>
+      prevChats.map((chat) => (chat.id === currentChat.id ? updatedChat : chat))
     );
 
     // Add AI response after a delay
@@ -251,13 +284,15 @@ function App() {
         id: Date.now() + 1,
         content: "Meow! 🐱",
         sender: "ai",
-        timestamp: new Date(),
+        timestamp: Date.now(),
       };
 
       const finalChat = {
         ...updatedChat,
         messages: [...updatedChat.messages, aiResponse],
       };
+
+      console.log("🤖 Adding AI response to existing chat:", finalChat);
 
       setCurrentChat(finalChat);
       setChats((prevChats) =>
@@ -267,12 +302,94 @@ function App() {
   };
 
   const handleThemeChange = (newTheme) => {
+    console.log("🎨 Theme changing to:", newTheme);
     setTheme(newTheme);
   };
 
   const handleLanguageChange = (newLanguage) => {
+    console.log("🌐 Language changing to:", newLanguage);
     setLanguage(newLanguage);
   };
+
+  // Debug function to clear all localStorage data
+  const clearAllData = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to clear all data? This cannot be undone."
+      )
+    ) {
+      Object.values(STORAGE_KEYS).forEach((key) => StorageUtils.remove(key));
+      setChats([]);
+      setCurrentChat(null);
+      setTheme("light");
+      setLanguage("en");
+      console.log("🧹 All data cleared");
+    }
+  };
+
+  // Add to window for debugging (remove in production)
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      window.clearChatData = clearAllData;
+      window.showStorageData = () => {
+        console.log("📊 Current storage data:");
+        Object.entries(STORAGE_KEYS).forEach(([name, key]) => {
+          console.log(`${name}:`, StorageUtils.load(key));
+        });
+      };
+      window.testStorage = () => {
+        console.log("🧪 Testing localStorage functionality...");
+
+        // Test saving and loading
+        StorageUtils.save("test-key", { test: "data", timestamp: Date.now() });
+        const loaded = StorageUtils.load("test-key");
+        console.log("Test save/load:", loaded);
+
+        // Test current state
+        console.log("Current state:", {
+          chats: chats.length,
+          currentChat: currentChat?.id,
+          theme,
+          language,
+          isInitialized,
+        });
+
+        StorageUtils.remove("test-key");
+        console.log("✅ Storage test completed");
+      };
+    }
+  }, [chats, currentChat, theme, language, isInitialized]);
+
+  // Add development helper to show storage status
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("📊 Current app state:");
+      console.log("- Chats:", chats.length);
+      console.log("- Current chat:", currentChat?.id || "none");
+      console.log("- Theme:", theme);
+      console.log("- Language:", language);
+      console.log("- Initialized:", isInitialized);
+    }
+  }, [chats, currentChat, theme, language, isInitialized]);
+
+  // Don't render until initialized to prevent flash of empty state
+  if (!isInitialized) {
+    return (
+      <div
+        className="app"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          fontSize: "18px",
+          color: "#6b7280",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className={`app ${theme}`} data-theme={theme}>

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
-  FiMenu,
   FiSend,
   FiChevronDown,
   FiUser,
@@ -15,6 +14,7 @@ import {
   FiThumbsDown,
   FiRefreshCw,
   FiShare,
+  FiX,
 } from "react-icons/fi";
 
 const ChatInterface = ({
@@ -22,21 +22,46 @@ const ChatInterface = ({
   onSendMessage,
   isSidebarOpen,
   onToggleSidebar,
+  theme,
+  language,
+  onThemeChange,
+  onLanguageChange,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("ChatGPT");
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
+  const settingsModalRef = useRef(null);
 
   const models = [
     { id: "gpt-4", name: "ChatGPT", description: "Great for most tasks" },
     { id: "gpt-4-turbo", name: "GPT-4 Turbo", description: "Faster responses" },
     { id: "gpt-3.5", name: "GPT-3.5", description: "Quick and efficient" },
+  ];
+
+  const themes = [
+    { id: "light", name: "Light" },
+    { id: "dark", name: "Dark" },
+    { id: "system", name: "System" },
+  ];
+
+  const languages = [
+    { id: "en", name: "English" },
+    { id: "es", name: "Spanish" },
+    { id: "fr", name: "French" },
+    { id: "de", name: "German" },
+    { id: "it", name: "Italian" },
+    { id: "pt", name: "Portuguese" },
+    { id: "ru", name: "Russian" },
+    { id: "zh", name: "Chinese" },
+    { id: "ja", name: "Japanese" },
+    { id: "ko", name: "Korean" },
   ];
 
   const scrollToBottom = () => {
@@ -58,6 +83,13 @@ const ChatInterface = ({
       ) {
         setIsAccountDropdownOpen(false);
       }
+      if (
+        settingsModalRef.current &&
+        !settingsModalRef.current.contains(event.target) &&
+        event.target.classList.contains("settings-modal-overlay")
+      ) {
+        setIsSettingsModalOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,7 +105,7 @@ const ChatInterface = ({
         id: Date.now(),
         content: inputValue,
         sender: "user",
-        timestamp: new Date(),
+        timestamp: Date.now(), // Use timestamp instead of Date object
       };
 
       onSendMessage(message);
@@ -125,6 +157,23 @@ const ChatInterface = ({
       // Fallback to clipboard
       navigator.clipboard.writeText(content);
     }
+  };
+
+  const handleOpenSettings = () => {
+    setIsSettingsModalOpen(true);
+    setIsAccountDropdownOpen(false);
+  };
+
+  const handleCloseSettings = () => {
+    setIsSettingsModalOpen(false);
+  };
+
+  const handleThemeChangeLocal = (newTheme) => {
+    onThemeChange(newTheme);
+  };
+
+  const handleLanguageChangeLocal = (newLanguage) => {
+    onLanguageChange(newLanguage);
   };
 
   return (
@@ -197,7 +246,7 @@ const ChatInterface = ({
                   <span>Customize ChatGPT</span>
                 </div>
 
-                <div className="account-menu-item">
+                <div className="account-menu-item" onClick={handleOpenSettings}>
                   <FiSettings size={16} />
                   <span>Settings</span>
                 </div>
@@ -324,6 +373,65 @@ const ChatInterface = ({
           ChatGPT can make mistakes. Check important info.
         </div>
       </div>
+
+      {/* Settings Modal */}
+      {isSettingsModalOpen && (
+        <div className="settings-modal-overlay" onClick={handleCloseSettings}>
+          <div
+            ref={settingsModalRef}
+            className="settings-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="settings-modal-header">
+              <h2>Settings</h2>
+              <button
+                className="settings-close-btn"
+                onClick={handleCloseSettings}
+              >
+                <FiX size={20} />
+              </button>
+            </div>
+
+            <div className="settings-modal-content">
+              <div className="settings-section">
+                <h3>Appearance</h3>
+                <div className="settings-item">
+                  <label>Theme</label>
+                  <select
+                    className="settings-select"
+                    value={theme}
+                    onChange={(e) => handleThemeChangeLocal(e.target.value)}
+                  >
+                    {themes.map((themeOption) => (
+                      <option key={themeOption.id} value={themeOption.id}>
+                        {themeOption.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="settings-section">
+                <h3>General</h3>
+                <div className="settings-item">
+                  <label>Language</label>
+                  <select
+                    className="settings-select"
+                    value={language}
+                    onChange={(e) => handleLanguageChangeLocal(e.target.value)}
+                  >
+                    {languages.map((lang) => (
+                      <option key={lang.id} value={lang.id}>
+                        {lang.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
