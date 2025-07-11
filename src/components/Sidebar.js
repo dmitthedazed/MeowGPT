@@ -2,15 +2,10 @@ import React, { useState } from "react";
 import {
   FiPlus,
   FiMessageSquare,
-  FiUser,
-  FiSettings,
-  FiHelpCircle,
-  FiLogOut,
   FiZap,
   FiSearch,
   FiX,
   FiTrash2,
-  FiMoreHorizontal,
 } from "react-icons/fi";
 import { useTranslation } from "../translations";
 

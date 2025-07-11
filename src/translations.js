@@ -149,11 +149,6 @@ export const translations = {
     badResponse: "Плохой ответ",
     regenerate: "Перегенерировать",
     share: "Поделиться",
-    temporaryChat: "Включить временный чат",
-    goodResponse: "Хороший ответ",
-    badResponse: "Плохой ответ",
-    regenerate: "Регенерировать",
-    share: "Поделиться",
 
     // Common
     close: "Закрыть",
