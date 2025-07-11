@@ -254,7 +254,7 @@ const ChatInterface = ({
               className="account-dropdown-trigger"
               onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
             >
-              <div className="account-avatar">D</div>
+              <div className="account-avatar">A</div>
             </button>
 
             {isAccountDropdownOpen && (
