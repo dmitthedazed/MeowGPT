@@ -2,6 +2,22 @@
 
 A delightful chat interface with feline intelligence! MeowGPT is a React-based web application that provides a ChatGPT-like experience with a cute cat theme and multi-language support.
 
+## 💡 Inspiration
+
+MeowGPT was inspired by the viral sensation **[CatGPT](https://github.com/woutervdijke/CatGPT)** - a brilliant parody that took the internet by storm in early 2023. What started as a humorous take on AI assistants quickly became a cultural phenomenon, garnering coverage from major tech publications and capturing the hearts of cat lovers worldwide.
+
+Building upon this purrfect foundation, MeowGPT expands the concept into a fully-featured chat application with enhanced functionality, multi-language support, and a polished user experience that brings the whimsical world of feline AI to life. 🐾
+
+### 🌟 Original CatGPT - _As seen on:_
+
+**[The Verge](https://www.theverge.com/2023/2/1/23580953/forget-about-chatgpt-meow-theres-catgpt) | [NPR](https://www.npr.org/transcripts/1153728071) | [franceinfo](https://www.francetvinfo.fr/live/message/63d/8d9/e6a/37a/44f/9f5/2b1/3ed.html) | [Futurism](https://futurism.com/the-byte/catgpt-ai-answers-cat) | [Hacker News](https://news.ycombinator.com/item?id=34610292)**
+
+**Try the original CatGPT at [catgpt.wvd.io](https://catgpt.wvd.io)**
+
+<img src="https://user-images.githubusercontent.com/15675775/215778138-072b609a-e282-46a4-b345-3f524a85765f.jpg" width="500" height="auto" />
+
+**Original repo:** https://github.com/woutervdijke/CatGPT
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -29,47 +45,6 @@ A delightful chat interface with feline intelligence! MeowGPT is a React-based w
 - **MeowGPT**: Perfect for most tasks 🐱
 - **MeowGPT Turbo**: Fast as a cheetah 🐆
 - **MeowGPT Mini**: Kitten-sized efficiency 🐾
-
-### 💬 Chat Features
-
-- **Message Actions**: Copy, rate (thumbs up/down), regenerate, and share messages
-- **Typing Indicators**: Visual feedback when AI is responding
-- **Auto-scrolling**: Messages automatically scroll to the latest
-- **Chat History**: Browse and search through previous conversations
-- **Chat Deletion**: Remove unwanted conversations
-
-### 🔧 Advanced Features
-
-- **Settings Modal**: Centralized configuration for themes and languages
-- **Temporary Chat Mode**: Option for temporary conversations
-- **Message Rating System**: Rate AI responses for quality feedback
-- **Keyboard Shortcuts**: Press Enter to send, Shift+Enter for new lines
-- **Auto-resize Input**: Text area automatically adjusts to content
-- **Welcome Screen**: Friendly introduction for new users
-
-### 📱 User Interface
-
-- **Collapsible Sidebar**: Expandable/collapsible navigation panel
-- **Modern Design**: Clean, intuitive ChatGPT-inspired interface
-- **Cat-themed Elements**: Adorable cat emojis and feline-inspired design
-- **Responsive Layout**: Adapts to different screen sizes
-- **Smooth Animations**: Polished transitions and hover effects
-
-### 🛠️ Technical Features
-
-- **LocalStorage Integration**: Robust data persistence with error handling
-- **React Hooks**: Modern React functional components with hooks
-- **Icon Library**: Comprehensive icon set using React Icons (Feather Icons)
-- **CSS Theming**: Dynamic theming system with CSS custom properties
-- **Development Tools**: Built-in debugging utilities for development
-
-### 🌟 Special Features
-
-- **Chat Titles**: Automatic title generation from first message
-- **Message Timestamps**: Track when messages were sent
-- **Error Handling**: Graceful error handling for storage operations
-- **Performance Optimized**: Efficient rendering and state management
-- **Accessibility**: Semantic HTML and keyboard navigation support
 
 ## 🚀 Getting Started
 
@@ -166,12 +141,6 @@ This project is configured for easy deployment to GitHub Pages:
 2. Type your message in the input field
 3. Press Enter or click the send button
 4. Enjoy the meow-some responses! 🐾
-
-### Managing Chats
-
-- **Switch Chats**: Click on any chat in the sidebar to open it
-- **Delete Chats**: Hover over a chat and click the trash icon
-- **Search Chats**: Use the search functionality to find specific conversations
 
 ### Customizing Your Experience
 
@@ -303,16 +272,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Inspired by**: ChatGPT's interface design
 - **Icons**: Feather Icons via React Icons
 - **Special Thanks**: To all the cats who provided moral support during development 🐱
-
-## 📞 Support
-
-If you encounter any issues or have questions:
-
-1. Check the browser console for error messages
-2. Try clearing your browser's localStorage
-3. Ensure you're using a modern browser with JavaScript enabled
-
----
 
 **Made with ❤️ and lots of meows!** 🐾
 

@@ -18,20 +18,24 @@ const SUPPORTED_LANGUAGES = ["en", "ru", "uk", "sk", "pl", "sim", "meow"];
 const detectUserLanguage = () => {
   // Get browser language
   const browserLanguage = navigator.language || navigator.userLanguage;
-  
+
   // Extract language code (e.g., "en-US" -> "en")
   const languageCode = browserLanguage.split("-")[0].toLowerCase();
-  
-  console.log(`🌐 Browser language: ${browserLanguage}, detected code: ${languageCode}`);
-  
+
+  console.log(
+    `🌐 Browser language: ${browserLanguage}, detected code: ${languageCode}`
+  );
+
   // Check if the language is supported
   if (SUPPORTED_LANGUAGES.includes(languageCode)) {
     console.log(`✅ Language ${languageCode} is supported`);
     return languageCode;
   }
-  
+
   // Fallback to English if not supported
-  console.log(`❌ Language ${languageCode} not supported, falling back to English`);
+  console.log(
+    `❌ Language ${languageCode} not supported, falling back to English`
+  );
   return "en";
 };
 
@@ -79,6 +83,84 @@ const StorageUtils = {
   },
 };
 
+// Function to generate random meow responses
+const generateRandomMeowResponse = () => {
+  const meowVariations = [
+    "meow",
+    "mrow",
+    "mew",
+    "mrrow",
+    "meow",
+    "miau",
+    "nyaa",
+  ];
+  const catEmojis = [
+    "🐱",
+    "🐈",
+    "🐾",
+    "😸",
+    "😺",
+    "😻",
+    "😼",
+    "😽",
+    "🙀",
+    "😿",
+    "😾",
+    "🐈‍⬛",
+  ];
+  const heartEmojis = [
+    "💕",
+    "💖",
+    "💗",
+    "💝",
+    "💘",
+    "💙",
+    "💚",
+    "💛",
+    "🧡",
+    "💜",
+    "🤍",
+    "🖤",
+  ];
+  const sparkleEmojis = ["✨", "⭐", "🌟", "💫", "⚡", "🔥"];
+
+  // Random number of meows (1-35)
+  const meowCount = Math.floor(Math.random() * 35) + 1;
+
+  let response = "";
+
+  // Generate meows
+  for (let i = 0; i < meowCount; i++) {
+    const randomMeow =
+      meowVariations[Math.floor(Math.random() * meowVariations.length)];
+    response += randomMeow;
+
+    // Add space between meows (except for the last one)
+    if (i < meowCount - 1) {
+      response += " ";
+    }
+  }
+
+  // Capitalize the first letter
+  response = response.charAt(0).toUpperCase() + response.slice(1);
+
+  // 60% chance to add random emoji
+  if (Math.random() < 0.6) {
+    const allEmojis = [...catEmojis, ...heartEmojis, ...sparkleEmojis];
+    const randomEmoji = allEmojis[Math.floor(Math.random() * allEmojis.length)];
+    response += " " + randomEmoji;
+
+    // 20% chance to add a second emoji
+    if (Math.random() < 0.2) {
+      const secondEmoji =
+        allEmojis[Math.floor(Math.random() * allEmojis.length)];
+      response += " " + secondEmoji;
+    }
+  }
+
+  return response;
+};
+
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(
     window.innerWidth > 768 // Open by default on desktop, closed on mobile
@@ -96,7 +178,10 @@ function App() {
 
       // Load settings first - default to "system" theme to follow OS preference
       const savedTheme = StorageUtils.load(STORAGE_KEYS.THEME, "system");
-      const savedLanguage = StorageUtils.load(STORAGE_KEYS.LANGUAGE, detectUserLanguage());
+      const savedLanguage = StorageUtils.load(
+        STORAGE_KEYS.LANGUAGE,
+        detectUserLanguage()
+      );
 
       setTheme(savedTheme);
       setLanguage(savedLanguage);
@@ -266,7 +351,7 @@ function App() {
       setTimeout(() => {
         const aiResponse = {
           id: Date.now() + 1,
-          content: "Meow! 🐱",
+          content: generateRandomMeowResponse(),
           sender: "ai",
           timestamp: Date.now(),
         };
@@ -308,7 +393,7 @@ function App() {
     setTimeout(() => {
       const aiResponse = {
         id: Date.now() + 1,
-        content: "Meow! 🐱",
+        content: generateRandomMeowResponse(),
         sender: "ai",
         timestamp: Date.now(),
       };
@@ -390,6 +475,13 @@ function App() {
         console.log("Supported languages:", SUPPORTED_LANGUAGES);
         console.log("Current language:", language);
         console.log("✅ Language detection test completed");
+      };
+      window.testRandomMeow = () => {
+        console.log("🧪 Testing random meow generation...");
+        for (let i = 0; i < 5; i++) {
+          console.log(`Sample ${i + 1}:`, generateRandomMeowResponse());
+        }
+        console.log("✅ Random meow test completed");
       };
     }
   }, [chats, currentChat, theme, language, isInitialized]);
