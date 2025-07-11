@@ -14,7 +14,7 @@
   --accent-tertiary: #047857;
   --hover-bg: #f3f4f6;
   --active-bg: #e5e7eb;
-  
+
   /* Safe area variables for mobile browsers */
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
