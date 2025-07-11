@@ -45,13 +45,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -127,13 +127,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -209,13 +209,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -291,13 +291,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -373,13 +373,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -455,13 +455,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
@@ -536,13 +536,13 @@ export const translations = {
 
     // Languages
     languages: {
-      en: "English",
-      ru: "Русский",
-      uk: "Українська",
-      sk: "Slovenčina",
-      pl: "Polski",
-      sim: "Simlish",
-      meow: "Meow",
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
     },
 
     // Footer
