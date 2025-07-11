@@ -52,6 +52,7 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Slay Language",
     },
 
     // Footer
@@ -570,6 +571,88 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Meow meow",
     upgradeSubtitle: "Meow meow meow meow meow",
+  },
+
+  twink: {
+    // Header and Navigation
+    newChat: "YASSS GIRL 💜",
+    searchChats: "SLAY QUEEN 💜",
+
+    // Chat Interface
+    welcomeTitle: "SERVING CUNT WITH MEOWGPT 💜",
+    welcomeSubtitle: "QUEEN BADDIE ATE AND LEFT NO CRUMBS 💜",
+    messagePlaceholder: "DIVA SPILL THE TEA 💜",
+
+    // Models
+    models: {
+      MeowGPT: "YASSS DIVA 💜",
+      "MeowGPT Turbo": "SLAY BADDIE 💜",
+      "MeowGPT Mini": "BRAT QUEEN 💜",
+    },
+
+    modelDescriptions: {
+      MeowGPT: "ATE AND LEFT NO CRUMBS 💜",
+      "MeowGPT Turbo": "SERVING CUNT PERIOD 💜",
+      "MeowGPT Mini": "QUEEN BADDIE ENERGY 💜",
+    },
+
+    // Account Menu
+    upgradePlan: "SLAY QUEEN 💜",
+    settings: "DIVA SETTINGS 💜",
+    help: "YASSS HELP 💜",
+    madeBy: "BADDIE CREATORS ATE 💜",
+
+    // Settings Modal
+    settingsTitle: "QUEEN SETTINGS 💜",
+    appearance: "SERVING LOOKS 💜",
+    theme: "DIVA VIBES 💜",
+    language: "SLAY LANGUAGE 💜",
+    general: "YASSS GENERAL 💜",
+
+    // Theme Options
+    themes: {
+      light: "YASSS LIGHT 💜",
+      dark: "SLAY DARK 💜",
+      system: "QUEEN SYSTEM 💜",
+    },
+
+    // Languages
+    languages: {
+      en: "🇺🇸 YASSS ENGLISH 💜",
+      ru: "🇷🇺 SLAY RUSSIAN 💜",
+      uk: "🇺🇦 QUEEN UKRAINIAN 💜",
+      sk: "🇸🇰 BADDIE SLOVAK 💜",
+      pl: "🇵🇱 DIVA POLISH 💜",
+      sim: "🎮 BRAT SIMLISH 💜",
+      meow: "🐱 ATE MEOW 💜",
+      twink: "💜 SERVING CUNT 💜",
+    },
+
+    // Footer
+    disclaimer: "GIRL PERIOD CHECK YOUR FAGGOTS 💜",
+
+    // Buttons
+    send: "YASSS 💜",
+    copy: "SLAY 💜",
+    deleteChat: "BADDIE DELETE 💜",
+    temporaryChat: "BRAT CHAT 💜",
+    goodResponse: "ATE 💜",
+    badResponse: "GIRL NO 💜",
+    regenerate: "QUEEN REDO 💜",
+    share: "DIVA SHARE 💜",
+
+    // Common
+    close: "PERIOD 💜",
+
+    // Sidebar
+    noChats: "SERVING CUNT NO CHATS 💜",
+
+    // Account Menu
+    logOut: "YASSS BYE 💜",
+
+    // Upgrade
+    upgradeTitle: "SLAY UPGRADE 💜",
+    upgradeSubtitle: "QUEEN BADDIE LEFT NO CRUMBS 💜",
   },
 };
 

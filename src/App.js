@@ -12,7 +12,16 @@ const STORAGE_KEYS = {
 };
 
 // Supported languages
-const SUPPORTED_LANGUAGES = ["en", "ru", "uk", "sk", "pl", "sim", "meow"];
+const SUPPORTED_LANGUAGES = [
+  "en",
+  "ru",
+  "uk",
+  "sk",
+  "pl",
+  "sim",
+  "meow",
+  "twink",
+];
 
 // Function to detect user's preferred language
 const detectUserLanguage = () => {
