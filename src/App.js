@@ -61,7 +61,7 @@ function App() {
   );
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("system");
   const [language, setLanguage] = useState("en");
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -70,8 +70,8 @@ function App() {
     const initializeApp = () => {
       console.log("🚀 Initializing app...");
 
-      // Load settings first
-      const savedTheme = StorageUtils.load(STORAGE_KEYS.THEME, "light");
+      // Load settings first - default to "system" theme to follow OS preference
+      const savedTheme = StorageUtils.load(STORAGE_KEYS.THEME, "system");
       const savedLanguage = StorageUtils.load(STORAGE_KEYS.LANGUAGE, "en");
 
       setTheme(savedTheme);
@@ -323,7 +323,7 @@ function App() {
       Object.values(STORAGE_KEYS).forEach((key) => StorageUtils.remove(key));
       setChats([]);
       setCurrentChat(null);
-      setTheme("light");
+      setTheme("system");
       setLanguage("en");
       console.log("🧹 All data cleared");
     }
