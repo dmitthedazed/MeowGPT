@@ -14,13 +14,14 @@ A delightful chat interface with feline intelligence! MeowGPT is a React-based w
 ### 🌍 Internationalization
 
 - **7 Language Support**: English, Russian, Ukrainian, Slovak, Polish, Simlish, and Meow
+- **Auto Language Detection**: Automatically detects browser language and defaults to supported language
 - **Dynamic Language Switching**: Change language on-the-fly without losing context
 - **Complete Localization**: All UI elements and messages are translated
 
 ### 🎨 Themes & Customization
 
 - **Multiple Theme Options**: Light, Dark, and System themes
-- **Automatic Theme Detection**: System theme follows your OS preference
+- **Automatic Theme Detection**: System theme follows your OS preference (default)
 - **Persistent Theme Settings**: Your theme choice is remembered across sessions
 
 ### 🤖 AI Models
@@ -267,6 +268,7 @@ In development mode, open the browser console and use:
 - `clearChatData()`: Clear all stored data
 - `showStorageData()`: Display current storage state
 - `testStorage()`: Test localStorage functionality
+- `testLanguageDetection()`: Test browser language detection
 
 ### Available Scripts
 

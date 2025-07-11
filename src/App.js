@@ -11,6 +11,30 @@ const STORAGE_KEYS = {
   LANGUAGE: "meowgpt-language",
 };
 
+// Supported languages
+const SUPPORTED_LANGUAGES = ["en", "ru", "uk", "sk", "pl", "sim", "meow"];
+
+// Function to detect user's preferred language
+const detectUserLanguage = () => {
+  // Get browser language
+  const browserLanguage = navigator.language || navigator.userLanguage;
+  
+  // Extract language code (e.g., "en-US" -> "en")
+  const languageCode = browserLanguage.split("-")[0].toLowerCase();
+  
+  console.log(`🌐 Browser language: ${browserLanguage}, detected code: ${languageCode}`);
+  
+  // Check if the language is supported
+  if (SUPPORTED_LANGUAGES.includes(languageCode)) {
+    console.log(`✅ Language ${languageCode} is supported`);
+    return languageCode;
+  }
+  
+  // Fallback to English if not supported
+  console.log(`❌ Language ${languageCode} not supported, falling back to English`);
+  return "en";
+};
+
 // Storage utility functions
 const StorageUtils = {
   save: (key, value) => {
@@ -62,7 +86,7 @@ function App() {
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [theme, setTheme] = useState("system");
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(detectUserLanguage());
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize app data from localStorage
@@ -72,7 +96,7 @@ function App() {
 
       // Load settings first - default to "system" theme to follow OS preference
       const savedTheme = StorageUtils.load(STORAGE_KEYS.THEME, "system");
-      const savedLanguage = StorageUtils.load(STORAGE_KEYS.LANGUAGE, "en");
+      const savedLanguage = StorageUtils.load(STORAGE_KEYS.LANGUAGE, detectUserLanguage());
 
       setTheme(savedTheme);
       setLanguage(savedLanguage);
@@ -324,7 +348,7 @@ function App() {
       setChats([]);
       setCurrentChat(null);
       setTheme("system");
-      setLanguage("en");
+      setLanguage(detectUserLanguage());
       console.log("🧹 All data cleared");
     }
   };
@@ -358,6 +382,14 @@ function App() {
 
         StorageUtils.remove("test-key");
         console.log("✅ Storage test completed");
+      };
+      window.testLanguageDetection = () => {
+        console.log("🧪 Testing language detection...");
+        console.log("Browser language:", navigator.language);
+        console.log("Detected language:", detectUserLanguage());
+        console.log("Supported languages:", SUPPORTED_LANGUAGES);
+        console.log("Current language:", language);
+        console.log("✅ Language detection test completed");
       };
     }
   }, [chats, currentChat, theme, language, isInitialized]);
