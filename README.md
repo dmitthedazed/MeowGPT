@@ -106,6 +106,57 @@ A delightful chat interface with feline intelligence! MeowGPT is a React-based w
 npm run build
 ```
 
+## 🌐 Deployment
+
+### GitHub Pages
+
+This project is configured for easy deployment to GitHub Pages:
+
+#### Automatic Deployment
+
+1. Push your code to the `main` or `master` branch
+2. GitHub Actions will automatically build and deploy your site
+3. Your app will be available at `https://yourusername.github.io/MeowGPT`
+
+#### Manual Deployment
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Deploy to GitHub Pages:
+   ```bash
+   npm run deploy
+   ```
+
+#### Setup Instructions
+
+1. **Update homepage URL**: In `package.json`, update the `homepage` field:
+
+   ```json
+   "homepage": "https://yourusername.github.io/your-repo-name"
+   ```
+
+2. **Enable GitHub Pages**:
+
+   - Go to your repository settings
+   - Navigate to "Pages" section
+   - Select "Deploy from a branch"
+   - Choose "gh-pages" branch as the source
+
+3. **Configure GitHub Actions** (optional):
+   - The included workflow (`.github/workflows/deploy.yml`) will automatically deploy on push to main/master
+   - No additional configuration needed
+
+### Other Deployment Options
+
+- **Netlify**: Drag and drop the `build` folder
+- **Vercel**: Connect your GitHub repository
+- **AWS S3**: Upload the `build` folder to S3 bucket
+- **Firebase Hosting**: Use Firebase CLI to deploy
+
 ## 🎮 Usage
 
 ### Starting a New Chat
