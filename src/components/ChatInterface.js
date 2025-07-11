@@ -15,6 +15,7 @@ import {
   FiRefreshCw,
   FiShare,
   FiX,
+  FiMenu,
 } from "react-icons/fi";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useTranslation } from "../translations";
@@ -37,6 +38,8 @@ const ChatInterface = ({
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("MeowGPT");
   const [messageRatings, setMessageRatings] = useState({});
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -205,42 +208,94 @@ const ChatInterface = ({
     onLanguageChange(newLanguage);
   };
 
+  // Touch handlers for swipe gestures
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+
+    // Swipe right to open sidebar (when closed)
+    if (distance < -minSwipeDistance && !isSidebarOpen) {
+      onToggleSidebar();
+    }
+
+    // Swipe left to close sidebar (when open)
+    if (distance > minSwipeDistance && isSidebarOpen) {
+      onToggleSidebar();
+    }
+  };
+
+  // Mobile input focus handler
+  const handleInputFocus = () => {
+    // Close sidebar on mobile when input gets focus
+    if (window.innerWidth <= 768 && isSidebarOpen) {
+      onToggleSidebar();
+    }
+  };
+
   return (
-    <div className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""}`}>
+    <div
+      className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="chat-header">
-        <div className="model-dropdown" ref={dropdownRef}>
+        <div className="header-left">
           <button
-            className="model-dropdown-trigger"
-            onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+            className="hamburger-menu mobile-only"
+            onClick={onToggleSidebar}
+            title="Toggle menu"
           >
-            <span className="model-name">{selectedModel}</span>
-            <FiChevronDown
-              size={16}
-              className={`dropdown-arrow ${isModelDropdownOpen ? "open" : ""}`}
-            />
+            <FiMenu size={20} />
           </button>
 
-          {isModelDropdownOpen && (
-            <div className="model-dropdown-menu">
-              {models.map((model) => (
-                <div
-                  key={model.id}
-                  className={`model-option ${
-                    selectedModel === model.name ? "selected" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedModel(model.name);
-                    setIsModelDropdownOpen(false);
-                  }}
-                >
-                  <div className="model-option-name">{model.name}</div>
-                  <div className="model-option-description">
-                    {model.description}
+          <div className="model-dropdown" ref={dropdownRef}>
+            <button
+              className="model-dropdown-trigger"
+              onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+            >
+              <span className="model-name">{selectedModel}</span>
+              <FiChevronDown
+                size={16}
+                className={`dropdown-arrow ${
+                  isModelDropdownOpen ? "open" : ""
+                }`}
+              />
+            </button>
+
+            {isModelDropdownOpen && (
+              <div className="model-dropdown-menu">
+                {models.map((model) => (
+                  <div
+                    key={model.id}
+                    className={`model-option ${
+                      selectedModel === model.name ? "selected" : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedModel(model.name);
+                      setIsModelDropdownOpen(false);
+                    }}
+                  >
+                    <div className="model-option-name">{model.name}</div>
+                    <div className="model-option-description">
+                      {model.description}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="header-right">
@@ -416,6 +471,7 @@ const ChatInterface = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               rows="1"
+              onFocus={handleInputFocus} // Close sidebar on input focus
             />
             <button
               type="submit"

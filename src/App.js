@@ -56,7 +56,9 @@ const StorageUtils = {
 };
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    window.innerWidth > 768 // Open by default on desktop, closed on mobile
+  );
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [theme, setTheme] = useState("light");
@@ -403,6 +405,11 @@ function App() {
         onReturnHome={handleReturnHome}
         onDeleteChat={handleDeleteChat}
         language={language}
+      />
+      {/* Mobile overlay */}
+      <div
+        className={`sidebar-overlay ${isSidebarOpen ? "active" : ""}`}
+        onClick={toggleSidebar}
       />
       <ChatInterface
         currentChat={currentChat}

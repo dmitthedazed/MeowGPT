@@ -31,7 +31,9 @@ const Sidebar = ({
   };
 
   return (
-    <div className={`sidebar ${!isOpen ? "closed" : ""}`}>
+    <div
+      className={`sidebar ${!isOpen ? "closed" : ""} ${isOpen ? "open" : ""}`}
+    >
       <div className="sidebar-header">
         <div className="header-top">
           <div className="logo-section">
