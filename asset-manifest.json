@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MeowGPT/static/css/main.94524f09.css",
+    "main.js": "/MeowGPT/static/js/main.91a49676.js",
+    "index.html": "/MeowGPT/index.html",
+    "main.94524f09.css.map": "/MeowGPT/static/css/main.94524f09.css.map",
+    "main.91a49676.js.map": "/MeowGPT/static/js/main.91a49676.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.94524f09.css",
+    "static/js/main.91a49676.js"
+  ]
+}
