@@ -101,6 +101,8 @@ export const translations = {
     loadingMessage1: "Calculating next year with AI",
     loadingMessage2: "Looking at you from your webcam",
     loadingMessage3: "Analyzing spacetime vortexes",
+    errorMessage:
+      "Error: Please enter the current year to predict the next year.",
 
     // Account Menu
     logOut: "Log out",
@@ -208,6 +210,8 @@ export const translations = {
     loadingMessage1: "Вычисляю следующий год с помощью ИИ",
     loadingMessage2: "Смотрю на вас через вашу веб-камеру",
     loadingMessage3: "Анализирую пространственно-временные вихри",
+    errorMessage:
+      "Ошибка: Пожалуйста, введите текущий год для предсказания следующего года.",
 
     // Account Menu
     logOut: "Выйти",
@@ -315,6 +319,8 @@ export const translations = {
     loadingMessage1: "Обчислюю наступний рік за допомогою ШІ",
     loadingMessage2: "Дивлюся на вас через вашу веб-камеру",
     loadingMessage3: "Аналізую просторово-часові вихори",
+    errorMessage:
+      "Помилка: Будь ласка, введіть поточний рік для передбачення наступного року.",
 
     // Account Menu
     logOut: "Вийти",
@@ -422,6 +428,8 @@ export const translations = {
     loadingMessage1: "Počítam budúci rok pomocou AI",
     loadingMessage2: "Pozerám na vás cez vašu webkameru",
     loadingMessage3: "Analyzujem priestorovo-časové víry",
+    errorMessage:
+      "Chyba: Prosím zadajte aktuálny rok na predpoveď budúceho roku.",
 
     // Account Menu
     logOut: "Odhlásiť sa",
@@ -529,6 +537,8 @@ export const translations = {
     loadingMessage1: "Obliczam następny rok za pomocą AI",
     loadingMessage2: "Patrzę na ciebie przez twoją kamerę",
     loadingMessage3: "Analizuję wiry czasoprzestrzenne",
+    errorMessage:
+      "Błąd: Proszę wpisać aktualny rok, aby przewidzieć następny rok.",
 
     // Account Menu
     logOut: "Wyloguj się",
@@ -635,6 +645,8 @@ export const translations = {
     loadingMessage1: "Blarfy next yibs with AI nooboo",
     loadingMessage2: "Whippna at you from your meshaloob box",
     loadingMessage3: "Sul firby spacetime blarfy vortex",
+    errorMessage:
+      "Blarfy Error: Meshaloob current yibs to predict next yibs nooboo.",
 
     // Account Menu
     logOut: "Meshaloob Firby",
@@ -740,6 +752,7 @@ export const translations = {
     loadingMessage1: "Meow mrow next year with AI",
     loadingMessage2: "Meow watching you from meow camera",
     loadingMessage3: "Mrow analyzing spacetime meow vortex",
+    errorMessage: "Meow Error: Meow current year to predict next year mrow.",
 
     // Account Menu
     logOut: "Meow meow",
@@ -846,6 +859,7 @@ export const translations = {
     loadingMessage1: "CALCULATING NEXT YEAR WITH AI BESTIE 💜",
     loadingMessage2: "WATCHING YOU FROM YOUR CAMERA QUEEN 💜",
     loadingMessage3: "ANALYZING SPACETIME VORTEX ENERGY 💜",
+    errorMessage: "BESTIE ERROR: SPILL THE CURRENT YEAR TO PREDICT QUEEN 💜",
 
     // Account Menu
     logOut: "YASSS BYE 💜",
@@ -952,6 +966,8 @@ export const translations = {
     loadingMessage1: "calculating with ai vro 🥀",
     loadingMessage2: "looking at you from your camera vro 🥀",
     loadingMessage3: "analyzing sybau vortexes vro 🥀",
+    errorMessage:
+      "error vro: drop the current year to predict the next one fr 🥀",
 
     // Account Menu
     logOut: "gurt hawk tuah 🥀",

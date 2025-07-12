@@ -562,9 +562,7 @@ function App() {
     const inputYear = parseInt(yearInput);
 
     if (inputYear !== currentYear) {
-      setPredictionError(
-        `Error: Please enter the current year to predict the next year.`
-      );
+      setPredictionError(t("errorMessage"));
       return;
     }
 
