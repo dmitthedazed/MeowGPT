@@ -2179,6 +2179,12 @@ body {
     padding: 16px 20px;
   }
 
+  .image-generation-header .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
   .header-content h1 {
     font-size: 20px;
   }

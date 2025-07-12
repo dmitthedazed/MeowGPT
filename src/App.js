@@ -866,6 +866,8 @@ function App() {
           onGenerateImage={handleGenerateImage}
           imageGallery={imageGallery}
           setImageGallery={setImageGallery}
+          isSidebarOpen={isSidebarOpen}
+          onToggleSidebar={toggleSidebar}
         />
       )}
 

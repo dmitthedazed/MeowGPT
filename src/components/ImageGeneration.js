@@ -1,5 +1,11 @@
 import React from "react";
-import { FiImage, FiDownload, FiLoader, FiTrash2 } from "react-icons/fi";
+import {
+  FiImage,
+  FiDownload,
+  FiLoader,
+  FiTrash2,
+  FiMenu,
+} from "react-icons/fi";
 import { useTranslation } from "../translations";
 
 const ImageGeneration = ({
@@ -11,6 +17,8 @@ const ImageGeneration = ({
   onGenerateImage,
   imageGallery,
   setImageGallery,
+  isSidebarOpen,
+  onToggleSidebar,
 }) => {
   const { t } = useTranslation(language);
 
@@ -42,6 +50,13 @@ const ImageGeneration = ({
     <div className="image-generation-interface">
       <div className="image-generation-header">
         <div className="header-content">
+          <button
+            className="hamburger-menu mobile-only"
+            onClick={onToggleSidebar}
+            title="Toggle menu"
+          >
+            <FiMenu size={20} />
+          </button>
           <FiImage size={24} />
           <h1>{t("imageGenerationTitle")}</h1>
         </div>
