@@ -24,6 +24,7 @@ const SUPPORTED_LANGUAGES = [
   "sim",
   "meow",
   "twink",
+  "brainrot",
 ];
 
 // Function to detect user's preferred language
@@ -95,46 +96,134 @@ const StorageUtils = {
   },
 };
 
-// Function to generate random meow responses
-const generateRandomMeowResponse = () => {
-  const meowVariations = [
-    "meow",
-    "mrow",
-    "mew",
-    "mrrow",
-    "meow",
-    "miau",
-    "nyaa",
-  ];
-  const catEmojis = [
-    "🐱",
-    "🐈",
-    "🐾",
-    "😸",
-    "😺",
-    "😻",
-    "😼",
-    "😽",
-    "🙀",
-    "😿",
-    "😾",
-    "🐈‍⬛",
-  ];
-  const heartEmojis = [
-    "💕",
-    "💖",
-    "💗",
-    "💝",
-    "💘",
-    "💙",
-    "💚",
-    "💛",
-    "🧡",
-    "💜",
-    "🤍",
-    "🖤",
-  ];
-  const sparkleEmojis = ["✨", "⭐", "🌟", "💫", "⚡", "🔥"];
+// Function to generate random meow responses in different languages
+const generateRandomMeowResponse = (language = "en") => {
+  // Language-specific meow variations
+  const meowVariationsByLanguage = {
+    en: ["meow", "mrow", "mew", "mrrow", "meow", "miau", "nyaa"],
+    ru: ["мяу", "мурр", "мяв", "мррр", "мяу", "мур", "мяяв"],
+    uk: ["мяу", "мурр", "мяв", "мррр", "мяу", "мур", "мяяв"],
+    sk: ["mňau", "mrou", "miau", "mrr", "mňau", "mru", "mňauu"],
+    pl: ["miau", "mruuu", "miau", "mrr", "miau", "mru", "miauu"],
+    sim: ["meow", "purr", "mrow", "nya", "meow", "mur", "meww"], // Simlish style
+    meow: ["MEOW", "MEOOOW", "MEW", "MROW", "MEOW", "MIAU", "NYAA"],
+    twink: ["meow~", "mrow💜", "mew✨", "mrrow~", "meow💖", "miau✨", "nyaa~"],
+    brainrot: [
+      "sigma meow",
+      "ohio mrow",
+      "skibidi mew",
+      "rizz mrrow",
+      "gyatt meow",
+      "cap miau",
+      "bet nyaa",
+    ],
+  };
+
+  // Language-specific emojis and styles
+  const emojisByLanguage = {
+    en: {
+      cats: [
+        "🐱",
+        "🐈",
+        "🐾",
+        "😸",
+        "😺",
+        "😻",
+        "😼",
+        "😽",
+        "🙀",
+        "😿",
+        "�",
+        "�🐈‍⬛",
+      ],
+      hearts: [
+        "💕",
+        "💖",
+        "💗",
+        "💝",
+        "💘",
+        "💙",
+        "💚",
+        "�",
+        "🧡",
+        "💜",
+        "🤍",
+        "🖤",
+      ],
+      sparkles: ["✨", "⭐", "🌟", "�", "⚡", "🔥"],
+    },
+    ru: {
+      cats: ["�", "🐈", "🐾", "😸", "�😺", "😻", "😼", "😽", "🐈‍⬛"],
+      hearts: ["�", "💖", "💗", "❤️", "💝", "💘"],
+      sparkles: ["✨", "⭐", "🌟", "�"],
+    },
+    uk: {
+      cats: ["🐱", "🐈", "🐾", "�", "😺", "😻", "😼", "�😽", "🐈‍⬛"],
+      hearts: ["�", "💖", "💗", "💙", "💛", "💝"],
+      sparkles: ["✨", "⭐", "🌟", "�"],
+    },
+    sk: {
+      cats: ["🐱", "🐈", "🐾", "😸", "�", "😻", "😼", "😽", "🐈‍⬛"],
+      hearts: ["💕", "💖", "💗", "💝", "💘"],
+      sparkles: ["✨", "⭐", "🌟", "💫"],
+    },
+    pl: {
+      cats: ["🐱", "🐈", "🐾", "😸", "😺", "😻", "😼", "😽", "🐈‍⬛"],
+      hearts: ["💕", "💖", "💗", "💝", "💘"],
+      sparkles: ["✨", "⭐", "🌟", "💫"],
+    },
+    sim: {
+      cats: ["🐱", "🐈", "🐾", "😸", "😺", "😻", "😼", "😽", "�‍⬛"],
+      hearts: ["�", "�💖", "💗", "💝", "💘"],
+      sparkles: ["✨", "⭐", "🌟", "�", "🎮", "🎯"],
+    },
+    meow: {
+      cats: [
+        "�",
+        "🐈",
+        "🐾",
+        "😸",
+        "😺",
+        "😻",
+        "😼",
+        "😽",
+        "🙀",
+        "😿",
+        "😾",
+        "🐈‍⬛",
+      ],
+      hearts: [
+        "💕",
+        "💖",
+        "💗",
+        "💝",
+        "💘",
+        "💙",
+        "💚",
+        "💛",
+        "🧡",
+        "💜",
+        "🤍",
+        "🖤",
+      ],
+      sparkles: ["✨", "⭐", "🌟", "💫", "⚡", "�"],
+    },
+    twink: {
+      cats: ["�", "🐈", "🐾", "😸", "�", "😻", "😼", "😽", "🐈‍⬛"],
+      hearts: ["💜", "💖", "💕", "💗", "💝", "💘", "🤍", "💙"],
+      sparkles: ["✨", "⭐", "🌟", "�", "🦄", "🌈", "💎"],
+    },
+    brainrot: {
+      cats: ["🐱", "🐈", "🐾", "😸", "😺", "😻", "😼", "😽", "🐈‍⬛"],
+      hearts: ["💕", "💖", "💗", "💝", "💘"],
+      sparkles: ["✨", "⭐", "🌟", "💫", "💀", "🔥", "💯"],
+    },
+  };
+
+  // Get language-specific variations, fallback to English
+  const meowVariations =
+    meowVariationsByLanguage[language] || meowVariationsByLanguage.en;
+  const emojis = emojisByLanguage[language] || emojisByLanguage.en;
 
   // Random number of meows (1-35)
   const meowCount = Math.floor(Math.random() * 35) + 1;
@@ -153,12 +242,14 @@ const generateRandomMeowResponse = () => {
     }
   }
 
-  // Capitalize the first letter
-  response = response.charAt(0).toUpperCase() + response.slice(1);
+  // Capitalize the first letter (except for special languages)
+  if (language !== "twink" && language !== "brainrot") {
+    response = response.charAt(0).toUpperCase() + response.slice(1);
+  }
 
   // 60% chance to add random emoji
   if (Math.random() < 0.6) {
-    const allEmojis = [...catEmojis, ...heartEmojis, ...sparkleEmojis];
+    const allEmojis = [...emojis.cats, ...emojis.hearts, ...emojis.sparkles];
     const randomEmoji = allEmojis[Math.floor(Math.random() * allEmojis.length)];
     response += " " + randomEmoji;
 
@@ -536,7 +627,7 @@ function App() {
       setCurrentChat(newChat);
 
       // Generate AI response content first to calculate typing duration
-      const aiResponseContent = generateRandomMeowResponse();
+      const aiResponseContent = generateRandomMeowResponse(language);
       const typingDuration = calculateTypingDuration(aiResponseContent);
 
       // Show typing indicator
@@ -586,7 +677,7 @@ function App() {
     );
 
     // Generate AI response content first to calculate typing duration
-    const aiResponseContent = generateRandomMeowResponse();
+    const aiResponseContent = generateRandomMeowResponse(language);
     const typingDuration = calculateTypingDuration(aiResponseContent);
 
     // Show typing indicator
@@ -666,7 +757,7 @@ function App() {
     }
 
     // Generate new AI response content
-    const newAiResponseContent = generateRandomMeowResponse();
+    const newAiResponseContent = generateRandomMeowResponse(language);
     const typingDuration = calculateTypingDuration(newAiResponseContent);
 
     // Immediately replace the message with typing indicator
@@ -783,7 +874,7 @@ function App() {
       window.testRandomMeow = () => {
         console.log("🧪 Testing random meow generation...");
         for (let i = 0; i < 5; i++) {
-          console.log(`Sample ${i + 1}:`, generateRandomMeowResponse());
+          console.log(`Sample ${i + 1}:`, generateRandomMeowResponse(language));
         }
         console.log("✅ Random meow test completed");
       };
