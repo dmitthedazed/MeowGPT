@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/MeowGPT/static/css/main.7b010d55.css",
-    "main.js": "/MeowGPT/static/js/main.2e1fad62.js",
+    "main.css": "/MeowGPT/static/css/main.ecce2369.css",
+    "main.js": "/MeowGPT/static/js/main.8ffc65a5.js",
     "static/media/icon.svg": "/MeowGPT/static/media/icon.a30f731d85ae15671d976bc6842cc86b.svg",
     "static/media/icon-light.svg": "/MeowGPT/static/media/icon-light.2119f676332df96b7eeb882f3d0a3dc4.svg",
     "index.html": "/MeowGPT/index.html",
-    "main.7b010d55.css.map": "/MeowGPT/static/css/main.7b010d55.css.map",
-    "main.2e1fad62.js.map": "/MeowGPT/static/js/main.2e1fad62.js.map"
+    "main.ecce2369.css.map": "/MeowGPT/static/css/main.ecce2369.css.map",
+    "main.8ffc65a5.js.map": "/MeowGPT/static/js/main.8ffc65a5.js.map"
   },
   "entrypoints": [
-    "static/css/main.7b010d55.css",
-    "static/js/main.2e1fad62.js"
+    "static/css/main.ecce2369.css",
+    "static/js/main.8ffc65a5.js"
   ]
 }
