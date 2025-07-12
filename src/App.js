@@ -574,9 +574,9 @@ function App() {
 
     // Array of funny prediction messages
     const messages = [
-      "Calculating next year with AI",
-      "Looking at you from your webcam",
-      "Analyzing spacetime vortexes",
+      t("loadingMessage1"),
+      t("loadingMessage2"),
+      t("loadingMessage3"),
     ];
 
     let messageIndex = 0;
