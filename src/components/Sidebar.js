@@ -21,6 +21,7 @@ const Sidebar = ({
   onReturnHome,
   onDeleteChat,
   language,
+  onOpenSearch,
 }) => {
   const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
@@ -101,7 +102,7 @@ const Sidebar = ({
           <FiPlus size={16} />
           <span>{t("newChat")}</span>
         </button>
-        <button className="search-chat-btn">
+        <button className="search-chat-btn" onClick={onOpenSearch}>
           <FiSearch size={16} />
           <span>{t("searchChats")}</span>
         </button>

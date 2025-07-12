@@ -52,6 +52,7 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
       brainrot: "🥀 Brainrot",
     },
 
@@ -135,6 +136,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -217,6 +220,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -299,6 +304,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -381,6 +388,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -463,6 +472,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -544,6 +555,8 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -708,6 +721,7 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
+      twink: "💜 Twink 💜",
       brainrot: "🥀 Brainrot",
     },
 

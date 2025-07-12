@@ -202,14 +202,6 @@ const ChatInterface = ({
     setIsSettingsModalOpen(false);
   };
 
-  const handleThemeChangeLocal = (newTheme) => {
-    onThemeChange(newTheme);
-  };
-
-  const handleLanguageChangeLocal = (newLanguage) => {
-    onLanguageChange(newLanguage);
-  };
-
   // Touch handlers for swipe gestures
   const handleTouchStart = (e) => {
     setTouchEnd(null);
@@ -243,6 +235,16 @@ const ChatInterface = ({
     if (window.innerWidth <= 768 && isSidebarOpen) {
       onToggleSidebar();
     }
+  };
+
+  // Handle theme change
+  const handleThemeChangeLocal = (newTheme) => {
+    onThemeChange(newTheme);
+  };
+
+  // Handle language change
+  const handleLanguageChangeLocal = (newLanguage) => {
+    onLanguageChange(newLanguage);
   };
 
   return (

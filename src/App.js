@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
+import { FiSearch, FiX, FiPlus, FiMessageSquare } from "react-icons/fi";
+import { useTranslation } from "./translations";
 
 // LocalStorage keys
 const STORAGE_KEYS = {
@@ -180,6 +182,13 @@ function App() {
   const [language, setLanguage] = useState(detectUserLanguage());
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Search modal state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const { t } = useTranslation(language);
+
   // Initialize app data from localStorage
   useEffect(() => {
     const initializeApp = () => {
@@ -260,6 +269,23 @@ function App() {
     }
   }, [theme]);
 
+  // Effect to handle keyboard shortcuts for search modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isSearchOpen) {
+        handleCloseSearch();
+      }
+    };
+
+    if (isSearchOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSearchOpen]);
+
   // Save chats to localStorage
   useEffect(() => {
     if (!isInitialized) return;
@@ -297,6 +323,16 @@ function App() {
   };
 
   const handleNewChat = () => {
+    // Check if there's already an empty chat (no messages)
+    const existingEmptyChat = chats.find((chat) => chat.messages.length === 0);
+
+    if (existingEmptyChat) {
+      // If there's an empty chat, just select it instead of creating a new one
+      console.log("📱 Selecting existing empty chat:", existingEmptyChat);
+      setCurrentChat(existingEmptyChat);
+      return;
+    }
+
     const newChat = {
       id: Date.now(),
       title: "New Chat",
@@ -331,6 +367,46 @@ function App() {
     if (currentChat?.id === chatId) {
       setCurrentChat(null);
     }
+  };
+
+  // Search modal functions
+  const handleOpenSearch = () => {
+    setIsSearchOpen(true);
+    setSearchQuery("");
+    setSearchResults([]);
+
+    // Close sidebar on mobile when opening search modal
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  const handleCloseSearch = () => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+    setSearchResults([]);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    // Filter chats based on title
+    const filtered = chats.filter((chat) =>
+      chat.title.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(filtered);
+  };
+
+  const handleSearchChatSelect = (chat) => {
+    handleSelectChat(chat);
+    handleCloseSearch();
   };
 
   const handleSendMessage = (message) => {
@@ -538,6 +614,7 @@ function App() {
         onReturnHome={handleReturnHome}
         onDeleteChat={handleDeleteChat}
         language={language}
+        onOpenSearch={handleOpenSearch}
       />
       {/* Mobile overlay */}
       <div
@@ -554,6 +631,71 @@ function App() {
         onThemeChange={handleThemeChange}
         onLanguageChange={handleLanguageChange}
       />
+
+      {/* Search Modal */}
+      {isSearchOpen && (
+        <div className="search-modal-overlay" onClick={handleCloseSearch}>
+          <div className="search-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="search-modal-header">
+              <div className="search-input-container">
+                <FiSearch size={16} className="search-input-icon" />
+                <input
+                  type="text"
+                  placeholder={t("searchChats")}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="search-input"
+                  autoFocus
+                />
+              </div>
+              <button
+                className="search-modal-close"
+                onClick={handleCloseSearch}
+              >
+                <FiX size={18} />
+              </button>
+            </div>
+            <div className="search-modal-content">
+              {searchQuery === "" ? (
+                <div className="search-empty-state">
+                  <div
+                    className="search-suggestion"
+                    onClick={() => {
+                      handleNewChat();
+                      handleCloseSearch();
+                    }}
+                  >
+                    <FiPlus size={16} />
+                    <span>{t("newChat")}</span>
+                  </div>
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="search-no-results">
+                  <span>No chats found</span>
+                </div>
+              ) : (
+                <div className="search-results">
+                  {searchResults.map((chat) => (
+                    <div
+                      key={chat.id}
+                      className={`search-result-item ${
+                        currentChat?.id === chat.id ? "active" : ""
+                      }`}
+                      onClick={() => handleSearchChatSelect(chat)}
+                    >
+                      <FiMessageSquare
+                        size={16}
+                        className="search-result-icon"
+                      />
+                      <span className="search-result-title">{chat.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
