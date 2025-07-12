@@ -6,6 +6,7 @@ import {
   FiSearch,
   FiX,
   FiTrash2,
+  FiImage,
 } from "react-icons/fi";
 import { useTranslation } from "../translations";
 import { ReactComponent as MeowGPTIcon } from "../icon.svg";
@@ -22,6 +23,7 @@ const Sidebar = ({
   onDeleteChat,
   language,
   onOpenSearch,
+  onOpenImageGeneration,
 }) => {
   const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
@@ -114,6 +116,14 @@ const Sidebar = ({
         >
           <FiSearch size={16} />
           <span>{t("searchChats")}</span>
+        </button>
+        <button
+          className="image-generation-btn"
+          onClick={onOpenImageGeneration}
+          title={!isOpen ? t("imageGeneration") : ""}
+        >
+          <FiImage size={16} />
+          <span>{t("imageGeneration")}</span>
         </button>
       </div>
 

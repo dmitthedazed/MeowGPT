@@ -188,6 +188,11 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  // Image generation modal state
+  const [isImageGenerationOpen, setIsImageGenerationOpen] = useState(false);
+  const [imagePrompt, setImagePrompt] = useState("");
+  const [generatedImages, setGeneratedImages] = useState([]);
+
   const { t } = useTranslation(language);
 
   // Initialize app data from localStorage
@@ -270,22 +275,25 @@ function App() {
     }
   }, [theme]);
 
-  // Effect to handle keyboard shortcuts for search modal
+  // Effect to handle keyboard shortcuts for search and image generation modals
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && isSearchOpen) {
         handleCloseSearch();
       }
+      if (e.key === "Escape" && isImageGenerationOpen) {
+        handleCloseImageGeneration();
+      }
     };
 
-    if (isSearchOpen) {
+    if (isSearchOpen || isImageGenerationOpen) {
       document.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isSearchOpen]);
+  }, [isSearchOpen, isImageGenerationOpen]);
 
   // Save chats to localStorage
   useEffect(() => {
@@ -408,6 +416,39 @@ function App() {
   const handleSearchChatSelect = (chat) => {
     handleSelectChat(chat);
     handleCloseSearch();
+  };
+
+  // Image generation modal functions
+  const handleOpenImageGeneration = () => {
+    setIsImageGenerationOpen(true);
+    setImagePrompt("");
+    setGeneratedImages([]);
+
+    // Close sidebar on mobile when opening image generation modal
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  const handleCloseImageGeneration = () => {
+    setIsImageGenerationOpen(false);
+    setImagePrompt("");
+    setGeneratedImages([]);
+  };
+
+  const handleGenerateImage = () => {
+    if (!imagePrompt.trim()) return;
+
+    // Generate fake images (placeholder URLs)
+    const fakeImages = [
+      `https://picsum.photos/512/512?random=${Math.random()}`,
+      `https://picsum.photos/512/512?random=${Math.random()}`,
+      `https://picsum.photos/512/512?random=${Math.random()}`,
+      `https://picsum.photos/512/512?random=${Math.random()}`,
+    ];
+
+    setGeneratedImages(fakeImages);
   };
 
   const handleSendMessage = (message) => {
@@ -732,6 +773,7 @@ function App() {
         onDeleteChat={handleDeleteChat}
         language={language}
         onOpenSearch={handleOpenSearch}
+        onOpenImageGeneration={handleOpenImageGeneration}
       />
       {/* Mobile overlay */}
       <div

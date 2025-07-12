@@ -261,6 +261,44 @@ body {
   display: none;
 }
 
+.image-generation-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--border-secondary);
+  color: var(--text-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.image-generation-btn:hover {
+  background-color: var(--hover-bg);
+}
+
+.image-generation-btn svg {
+  margin-right: 8px;
+}
+
+.sidebar.closed .image-generation-btn {
+  padding: 8px;
+  justify-content: center;
+  min-width: 36px;
+}
+
+.sidebar.closed .image-generation-btn svg {
+  margin-right: 0;
+}
+
+.sidebar.closed .image-generation-btn span {
+  display: none;
+}
+
 .search-section {
   margin-bottom: 8px;
 }

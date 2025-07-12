@@ -4,6 +4,7 @@ export const translations = {
     // Header and Navigation
     newChat: "New chat",
     searchChats: "Search chats",
+    imageGeneration: "Image Generation (Alpha)",
 
     // Chat Interface
     welcomeTitle: "Chat with MeowGPT",
@@ -89,6 +90,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Новый чат",
     searchChats: "Поиск чатов",
+    imageGeneration: "Генерация изображений (Альфа)",
 
     // Chat Interface
     welcomeTitle: "Чат с MeowGPT",
@@ -174,6 +176,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Новий чат",
     searchChats: "Пошук чатів",
+    imageGeneration: "Генерація зображень (Альфа)",
 
     // Chat Interface
     welcomeTitle: "Чат з MeowGPT",
@@ -259,6 +262,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Nový chat",
     searchChats: "Hľadať chaty",
+    imageGeneration: "Generovanie obrázkov (Alfa)",
 
     // Chat Interface
     welcomeTitle: "Chat s MeowGPT",
@@ -344,6 +348,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Nowy chat",
     searchChats: "Szukaj chatów",
+    imageGeneration: "Generowanie obrazów (Alfa)",
 
     // Chat Interface
     welcomeTitle: "Chat z MeowGPT",
@@ -429,6 +434,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Noby Plerg",
     searchChats: "Firby Plerg",
+    imageGeneration: "Yibs Blarfy Sul (Nooboo)",
 
     // Chat Interface
     welcomeTitle: "Plerg Whippna MeowGPT",
@@ -513,6 +519,7 @@ export const translations = {
     // Header and Navigation
     newChat: "Meow meow",
     searchChats: "Meow meeeow",
+    imageGeneration: "Meow mrow meow (Mrow)",
 
     // Chat Interface
     welcomeTitle: "Meow meow MeowGPT",
@@ -597,6 +604,7 @@ export const translations = {
     // Header and Navigation
     newChat: "YASSS GIRL 💜",
     searchChats: "SLAY QUEEN 💜",
+    imageGeneration: "SERVING VISUALS 💜 (DIVA)",
 
     // Chat Interface
     welcomeTitle: "SERVING CUNT WITH MEOWGPT 💜",
@@ -681,6 +689,7 @@ export const translations = {
     // Header and Navigation
     newChat: "yo vro 🥀",
     searchChats: "gurt sybau 🥀",
+    imageGeneration: "hawk tuah visuals 🥀 (vro)",
 
     // Chat Interface
     welcomeTitle: "hawk tuah MeowGPT 🥀",
