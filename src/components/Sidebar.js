@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiPlus,
   FiMessageSquare,
@@ -8,6 +8,8 @@ import {
   FiTrash2,
 } from "react-icons/fi";
 import { useTranslation } from "../translations";
+import { ReactComponent as MeowGPTIcon } from "../icon.svg";
+import { ReactComponent as MeowGPTLightIcon } from "../icon-light.svg";
 
 const Sidebar = ({
   isOpen,
@@ -22,6 +24,49 @@ const Sidebar = ({
 }) => {
   const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
+  const [currentTheme, setCurrentTheme] = useState("light");
+
+  // Function to get the current theme from the document
+  const getCurrentTheme = () => {
+    const theme = document.documentElement.getAttribute("data-theme");
+    return theme || "light";
+  };
+
+  // Function to get the appropriate logo icon based on theme
+  const getLogoIcon = () => {
+    return currentTheme === "dark" ? MeowGPTLightIcon : MeowGPTIcon;
+  };
+
+  // Effect to monitor theme changes
+  useEffect(() => {
+    const updateTheme = () => {
+      setCurrentTheme(getCurrentTheme());
+    };
+
+    // Set initial theme
+    updateTheme();
+
+    // Create observer to watch for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "data-theme"
+        ) {
+          updateTheme();
+        }
+      });
+    });
+
+    // Start observing
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    // Cleanup observer
+    return () => observer.disconnect();
+  }, []);
 
   const handleDeleteChat = (e, chatId) => {
     e.stopPropagation(); // Prevent chat selection when clicking delete
@@ -42,24 +87,7 @@ const Sidebar = ({
               onClick={isOpen ? onReturnHome : onToggle}
             >
               <div className="logo-icon">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 16c-2.5 0-4.5-2-4.5-4.5S9.5 7 12 7s4.5 2 4.5 4.5S14.5 16 12 16z" />
-                  <path d="M9 9h.01" />
-                  <path d="M15 9h.01" />
-                  <path d="M10.5 13.5s1 1 1.5 1 1.5-1 1.5-1" />
-                  <path d="M4 6l2 2" />
-                  <path d="M20 6l-2 2" />
-                  <path d="M12 2v2" />
-                </svg>
+                {React.createElement(getLogoIcon())}
               </div>
             </button>
           </div>

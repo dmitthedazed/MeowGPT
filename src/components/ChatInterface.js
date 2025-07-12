@@ -79,6 +79,7 @@ const ChatInterface = ({
     { id: "sim", name: t("languages.sim") },
     { id: "meow", name: t("languages.meow") },
     { id: "twink", name: t("languages.twink") },
+    { id: "brainrot", name: t("languages.brainrot") },
   ];
 
   const scrollToBottom = () => {

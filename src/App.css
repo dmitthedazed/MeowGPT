@@ -147,26 +147,37 @@ body {
 }
 
 .logo-btn:hover .logo-icon {
-  background: linear-gradient(135deg, #0d8f6f 0%, #15705a 100%);
+  background: var(--hover-bg);
 }
 
 .logo-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, #10a37f 0%, #1a7f64 100%);
+  width: 36px;
+  height: 36px;
   border-radius: 6px;
   margin-right: 0;
   flex-shrink: 0;
   transition: background 0.2s ease;
-  color: white;
+  color: var(--text-primary);
 }
 
 .logo-icon svg {
-  color: white;
+  color: var(--text-primary);
 }
+
+/* Dark mode specific logo styling */
+[data-theme="dark"] .logo-icon svg {
+  color: var(--text-primary);
+}
+
+/* Light mode specific logo styling */
+[data-theme="light"] .logo-icon svg {
+  color: var(--text-primary);
+}
+
+/* System theme will inherit from the appropriate theme above */
 
 .logo-text {
   font-size: 16px;

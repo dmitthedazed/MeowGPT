@@ -52,7 +52,7 @@ export const translations = {
       pl: "🇵🇱 Polski",
       sim: "🎮 Simlish",
       meow: "🐱 Meow",
-      twink: "💜 Slay Language",
+      brainrot: "🥀 Brainrot",
     },
 
     // Footer
@@ -626,6 +626,7 @@ export const translations = {
       sim: "🎮 BRAT SIMLISH 💜",
       meow: "🐱 ATE MEOW 💜",
       twink: "💜 SERVING CUNT 💜",
+      brainrot: "🥀 BADDIE BRAINROT 💜",
     },
 
     // Footer
@@ -653,6 +654,88 @@ export const translations = {
     // Upgrade
     upgradeTitle: "SLAY UPGRADE 💜",
     upgradeSubtitle: "QUEEN BADDIE LEFT NO CRUMBS 💜",
+  },
+
+  brainrot: {
+    // Header and Navigation
+    newChat: "yo vro 🥀",
+    searchChats: "gurt sybau 🥀",
+
+    // Chat Interface
+    welcomeTitle: "hawk tuah MeowGPT 🥀",
+    welcomeSubtitle: "yo dih sybau gurt hawk tuah 🥀",
+    messagePlaceholder: "vro ts MeowGPT 🥀",
+
+    // Models
+    models: {
+      MeowGPT: "sybau MeowGPT 🥀",
+      "MeowGPT Turbo": "gurt MeowGPT 🥀",
+      "MeowGPT Mini": "yo MeowGPT 🥀",
+    },
+
+    modelDescriptions: {
+      MeowGPT: "fr dih sybau 🥀",
+      "MeowGPT Turbo": "hawk tuah gurt 🥀",
+      "MeowGPT Mini": "vro yo ts 🥀",
+    },
+
+    // Account Menu
+    upgradePlan: "pmo gurt 🥀",
+    settings: "dih sybau 🥀",
+    help: "yo hawk tuah 🥀",
+    madeBy: "vro ts gurt dimka hawk tuah Github Copilot 🥀",
+
+    // Settings Modal
+    settingsTitle: "dih sybau 🥀",
+    appearance: "fr yo 🥀",
+    theme: "gurt 🥀",
+    language: "vro ts 🥀",
+    general: "hawk tuah 🥀",
+
+    // Theme Options
+    themes: {
+      light: "yo gurt 🥀",
+      dark: "dih sybau 🥀",
+      system: "fr hawk tuah 🥀",
+    },
+
+    // Languages
+    languages: {
+      en: "🇺🇸 English",
+      ru: "🇷🇺 Русский",
+      uk: "🇺🇦 Українська",
+      sk: "🇸🇰 Slovenčina",
+      pl: "🇵🇱 Polski",
+      sim: "🎮 Simlish",
+      meow: "🐱 Meow",
+      brainrot: "🥀 Brainrot",
+    },
+
+    // Footer
+    disclaimer: "sybau MeowGPT fr dih yo vro gurt hawk tuah 🥀",
+
+    // Buttons
+    send: "yo 🥀",
+    copy: "gurt 🥀",
+    deleteChat: "dih ts 🥀",
+    temporaryChat: "rn vro sybau 🥀",
+    goodResponse: "fr yo 🥀",
+    badResponse: "pmo dih 🥀",
+    regenerate: "hawk tuah gurt 🥀",
+    share: "sybau vro 🥀",
+
+    // Common
+    close: "ts 🥀",
+
+    // Sidebar
+    noChats: "yo dih sybau 🥀",
+
+    // Account Menu
+    logOut: "gurt hawk tuah 🥀",
+
+    // Upgrade
+    upgradeTitle: "pmo gurt 🥀",
+    upgradeSubtitle: "fr yo vro dih hawk tuah sybau 🥀",
   },
 };
 
