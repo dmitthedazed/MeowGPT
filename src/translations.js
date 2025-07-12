@@ -89,6 +89,14 @@ export const translations = {
 
     // Sidebar
     noChats: "No chats yet",
+    gpts: "GPTs",
+    nextYearPredictor: "Next year predictor",
+
+    // Year Predictor
+    enterYear: "Enter the current year to predict the next year",
+    predict: "Predict",
+    predicting: "Predicting...",
+    prediction: "Prediction",
 
     // Account Menu
     logOut: "Log out",
@@ -184,6 +192,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Пока нет чатов",
+    gpts: "GPT",
+    nextYearPredictor: "Предсказатель следующего года",
+
+    // Year Predictor
+    enterYear: "Введите текущий год для предсказания следующего года",
+    predict: "Предсказать",
+    predicting: "Предсказываю...",
+    prediction: "Предсказание",
 
     // Account Menu
     logOut: "Выйти",
@@ -279,6 +295,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Поки немає чатів",
+    gpts: "GPT",
+    nextYearPredictor: "Передбачувач наступного року",
+
+    // Year Predictor
+    enterYear: "Введіть поточний рік для передбачення наступного року",
+    predict: "Передбачити",
+    predicting: "Передбачаю...",
+    prediction: "Передбачення",
 
     // Account Menu
     logOut: "Вийти",
@@ -374,6 +398,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Zatiaľ žiadne chaty",
+    gpts: "GPT",
+    nextYearPredictor: "Predikátor budúceho roku",
+
+    // Year Predictor
+    enterYear: "Zadajte aktuálny rok na predpoveď budúceho roku",
+    predict: "Predpovedať",
+    predicting: "Predpovedám...",
+    prediction: "Predpoveď",
 
     // Account Menu
     logOut: "Odhlásiť sa",
@@ -469,6 +501,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Brak chatów",
+    gpts: "GPT",
+    nextYearPredictor: "Przewidywacz przyszłego roku",
+
+    // Year Predictor
+    enterYear: "Wpisz aktualny rok, aby przewidzieć następny rok",
+    predict: "Przewiduj",
+    predicting: "Przewiduję...",
+    prediction: "Przewidywanie",
 
     // Account Menu
     logOut: "Wyloguj się",
@@ -563,6 +603,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Plerg Yibs Nooboo",
+    gpts: "GPT Sul",
+    nextYearPredictor: "Firby Yibs Whippna",
+
+    // Year Predictor
+    enterYear: "Meshaloob current yibs to predict next yibs",
+    predict: "Firby Whippna",
+    predicting: "Firby whippna nooboo...",
+    prediction: "Whippna Sul",
 
     // Account Menu
     logOut: "Meshaloob Firby",
@@ -656,6 +704,14 @@ export const translations = {
 
     // Sidebar
     noChats: "Meow meow meow",
+    gpts: "Meow GPT",
+    nextYearPredictor: "Meow mrow meow meow",
+
+    // Year Predictor
+    enterYear: "Meow current year to predict next year",
+    predict: "Meow mrow",
+    predicting: "Meow mrow meow...",
+    prediction: "Mrow meow",
 
     // Account Menu
     logOut: "Meow meow",
@@ -750,6 +806,14 @@ export const translations = {
 
     // Sidebar
     noChats: "SERVING CUNT NO CHATS 💜",
+    gpts: "DIVA GPT 💜",
+    nextYearPredictor: "FUTURE READER ENERGY 💜",
+
+    // Year Predictor
+    enterYear: "SPILL THE CURRENT YEAR TO PREDICT THE NEXT ONE 💜",
+    predict: "SERVE FUTURE TEA 💜",
+    predicting: "READING THE UNIVERSE 💜",
+    prediction: "THE TEA IS 💜",
 
     // Account Menu
     logOut: "YASSS BYE 💜",
@@ -844,6 +908,14 @@ export const translations = {
 
     // Sidebar
     noChats: "yo dih sybau 🥀",
+    gpts: "sybau GPT 🥀",
+    nextYearPredictor: "hawk tuah future reader 🥀",
+
+    // Year Predictor
+    enterYear: "drop the current year to predict the next one fr 🥀",
+    predict: "hawk tuah predict 🥀",
+    predicting: "fr reading the future 🥀",
+    prediction: "vro the tea is 🥀",
 
     // Account Menu
     logOut: "gurt hawk tuah 🥀",

@@ -24,6 +24,7 @@ const Sidebar = ({
   language,
   onOpenSearch,
   onOpenImageGeneration,
+  onOpenYearPredictor,
 }) => {
   const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
@@ -124,6 +125,18 @@ const Sidebar = ({
         >
           <FiImage size={16} />
           <span>{t("imageGeneration")}</span>
+        </button>
+
+        {/* GPTs section */}
+        <div className="sidebar-divider"></div>
+        <div className="gpts-label">{t("gpts")}</div>
+        <button
+          className="gpt-item"
+          onClick={onOpenYearPredictor}
+          title={!isOpen ? t("nextYearPredictor") : ""}
+        >
+          <div className="gpt-icon">🔮</div>
+          <span>{t("nextYearPredictor")}</span>
         </button>
       </div>
 

@@ -3,7 +3,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
 import ImageGeneration from "./components/ImageGeneration";
-import { FiSearch, FiX, FiPlus, FiMessageSquare } from "react-icons/fi";
+import { FiSearch, FiX, FiPlus, FiMessageSquare, FiZap } from "react-icons/fi";
 import { useTranslation } from "./translations";
 
 // LocalStorage keys
@@ -289,6 +289,14 @@ function App() {
   // View mode state
   const [currentView, setCurrentView] = useState("chat"); // "chat" or "imageGeneration"
 
+  // Year Predictor modal state
+  const [isYearPredictorOpen, setIsYearPredictorOpen] = useState(false);
+  const [yearInput, setYearInput] = useState("");
+  const [yearPrediction, setYearPrediction] = useState("");
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [predictionMessage, setPredictionMessage] = useState("");
+  const [predictionError, setPredictionError] = useState("");
+
   const { t } = useTranslation(language);
 
   // Initialize app data from localStorage
@@ -380,16 +388,23 @@ function App() {
       if (e.key === "Escape" && currentView === "imageGeneration") {
         handleCloseImageGeneration();
       }
+      if (e.key === "Escape" && isYearPredictorOpen) {
+        handleCloseYearPredictor();
+      }
     };
 
-    if (isSearchOpen || currentView === "imageGeneration") {
+    if (
+      isSearchOpen ||
+      currentView === "imageGeneration" ||
+      isYearPredictorOpen
+    ) {
       document.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isSearchOpen, currentView]);
+  }, [isSearchOpen, currentView, isYearPredictorOpen]);
 
   // Save chats to localStorage
   useEffect(() => {
@@ -514,6 +529,73 @@ function App() {
   const handleSearchChatSelect = (chat) => {
     handleSelectChat(chat);
     handleCloseSearch();
+  };
+
+  // Year Predictor modal functions
+  const handleOpenYearPredictor = () => {
+    setIsYearPredictorOpen(true);
+    setYearInput("");
+    setYearPrediction("");
+  };
+
+  const handleCloseYearPredictor = () => {
+    setIsYearPredictorOpen(false);
+    setYearInput("");
+    setYearPrediction("");
+    setIsPredicting(false);
+    setPredictionMessage("");
+    setPredictionError("");
+  };
+
+  const handleYearInputChange = (e) => {
+    const value = e.target.value;
+    // Only allow 4 digits
+    if (value === "" || /^\d{1,4}$/.test(value)) {
+      setYearInput(value);
+    }
+  };
+  const handlePredict = async () => {
+    if (!yearInput || yearInput.length !== 4) return;
+
+    // Check if the current year (2025) is entered
+    const currentYear = new Date().getFullYear();
+    const inputYear = parseInt(yearInput);
+
+    if (inputYear !== currentYear) {
+      setPredictionError(
+        `Error: Please enter the current year to predict the next year.`
+      );
+      return;
+    }
+
+    setIsPredicting(true);
+    setYearPrediction("");
+    setPredictionError("");
+
+    // Array of funny prediction messages
+    const messages = [
+      "Calculating next year with AI",
+      "Looking at you from your webcam",
+      "Analyzing spacetime vortexes",
+    ];
+
+    let messageIndex = 0;
+    setPredictionMessage(messages[messageIndex]);
+
+    // Cycle through messages every 2 seconds
+    const messageInterval = setInterval(() => {
+      messageIndex = (messageIndex + 1) % messages.length;
+      setPredictionMessage(messages[messageIndex]);
+    }, 2000);
+
+    // Complete prediction after 6 seconds (3 messages × 2 seconds each)
+    setTimeout(() => {
+      clearInterval(messageInterval);
+      const predictedYear = inputYear + 1;
+      setYearPrediction(predictedYear.toString());
+      setIsPredicting(false);
+      setPredictionMessage("");
+    }, 6000);
   };
 
   // Image generation view functions
@@ -926,6 +1008,7 @@ function App() {
         language={language}
         onOpenSearch={handleOpenSearch}
         onOpenImageGeneration={handleOpenImageGeneration}
+        onOpenYearPredictor={handleOpenYearPredictor}
       />
       {/* Mobile overlay */}
       <div
@@ -1019,6 +1102,74 @@ function App() {
                       <span className="search-result-title">{chat.title}</span>
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Year Predictor Modal */}
+      {isYearPredictorOpen && (
+        <div
+          className="year-predictor-modal-overlay"
+          onClick={handleCloseYearPredictor}
+        >
+          <div
+            className="year-predictor-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="year-predictor-modal-header">
+              <h2>{t("nextYearPredictor")}</h2>
+              <button
+                className="year-predictor-modal-close"
+                onClick={handleCloseYearPredictor}
+              >
+                <FiX size={18} />
+              </button>
+            </div>
+            <div className="year-predictor-modal-content">
+              <div className="year-input-section">
+                <label htmlFor="year-input">{t("enterYear")}</label>
+                <input
+                  id="year-input"
+                  type="text"
+                  value={yearInput}
+                  onChange={handleYearInputChange}
+                  placeholder="2025"
+                  maxLength="4"
+                  className="year-input"
+                />
+                <button
+                  className="predict-btn"
+                  onClick={handlePredict}
+                  disabled={yearInput.length !== 4 || isPredicting}
+                >
+                  {isPredicting ? t("predicting") : t("predict")}
+                </button>
+              </div>
+
+              {predictionError && (
+                <div className="prediction-error">
+                  <p>{predictionError}</p>
+                </div>
+              )}
+
+              {(yearPrediction || isPredicting) && (
+                <div className="prediction-output">
+                  <h3>{t("prediction")}</h3>
+                  <div className="prediction-text">
+                    {isPredicting ? (
+                      <div className="prediction-loading">
+                        <div className="loading-spinner">
+                          <FiZap className="spinner" size={20} />
+                        </div>
+                        <span>{predictionMessage}</span>
+                      </div>
+                    ) : (
+                      <p>{yearPrediction}</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

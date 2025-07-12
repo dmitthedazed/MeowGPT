@@ -299,6 +299,66 @@ body {
   display: none;
 }
 
+/* GPT Section Styles */
+.sidebar-divider {
+  height: 1px;
+  background-color: var(--border-tertiary);
+  margin: 16px 0 8px 0;
+}
+
+.gpts-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gpt-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--border-secondary);
+  color: var(--text-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.gpt-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.gpt-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.sidebar.closed .gpts-label {
+  display: none;
+}
+
+.sidebar.closed .gpt-item {
+  padding: 8px;
+  justify-content: center;
+  min-width: 36px;
+}
+
+.sidebar.closed .gpt-item .gpt-icon {
+  margin-right: 0;
+}
+
+.sidebar.closed .gpt-item span {
+  display: none;
+}
+
 .search-section {
   margin-bottom: 8px;
 }
@@ -1817,6 +1877,220 @@ body {
 
   .search-modal-content {
     max-height: calc(70vh - 80px);
+  }
+}
+
+/* Year Predictor Modal Styles */
+.year-predictor-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.year-predictor-modal {
+  background-color: var(--bg-primary);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.year-predictor-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.year-predictor-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.year-predictor-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.year-predictor-modal-close:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.year-predictor-modal-content {
+  padding: 24px;
+}
+
+.year-input-section {
+  margin-bottom: 24px;
+}
+
+.year-input-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.year-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 16px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.year-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.predict-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.predict-btn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.predict-btn:disabled {
+  background-color: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.prediction-error {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+}
+
+[data-theme="dark"] .prediction-error {
+  background-color: #451a1a;
+  border-color: #7f1d1d;
+  color: #f87171;
+}
+
+.prediction-error p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.prediction-output {
+  border-top: 1px solid var(--border-primary);
+  padding-top: 24px;
+}
+
+.prediction-output h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.prediction-text {
+  background-color: var(--bg-secondary);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-secondary);
+}
+
+.prediction-text p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.prediction-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.prediction-loading .loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prediction-loading .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile styles for Year Predictor Modal */
+@media (max-width: 768px) {
+  .year-predictor-modal {
+    width: 95%;
+    max-width: none;
+    margin: 0 10px;
+  }
+
+  .year-predictor-modal-header {
+    padding: 16px 20px;
+  }
+
+  .year-predictor-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .year-predictor-modal-content {
+    padding: 20px;
+  }
+
+  .year-input {
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 }
 
