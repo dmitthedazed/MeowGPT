@@ -99,16 +99,16 @@ const Sidebar = ({
             </button>
           )}
         </div>
-        <button 
-          className="new-chat-btn" 
+        <button
+          className="new-chat-btn"
           onClick={onNewChat}
           title={!isOpen ? t("newChat") : ""}
         >
           <FiPlus size={16} />
           <span>{t("newChat")}</span>
         </button>
-        <button 
-          className="search-chat-btn" 
+        <button
+          className="search-chat-btn"
           onClick={onOpenSearch}
           title={!isOpen ? t("searchChats") : ""}
         >
@@ -153,7 +153,7 @@ const Sidebar = ({
       </div>
 
       <div className="sidebar-footer">
-        <button 
+        <button
           className="upgrade-plan-btn"
           title={!isOpen ? t("upgradeTitle") : ""}
         >
