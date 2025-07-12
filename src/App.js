@@ -454,19 +454,22 @@ function App() {
 
     try {
       // Fetch cat image from The Cat API
-      const response = await fetch("https://api.thecatapi.com/v1/images/search", {
-        method: "GET",
-        headers: {
-          "x-api-key": "ylX4blBYT9FaoVd6OhvR",
-        },
-      });
+      const response = await fetch(
+        "https://api.thecatapi.com/v1/images/search",
+        {
+          method: "GET",
+          headers: {
+            "x-api-key": "ylX4blBYT9FaoVd6OhvR",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch cat image");
       }
 
       const data = await response.json();
-      
+
       if (data && data.length > 0) {
         const newImage = {
           id: Date.now(),
@@ -488,7 +491,7 @@ function App() {
       }
     } catch (error) {
       console.error("Error generating cat image:", error);
-      
+
       // Fallback to placeholder if API fails
       const fallbackImage = {
         id: Date.now(),
@@ -500,7 +503,7 @@ function App() {
       // Add to current generated images (for display)
       setGeneratedImages([fallbackImage]);
 
-      // Add to gallery (for persistent storage)  
+      // Add to gallery (for persistent storage)
       setImageGallery((prevGallery) => [fallbackImage, ...prevGallery]);
 
       // Clear the prompt after generation

@@ -1861,14 +1861,15 @@ body {
 
 .prompt-input-container {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 800px;
+  flex-direction: row;
+  gap: 12px;
+  max-width: 1200px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 .image-prompt-input {
-  width: 100%;
+  flex: 1;
   padding: 16px;
   border: 1px solid var(--border-secondary);
   border-radius: 8px;
@@ -1890,28 +1891,34 @@ body {
 }
 
 .generate-btn {
-  align-self: flex-start;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  background-color: var(--accent-primary);
-  color: white;
-  border: none;
+  padding: 12px 20px;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  align-self: stretch;
+  min-width: 120px;
 }
 
 .generate-btn:hover:not(:disabled) {
-  background-color: var(--accent-secondary);
+  background-color: var(--text-secondary);
+  border-color: var(--accent-primary);
   transform: translateY(-1px);
 }
 
 .generate-btn:disabled {
-  background-color: var(--text-secondary);
+  background-color: var(--bg-secondary);
+  color: var(--text-tertiary);
+  border-color: var(--border-secondary);
   cursor: not-allowed;
   transform: none;
 }
@@ -2182,11 +2189,14 @@ body {
 
   .prompt-input-container {
     max-width: none;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .generate-btn {
     align-self: stretch;
     justify-content: center;
+    min-width: auto;
   }
 
   .current-image-preview-container {
