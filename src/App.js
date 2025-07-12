@@ -1136,7 +1136,7 @@ function App() {
                   type="text"
                   value={yearInput}
                   onChange={handleYearInputChange}
-                  placeholder="2025"
+                  placeholder="type here vro"
                   maxLength="4"
                   className="year-input"
                 />
