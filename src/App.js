@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
+import ImageGeneration from "./components/ImageGeneration";
 import { FiSearch, FiX, FiPlus, FiMessageSquare } from "react-icons/fi";
 import { useTranslation } from "./translations";
 
@@ -192,6 +193,11 @@ function App() {
   const [isImageGenerationOpen, setIsImageGenerationOpen] = useState(false);
   const [imagePrompt, setImagePrompt] = useState("");
   const [generatedImages, setGeneratedImages] = useState([]);
+  const [isGeneratingImages, setIsGeneratingImages] = useState(false);
+  const [imageGallery, setImageGallery] = useState([]); // Gallery for all generated images
+
+  // View mode state
+  const [currentView, setCurrentView] = useState("chat"); // "chat" or "imageGeneration"
 
   const { t } = useTranslation(language);
 
@@ -352,11 +358,13 @@ function App() {
     console.log("🆕 Creating new chat:", newChat);
     setChats((prevChats) => [newChat, ...prevChats]);
     setCurrentChat(newChat);
+    setCurrentView("chat"); // Switch back to chat view
   };
 
   const handleSelectChat = (chat) => {
     console.log("📱 Selecting chat:", chat);
     setCurrentChat(chat);
+    setCurrentView("chat"); // Switch back to chat view
   };
 
   const handleReturnHome = () => {
@@ -418,13 +426,14 @@ function App() {
     handleCloseSearch();
   };
 
-  // Image generation modal functions
+  // Image generation view functions
   const handleOpenImageGeneration = () => {
-    setIsImageGenerationOpen(true);
+    setCurrentView("imageGeneration");
     setImagePrompt("");
     setGeneratedImages([]);
+    setIsGeneratingImages(false);
 
-    // Close sidebar on mobile when opening image generation modal
+    // Close sidebar on mobile when switching to image generation
     const isMobile = window.innerWidth <= 768;
     if (isMobile && isSidebarOpen) {
       setIsSidebarOpen(false);
@@ -432,23 +441,73 @@ function App() {
   };
 
   const handleCloseImageGeneration = () => {
-    setIsImageGenerationOpen(false);
+    setCurrentView("chat");
     setImagePrompt("");
     setGeneratedImages([]);
+    setIsGeneratingImages(false);
   };
 
-  const handleGenerateImage = () => {
+  const handleGenerateImage = async () => {
     if (!imagePrompt.trim()) return;
 
-    // Generate fake images (placeholder URLs)
-    const fakeImages = [
-      `https://picsum.photos/512/512?random=${Math.random()}`,
-      `https://picsum.photos/512/512?random=${Math.random()}`,
-      `https://picsum.photos/512/512?random=${Math.random()}`,
-      `https://picsum.photos/512/512?random=${Math.random()}`,
-    ];
+    setIsGeneratingImages(true);
 
-    setGeneratedImages(fakeImages);
+    try {
+      // Fetch cat image from The Cat API
+      const response = await fetch("https://api.thecatapi.com/v1/images/search", {
+        method: "GET",
+        headers: {
+          "x-api-key": "ylX4blBYT9FaoVd6OhvR",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch cat image");
+      }
+
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        const newImage = {
+          id: Date.now(),
+          url: data[0].url,
+          prompt: imagePrompt,
+          timestamp: Date.now(),
+        };
+
+        // Add to current generated images (for display)
+        setGeneratedImages([newImage]);
+
+        // Add to gallery (for persistent storage)
+        setImageGallery((prevGallery) => [newImage, ...prevGallery]);
+
+        // Clear the prompt after successful generation
+        setImagePrompt("");
+      } else {
+        throw new Error("No cat image received from API");
+      }
+    } catch (error) {
+      console.error("Error generating cat image:", error);
+      
+      // Fallback to placeholder if API fails
+      const fallbackImage = {
+        id: Date.now(),
+        url: `https://picsum.photos/512/512?random=${Math.random()}`,
+        prompt: imagePrompt,
+        timestamp: Date.now(),
+      };
+
+      // Add to current generated images (for display)
+      setGeneratedImages([fallbackImage]);
+
+      // Add to gallery (for persistent storage)  
+      setImageGallery((prevGallery) => [fallbackImage, ...prevGallery]);
+
+      // Clear the prompt after generation
+      setImagePrompt("");
+    } finally {
+      setIsGeneratingImages(false);
+    }
   };
 
   const handleSendMessage = (message) => {
@@ -780,18 +839,32 @@ function App() {
         className={`sidebar-overlay ${isSidebarOpen ? "active" : ""}`}
         onClick={toggleSidebar}
       />
-      <ChatInterface
-        currentChat={currentChat}
-        onSendMessage={handleSendMessage}
-        isSidebarOpen={isSidebarOpen}
-        onToggleSidebar={toggleSidebar}
-        theme={theme}
-        language={language}
-        onThemeChange={handleThemeChange}
-        onLanguageChange={handleLanguageChange}
-        isAiTyping={isAiTyping}
-        onRegenerateResponse={handleRegenerateResponse}
-      />
+      {/* Main Content Area */}
+      {currentView === "chat" ? (
+        <ChatInterface
+          currentChat={currentChat}
+          onSendMessage={handleSendMessage}
+          isSidebarOpen={isSidebarOpen}
+          onToggleSidebar={toggleSidebar}
+          theme={theme}
+          language={language}
+          onThemeChange={handleThemeChange}
+          onLanguageChange={handleLanguageChange}
+          isAiTyping={isAiTyping}
+          onRegenerateResponse={handleRegenerateResponse}
+        />
+      ) : (
+        <ImageGeneration
+          language={language}
+          imagePrompt={imagePrompt}
+          setImagePrompt={setImagePrompt}
+          generatedImages={generatedImages}
+          isGeneratingImages={isGeneratingImages}
+          onGenerateImage={handleGenerateImage}
+          imageGallery={imageGallery}
+          setImageGallery={setImageGallery}
+        />
+      )}
 
       {/* Search Modal */}
       {isSearchOpen && (

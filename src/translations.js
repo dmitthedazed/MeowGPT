@@ -75,6 +75,18 @@ export const translations = {
     // Common
     close: "Close",
 
+    // Image Generation
+    imageGenerationTitle: "Image Generation",
+    imagePromptPlaceholder: "Describe the image you want to generate...",
+    generateImages: "Generate Image",
+    generatingImages: "Generating image...",
+    downloadImage: "Download",
+    imageGenerationEmptyState:
+      'Click "Generate Image" to create an image from your prompt',
+    galleryTitle: "Gallery",
+    galleryEmpty: "No images generated yet",
+    clearGallery: "Clear Gallery",
+
     // Sidebar
     noChats: "No chats yet",
 
@@ -160,6 +172,15 @@ export const translations = {
 
     // Common
     close: "Закрыть",
+
+    // Image Generation
+    imageGenerationTitle: "Генерация изображений",
+    imagePromptPlaceholder: "Опишите изображение, которое хотите создать...",
+    generateImages: "Создать изображения",
+    generatingImages: "Создание изображений...",
+    downloadImage: "Скачать",
+    imageGenerationEmptyState:
+      'Нажмите "Создать изображения", чтобы создать изображения из вашего запроса',
 
     // Sidebar
     noChats: "Пока нет чатов",
@@ -247,6 +268,15 @@ export const translations = {
     // Common
     close: "Закрити",
 
+    // Image Generation
+    imageGenerationTitle: "Генерація зображень",
+    imagePromptPlaceholder: "Опишіть зображення, яке хочете створити...",
+    generateImages: "Створити зображення",
+    generatingImages: "Створення зображень...",
+    downloadImage: "Завантажити",
+    imageGenerationEmptyState:
+      'Натисніть "Створити зображення", щоб створити зображення з вашого запиту',
+
     // Sidebar
     noChats: "Поки немає чатів",
 
@@ -332,6 +362,15 @@ export const translations = {
 
     // Common
     close: "Zavrieť",
+
+    // Image Generation
+    imageGenerationTitle: "Generovanie obrázkov",
+    imagePromptPlaceholder: "Opíšte obrázok, ktorý chcete vytvoriť...",
+    generateImages: "Vytvoriť obrázky",
+    generatingImages: "Vytváranie obrázkov...",
+    downloadImage: "Stiahnuť",
+    imageGenerationEmptyState:
+      'Kliknite na "Vytvoriť obrázky" na vytvorenie obrázkov z vášho popisu',
 
     // Sidebar
     noChats: "Zatiaľ žiadne chaty",
@@ -419,6 +458,15 @@ export const translations = {
     // Common
     close: "Zamknij",
 
+    // Image Generation
+    imageGenerationTitle: "Generowanie obrazów",
+    imagePromptPlaceholder: "Opisz obraz, który chcesz utworzyć...",
+    generateImages: "Wygeneruj obrazy",
+    generatingImages: "Generowanie obrazów...",
+    downloadImage: "Pobierz",
+    imageGenerationEmptyState:
+      'Kliknij "Wygeneruj obrazy", aby utworzyć obrazy z Twojego opisu',
+
     // Sidebar
     noChats: "Brak chatów",
 
@@ -503,6 +551,15 @@ export const translations = {
 
     // Common
     close: "Nooboo",
+
+    // Image Generation
+    imageGenerationTitle: "Yibs Blarfy Sul",
+    imagePromptPlaceholder: "Meshaloob yibs blarfy sul whippna...",
+    generateImages: "Firby Blarfy",
+    generatingImages: "Firby blarfy nooboo...",
+    downloadImage: "Meshaloob",
+    imageGenerationEmptyState:
+      'Firby "Firby Blarfy" sul meshaloob blarfy yibs whippna',
 
     // Sidebar
     noChats: "Plerg Yibs Nooboo",
@@ -589,6 +646,14 @@ export const translations = {
     // Common
     close: "Meow",
 
+    // Image Generation
+    imageGenerationTitle: "Meow Mrow Meow",
+    imagePromptPlaceholder: "Meow meow mrow meow meow...",
+    generateImages: "Meow Mrow",
+    generatingImages: "Meow mrow meow...",
+    downloadImage: "Mrow",
+    imageGenerationEmptyState: 'Meow "Meow Mrow" meow mrow meow meow meow',
+
     // Sidebar
     noChats: "Meow meow meow",
 
@@ -674,6 +739,15 @@ export const translations = {
     // Common
     close: "PERIOD 💜",
 
+    // Image Generation
+    imageGenerationTitle: "SERVING VISUALS 💜",
+    imagePromptPlaceholder: "DIVA DESCRIBE THAT VISUAL ENERGY 💜",
+    generateImages: "SLAY VISUALS 💜",
+    generatingImages: "SERVING LOOKS 💜",
+    downloadImage: "ATE 💜",
+    imageGenerationEmptyState:
+      'YASSS CLICK "SLAY VISUALS" TO SERVE LOOKS FROM YOUR VIBE 💜',
+
     // Sidebar
     noChats: "SERVING CUNT NO CHATS 💜",
 
@@ -758,6 +832,15 @@ export const translations = {
 
     // Common
     close: "ts 🥀",
+
+    // Image Generation
+    imageGenerationTitle: "hawk tuah visuals 🥀",
+    imagePromptPlaceholder: "yo vro describe that visual gurt 🥀",
+    generateImages: "hawk tuah create 🥀",
+    generatingImages: "fr making visuals 🥀",
+    downloadImage: "gurt 🥀",
+    imageGenerationEmptyState:
+      'yo click "hawk tuah create" fr make visuals from your vibe 🥀',
 
     // Sidebar
     noChats: "yo dih sybau 🥀",
