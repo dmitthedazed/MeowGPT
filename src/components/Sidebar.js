@@ -86,6 +86,7 @@ const Sidebar = ({
             <button
               className="logo-btn"
               onClick={isOpen ? onReturnHome : onToggle}
+              title={!isOpen ? "MeowGPT" : ""}
             >
               <div className="logo-icon">
                 {React.createElement(getLogoIcon())}
@@ -98,11 +99,19 @@ const Sidebar = ({
             </button>
           )}
         </div>
-        <button className="new-chat-btn" onClick={onNewChat}>
+        <button 
+          className="new-chat-btn" 
+          onClick={onNewChat}
+          title={!isOpen ? t("newChat") : ""}
+        >
           <FiPlus size={16} />
           <span>{t("newChat")}</span>
         </button>
-        <button className="search-chat-btn" onClick={onOpenSearch}>
+        <button 
+          className="search-chat-btn" 
+          onClick={onOpenSearch}
+          title={!isOpen ? t("searchChats") : ""}
+        >
           <FiSearch size={16} />
           <span>{t("searchChats")}</span>
         </button>
@@ -121,6 +130,7 @@ const Sidebar = ({
               onClick={() => onSelectChat(chat)}
               onMouseEnter={() => setHoveredChatId(chat.id)}
               onMouseLeave={() => setHoveredChatId(null)}
+              title={!isOpen ? chat.title : ""}
             >
               <div className="chat-item-content">
                 <FiMessageSquare size={16} className="chat-icon" />
@@ -143,7 +153,10 @@ const Sidebar = ({
       </div>
 
       <div className="sidebar-footer">
-        <button className="upgrade-plan-btn">
+        <button 
+          className="upgrade-plan-btn"
+          title={!isOpen ? t("upgradeTitle") : ""}
+        >
           <FiZap size={20} />
           <div className="upgrade-text">
             <div className="upgrade-title">{t("upgradeTitle")}</div>
