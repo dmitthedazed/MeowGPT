@@ -904,6 +904,44 @@ body {
   color: #374151;
 }
 
+/* Copy button success state */
+.action-btn.copy-success {
+  color: #10a37f;
+  background-color: rgba(16, 163, 127, 0.1);
+  animation: copySuccess 0.3s ease-in-out;
+}
+
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+    background-color: transparent;
+  }
+  50% {
+    transform: scale(1.1);
+    background-color: rgba(16, 163, 127, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgba(16, 163, 127, 0.1);
+  }
+}
+
+.action-btn.copy-success:hover {
+  background-color: rgba(16, 163, 127, 0.15);
+  color: #10a37f;
+}
+
+/* Dark theme copy success */
+[data-theme="dark"] .action-btn.copy-success {
+  color: #10a37f;
+  background-color: rgba(16, 163, 127, 0.15);
+}
+
+[data-theme="dark"] .action-btn.copy-success:hover {
+  background-color: rgba(16, 163, 127, 0.2);
+  color: #10a37f;
+}
+
 .chat-input-container {
   position: fixed;
   bottom: 20px;
@@ -1028,6 +1066,14 @@ body {
 .typing-dots {
   display: flex;
   gap: 4px;
+}
+
+/* Typing dots when they appear within message content */
+.message-content-wrapper .typing-dots {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  min-height: 24px;
 }
 
 .typing-dot {
@@ -1526,6 +1572,7 @@ body {
   justify-content: center;
   z-index: 9999;
   padding-top: 80px;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .search-modal {
@@ -1537,12 +1584,18 @@ body {
   max-height: 70vh;
   overflow: hidden;
   border: 1px solid var(--border-primary);
+  animation: slideInUp 0.3s ease-out;
 }
 
 /* Light mode specific - white background */
 [data-theme="light"] .search-modal {
   background-color: #ffffff;
   border-color: var(--border-primary);
+}
+
+/* Enhanced shadow for dark mode */
+[data-theme="dark"] .search-modal {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .search-modal-header {

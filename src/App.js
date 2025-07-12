@@ -181,6 +181,7 @@ function App() {
   const [theme, setTheme] = useState("system");
   const [language, setLanguage] = useState(detectUserLanguage());
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isAiTyping, setIsAiTyping] = useState(false);
 
   // Search modal state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -432,11 +433,18 @@ function App() {
       setChats((prevChats) => [newChat, ...prevChats]);
       setCurrentChat(newChat);
 
-      // Add AI response after a delay
+      // Generate AI response content first to calculate typing duration
+      const aiResponseContent = generateRandomMeowResponse();
+      const typingDuration = calculateTypingDuration(aiResponseContent);
+
+      // Show typing indicator
+      setIsAiTyping(true);
+
+      // Add AI response after calculated delay
       setTimeout(() => {
         const aiResponse = {
           id: Date.now() + 1,
-          content: generateRandomMeowResponse(),
+          content: aiResponseContent,
           sender: "ai",
           timestamp: Date.now(),
         };
@@ -452,7 +460,8 @@ function App() {
         setChats((prevChats) =>
           prevChats.map((chat) => (chat.id === newChat.id ? finalChat : chat))
         );
-      }, 1000);
+        setIsAiTyping(false);
+      }, typingDuration);
       return;
     }
 
@@ -474,11 +483,18 @@ function App() {
       prevChats.map((chat) => (chat.id === currentChat.id ? updatedChat : chat))
     );
 
+    // Generate AI response content first to calculate typing duration
+    const aiResponseContent = generateRandomMeowResponse();
+    const typingDuration = calculateTypingDuration(aiResponseContent);
+
+    // Show typing indicator
+    setIsAiTyping(true);
+
     // Add AI response after a delay
     setTimeout(() => {
       const aiResponse = {
         id: Date.now() + 1,
-        content: generateRandomMeowResponse(),
+        content: aiResponseContent,
         sender: "ai",
         timestamp: Date.now(),
       };
@@ -494,7 +510,108 @@ function App() {
       setChats((prevChats) =>
         prevChats.map((chat) => (chat.id === currentChat.id ? finalChat : chat))
       );
-    }, 1000);
+      setIsAiTyping(false);
+    }, typingDuration);
+  };
+
+  // Calculate typing duration based on message content
+  const calculateTypingDuration = (message) => {
+    if (!message) return 1000; // Default 1 second
+
+    // Count words in the message
+    const words = message
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
+    const wordCount = words.length;
+
+    // Base duration: 200ms per word, with minimum 800ms and maximum 4000ms
+    const baseTime = 200;
+    const minTime = 800;
+    const maxTime = 4000;
+
+    const calculatedTime = Math.max(
+      minTime,
+      Math.min(maxTime, wordCount * baseTime)
+    );
+
+    console.log(
+      `💬 Message: "${message.substring(
+        0,
+        50
+      )}..." | Words: ${wordCount} | Typing duration: ${calculatedTime}ms`
+    );
+
+    return calculatedTime;
+  };
+
+  // Regenerate AI response for a specific message
+  const handleRegenerateResponse = (messageId) => {
+    if (!currentChat) return;
+
+    console.log("🔄 Regenerating response for message:", messageId);
+
+    // Find the message to regenerate
+    const messageIndex = currentChat.messages.findIndex(
+      (msg) => msg.id === messageId
+    );
+    if (
+      messageIndex === -1 ||
+      currentChat.messages[messageIndex].sender !== "ai"
+    ) {
+      console.log("❌ Message not found or not an AI message");
+      return;
+    }
+
+    // Generate new AI response content
+    const newAiResponseContent = generateRandomMeowResponse();
+    const typingDuration = calculateTypingDuration(newAiResponseContent);
+
+    // Immediately replace the message with typing indicator
+    const updatedMessagesWithTyping = [...currentChat.messages];
+    updatedMessagesWithTyping[messageIndex] = {
+      ...updatedMessagesWithTyping[messageIndex],
+      content: "typing",
+      isTyping: true,
+      timestamp: Date.now(),
+    };
+
+    const chatWithTyping = {
+      ...currentChat,
+      messages: updatedMessagesWithTyping,
+    };
+
+    setCurrentChat(chatWithTyping);
+    setChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.id === currentChat.id ? chatWithTyping : chat
+      )
+    );
+
+    // Replace with actual content after calculated delay
+    setTimeout(() => {
+      const updatedMessages = [...currentChat.messages];
+      updatedMessages[messageIndex] = {
+        ...updatedMessages[messageIndex],
+        content: newAiResponseContent,
+        isTyping: false,
+        timestamp: Date.now(), // Update timestamp to show it's regenerated
+      };
+
+      const updatedChat = {
+        ...currentChat,
+        messages: updatedMessages,
+      };
+
+      console.log("🔄 Regenerated AI response:", newAiResponseContent);
+
+      setCurrentChat(updatedChat);
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat.id === currentChat.id ? updatedChat : chat
+        )
+      );
+    }, typingDuration);
   };
 
   const handleThemeChange = (newTheme) => {
@@ -630,6 +747,8 @@ function App() {
         language={language}
         onThemeChange={handleThemeChange}
         onLanguageChange={handleLanguageChange}
+        isAiTyping={isAiTyping}
+        onRegenerateResponse={handleRegenerateResponse}
       />
 
       {/* Search Modal */}

@@ -16,6 +16,7 @@ import {
   FiShare,
   FiX,
   FiMenu,
+  FiCheck,
 } from "react-icons/fi";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useTranslation } from "../translations";
@@ -29,15 +30,18 @@ const ChatInterface = ({
   language,
   onThemeChange,
   onLanguageChange,
+  isAiTyping = false,
+  setIsAiTyping,
+  onRegenerateResponse,
 }) => {
   const { t } = useTranslation(language);
   const [inputValue, setInputValue] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("MeowGPT");
   const [messageRatings, setMessageRatings] = useState({});
+  const [copiedMessages, setCopiedMessages] = useState({});
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const messagesEndRef = useRef(null);
@@ -128,12 +132,11 @@ const ChatInterface = ({
 
       onSendMessage(message);
       setInputValue("");
-      setIsTyping(true);
 
-      // Stop typing indicator when response comes
-      setTimeout(() => {
-        setIsTyping(false);
-      }, 1000);
+      // Use parent's typing control
+      if (setIsAiTyping) {
+        setIsAiTyping(true);
+      }
     }
   };
 
@@ -156,13 +159,30 @@ const ChatInterface = ({
     adjustTextareaHeight();
   }, [inputValue]);
 
-  const handleCopyMessage = (content) => {
+  const handleCopyMessage = (content, messageId) => {
     navigator.clipboard.writeText(content);
+
+    // Show checkmark feedback
+    setCopiedMessages((prev) => ({
+      ...prev,
+      [messageId]: true,
+    }));
+
+    // Hide checkmark after 2 seconds
+    setTimeout(() => {
+      setCopiedMessages((prev) => ({
+        ...prev,
+        [messageId]: false,
+      }));
+    }, 2000);
   };
 
   const handleRegenerateResponse = (messageId) => {
-    // In a real implementation, this would regenerate the AI response
-    console.log("Regenerating response for message:", messageId);
+    if (onRegenerateResponse) {
+      onRegenerateResponse(messageId);
+    } else {
+      console.log("Regenerate function not provided");
+    }
   };
 
   const handleShareMessage = (content) => {
@@ -380,71 +400,93 @@ const ChatInterface = ({
                       <span className="ai-avatar">🐱</span>
                     </div>
                     <div className="message-content-wrapper">
-                      <div className="message-content">{message.content}</div>
-                      <div className="message-actions">
-                        <button
-                          className="action-btn"
-                          onClick={() => handleCopyMessage(message.content)}
-                          title={t("copy")}
-                        >
-                          <FiCopy size={14} />
-                        </button>
-                        <button
-                          className={`action-btn ${
-                            messageRatings[message.id] === "thumbsUp"
-                              ? "active"
-                              : ""
-                          }`}
-                          title={t("goodResponse")}
-                          onClick={() =>
-                            handleRateMessage(message.id, "thumbsUp")
-                          }
-                        >
-                          {messageRatings[message.id] === "thumbsUp" ? (
-                            <AiFillLike size={14} />
-                          ) : (
-                            <FiThumbsUp size={14} />
-                          )}
-                        </button>
-                        <button
-                          className={`action-btn ${
-                            messageRatings[message.id] === "thumbsDown"
-                              ? "active"
-                              : ""
-                          }`}
-                          title={t("badResponse")}
-                          onClick={() =>
-                            handleRateMessage(message.id, "thumbsDown")
-                          }
-                        >
-                          {messageRatings[message.id] === "thumbsDown" ? (
-                            <AiFillDislike size={14} />
-                          ) : (
-                            <FiThumbsDown size={14} />
-                          )}
-                        </button>
-                        <button
-                          className="action-btn"
-                          onClick={() => handleRegenerateResponse(message.id)}
-                          title={t("regenerate")}
-                        >
-                          <FiRefreshCw size={14} />
-                        </button>
-                        <button
-                          className="action-btn"
-                          onClick={() => handleShareMessage(message.content)}
-                          title={t("share")}
-                        >
-                          <FiShare size={14} />
-                        </button>
-                      </div>
+                      {message.isTyping ? (
+                        <div className="typing-dots">
+                          <div className="typing-dot"></div>
+                          <div className="typing-dot"></div>
+                          <div className="typing-dot"></div>
+                        </div>
+                      ) : (
+                        <div className="message-content">{message.content}</div>
+                      )}
+                      {!message.isTyping && (
+                        <div className="message-actions">
+                          <button
+                            className={`action-btn ${
+                              copiedMessages[message.id] ? "copy-success" : ""
+                            }`}
+                            onClick={() =>
+                              handleCopyMessage(message.content, message.id)
+                            }
+                            title={
+                              copiedMessages[message.id]
+                                ? t("copied")
+                                : t("copy")
+                            }
+                          >
+                            {copiedMessages[message.id] ? (
+                              <FiCheck size={14} />
+                            ) : (
+                              <FiCopy size={14} />
+                            )}
+                          </button>
+                          <button
+                            className={`action-btn ${
+                              messageRatings[message.id] === "thumbsUp"
+                                ? "active"
+                                : ""
+                            }`}
+                            title={t("goodResponse")}
+                            onClick={() =>
+                              handleRateMessage(message.id, "thumbsUp")
+                            }
+                          >
+                            {messageRatings[message.id] === "thumbsUp" ? (
+                              <AiFillLike size={14} />
+                            ) : (
+                              <FiThumbsUp size={14} />
+                            )}
+                          </button>
+                          <button
+                            className={`action-btn ${
+                              messageRatings[message.id] === "thumbsDown"
+                                ? "active"
+                                : ""
+                            }`}
+                            title={t("badResponse")}
+                            onClick={() =>
+                              handleRateMessage(message.id, "thumbsDown")
+                            }
+                          >
+                            {messageRatings[message.id] === "thumbsDown" ? (
+                              <AiFillDislike size={14} />
+                            ) : (
+                              <FiThumbsDown size={14} />
+                            )}
+                          </button>
+                          <button
+                            className="action-btn"
+                            onClick={() => handleRegenerateResponse(message.id)}
+                            title={t("regenerate")}
+                          >
+                            <FiRefreshCw size={14} />
+                          </button>
+                          <button
+                            className="action-btn"
+                            onClick={() => handleShareMessage(message.content)}
+                            title={t("share")}
+                          >
+                            <FiShare size={14} />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
               </div>
             ))}
 
-            {isTyping && (
+            {isAiTyping && (
               <div className="typing-indicator">
                 <div className="message-container">
                   <div className="message-avatar ai">

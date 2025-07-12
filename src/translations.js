@@ -63,6 +63,7 @@ export const translations = {
     // Buttons
     send: "Send",
     copy: "Copy",
+    copied: "Copied!",
     deleteChat: "Delete chat",
     temporaryChat: "Turn on temporary chat",
     goodResponse: "Good response",
@@ -147,6 +148,7 @@ export const translations = {
     // Buttons
     send: "Отправить",
     copy: "Копировать",
+    copied: "Скопировано!",
     deleteChat: "Удалить чат",
     temporaryChat: "Включить временный чат",
     goodResponse: "Хороший ответ",
@@ -231,6 +233,7 @@ export const translations = {
     // Buttons
     send: "Відправити",
     copy: "Копіювати",
+    copied: "Скопійовано!",
     deleteChat: "Видалити чат",
     temporaryChat: "Увімкнути тимчасовий чат",
     goodResponse: "Хороша відповідь",
@@ -315,6 +318,7 @@ export const translations = {
     // Buttons
     send: "Odoslať",
     copy: "Kopírovať",
+    copied: "Skopírované!",
     deleteChat: "Vymazať chat",
     temporaryChat: "Zapnúť dočasný chat",
     goodResponse: "Dobrá odpoveď",
@@ -399,6 +403,7 @@ export const translations = {
     // Buttons
     send: "Wyślij",
     copy: "Kopiuj",
+    copied: "Skopiowane!",
     deleteChat: "Usuń chat",
     temporaryChat: "Włącz chat tymczasowy",
     goodResponse: "Dobra odpowiedź",
@@ -482,6 +487,7 @@ export const translations = {
     // Buttons
     send: "Firby",
     copy: "Blarfy",
+    copied: "Blarfy Sul!",
     deleteChat: "Nooboo Plerg",
     temporaryChat: "Yibs Meshaloob Plerg",
     goodResponse: "Sul Whippna",
@@ -565,6 +571,7 @@ export const translations = {
     // Buttons
     send: "Meow",
     copy: "Meow",
+    copied: "Meow meow!",
     deleteChat: "Meow meow",
     temporaryChat: "Meow meow meow",
     goodResponse: "Meow meow",
@@ -648,6 +655,7 @@ export const translations = {
     // Buttons
     send: "YASSS 💜",
     copy: "SLAY 💜",
+    copied: "ATE AND LEFT NO CRUMBS 💜",
     deleteChat: "BADDIE DELETE 💜",
     temporaryChat: "BRAT CHAT 💜",
     goodResponse: "ATE 💜",
@@ -731,6 +739,7 @@ export const translations = {
     // Buttons
     send: "yo 🥀",
     copy: "gurt 🥀",
+    copied: "fr yo sybau 🥀",
     deleteChat: "dih ts 🥀",
     temporaryChat: "rn vro sybau 🥀",
     goodResponse: "fr yo 🥀",
