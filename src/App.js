@@ -189,8 +189,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // Image generation modal state
-  const [isImageGenerationOpen, setIsImageGenerationOpen] = useState(false);
+  // Image generation state
   const [imagePrompt, setImagePrompt] = useState("");
   const [generatedImages, setGeneratedImages] = useState([]);
   const [isGeneratingImages, setIsGeneratingImages] = useState(false);
@@ -287,19 +286,19 @@ function App() {
       if (e.key === "Escape" && isSearchOpen) {
         handleCloseSearch();
       }
-      if (e.key === "Escape" && isImageGenerationOpen) {
+      if (e.key === "Escape" && currentView === "imageGeneration") {
         handleCloseImageGeneration();
       }
     };
 
-    if (isSearchOpen || isImageGenerationOpen) {
+    if (isSearchOpen || currentView === "imageGeneration") {
       document.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isSearchOpen, isImageGenerationOpen]);
+  }, [isSearchOpen, currentView]);
 
   // Save chats to localStorage
   useEffect(() => {

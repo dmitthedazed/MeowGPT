@@ -103,7 +103,7 @@ const ImageGeneration = ({
               <div className="current-image-preview-container">
                 <img
                   src={generatedImages[0].url}
-                  alt="Latest generated image"
+                  alt="Latest generated cat"
                   className="current-generated-image-preview"
                 />
                 <div className="image-preview-info">
@@ -171,7 +171,7 @@ const ImageGeneration = ({
                   <div key={image.id} className="gallery-image-container">
                     <img
                       src={image.url}
-                      alt={`Gallery image ${index + 1}`}
+                      alt={`Gallery cat ${index + 1}`}
                       className="gallery-image"
                     />
                     <div className="gallery-image-overlay">
