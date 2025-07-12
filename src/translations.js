@@ -94,9 +94,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Enter the current year to predict the next year",
+    yearPlaceholder: "type here",
     predict: "Predict",
     predicting: "Predicting...",
     prediction: "Prediction",
+    loadingMessage1: "Calculating next year with AI",
+    loadingMessage2: "Looking at you from your webcam",
+    loadingMessage3: "Analyzing spacetime vortexes",
 
     // Account Menu
     logOut: "Log out",
@@ -197,9 +201,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Введите текущий год для предсказания следующего года",
+    yearPlaceholder: "введите здесь",
     predict: "Предсказать",
     predicting: "Предсказываю...",
     prediction: "Предсказание",
+    loadingMessage1: "Вычисляю следующий год с помощью ИИ",
+    loadingMessage2: "Смотрю на вас через вашу веб-камеру",
+    loadingMessage3: "Анализирую пространственно-временные вихри",
 
     // Account Menu
     logOut: "Выйти",
@@ -300,9 +308,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Введіть поточний рік для передбачення наступного року",
+    yearPlaceholder: "введіть тут",
     predict: "Передбачити",
     predicting: "Передбачаю...",
     prediction: "Передбачення",
+    loadingMessage1: "Обчислюю наступний рік за допомогою ШІ",
+    loadingMessage2: "Дивлюся на вас через вашу веб-камеру",
+    loadingMessage3: "Аналізую просторово-часові вихори",
 
     // Account Menu
     logOut: "Вийти",
@@ -403,9 +415,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Zadajte aktuálny rok na predpoveď budúceho roku",
+    yearPlaceholder: "zadajte tu",
     predict: "Predpovedať",
     predicting: "Predpovedám...",
     prediction: "Predpoveď",
+    loadingMessage1: "Počítam budúci rok pomocou AI",
+    loadingMessage2: "Pozerám na vás cez vašu webkameru",
+    loadingMessage3: "Analyzujem priestorovo-časové víry",
 
     // Account Menu
     logOut: "Odhlásiť sa",
@@ -506,9 +522,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Wpisz aktualny rok, aby przewidzieć następny rok",
+    yearPlaceholder: "wpisz tutaj",
     predict: "Przewiduj",
     predicting: "Przewiduję...",
     prediction: "Przewidywanie",
+    loadingMessage1: "Obliczam następny rok za pomocą AI",
+    loadingMessage2: "Patrzę na ciebie przez twoją kamerę",
+    loadingMessage3: "Analizuję wiry czasoprzestrzenne",
 
     // Account Menu
     logOut: "Wyloguj się",
@@ -608,9 +628,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Meshaloob current yibs to predict next yibs",
+    yearPlaceholder: "firby yibs here",
     predict: "Firby Whippna",
     predicting: "Firby whippna nooboo...",
     prediction: "Whippna Sul",
+    loadingMessage1: "Blarfy next yibs with AI nooboo",
+    loadingMessage2: "Whippna at you from your meshaloob box",
+    loadingMessage3: "Sul firby spacetime blarfy vortex",
 
     // Account Menu
     logOut: "Meshaloob Firby",
@@ -709,9 +733,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "Meow current year to predict next year",
+    yearPlaceholder: "meow here",
     predict: "Meow mrow",
     predicting: "Meow mrow meow...",
     prediction: "Mrow meow",
+    loadingMessage1: "Meow mrow next year with AI",
+    loadingMessage2: "Meow watching you from meow camera",
+    loadingMessage3: "Mrow analyzing spacetime meow vortex",
 
     // Account Menu
     logOut: "Meow meow",
@@ -811,9 +839,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "SPILL THE CURRENT YEAR TO PREDICT THE NEXT ONE 💜",
+    yearPlaceholder: "SERVE IT HERE QUEEN 💜",
     predict: "SERVE FUTURE TEA 💜",
     predicting: "READING THE UNIVERSE 💜",
     prediction: "THE TEA IS 💜",
+    loadingMessage1: "CALCULATING NEXT YEAR WITH AI BESTIE 💜",
+    loadingMessage2: "WATCHING YOU FROM YOUR CAMERA QUEEN 💜",
+    loadingMessage3: "ANALYZING SPACETIME VORTEX ENERGY 💜",
 
     // Account Menu
     logOut: "YASSS BYE 💜",
@@ -913,9 +945,13 @@ export const translations = {
 
     // Year Predictor
     enterYear: "drop the current year to predict the next one fr 🥀",
+    yearPlaceholder: "type here vro 🥀",
     predict: "hawk tuah predict 🥀",
     predicting: "fr reading the future 🥀",
     prediction: "vro the tea is 🥀",
+    loadingMessage1: "calculating with ai vro 🥀",
+    loadingMessage2: "looking at you from your camera vro 🥀",
+    loadingMessage3: "analyzing sybau vortexes vro 🥀",
 
     // Account Menu
     logOut: "gurt hawk tuah 🥀",
