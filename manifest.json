@@ -4,8 +4,8 @@
   "display": "standalone",
   "start_url": "/MeowGPT/",
   "scope": "/MeowGPT/",
-  "background_color": "#181818",
-  "theme_color": "#181818",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "display_override": ["window-controls-overlay", "minimal-ui", "standalone"],
   "orientation": "portrait-primary",
   "icons": [
