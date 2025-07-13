@@ -6,11 +6,14 @@
   "scope": "/MeowGPT/",
   "background_color": "#181818",
   "theme_color": "#181818",
+  "display_override": ["window-controls-overlay", "minimal-ui", "standalone"],
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/MeowGPT/icon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
