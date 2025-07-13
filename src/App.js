@@ -311,10 +311,6 @@ function App() {
   const [predictionMessage, setPredictionMessage] = useState("");
   const [predictionError, setPredictionError] = useState("");
 
-  // PWA Install prompt state
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-
   const { t } = useTranslation(language);
 
   // Initialize app data from localStorage
@@ -480,86 +476,6 @@ function App() {
     setCurrentChat(newChat);
     setCurrentView("chat"); // Switch back to chat view
   }, [chats]);
-
-  // Handle PWA shortcut actions from URL parameters
-  useEffect(() => {
-    if (isInitialized) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const action = urlParams.get("action");
-
-      if (action === "new-chat") {
-        handleNewChat();
-        // Clean up the URL
-        window.history.replaceState({}, "", "/");
-      } else if (action === "year-predictor") {
-        setIsYearPredictorOpen(true);
-        // Clean up the URL
-        window.history.replaceState({}, "", "/");
-      }
-    }
-  }, [isInitialized, handleNewChat]);
-
-  // PWA Install prompt handling
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (e) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later
-      setDeferredPrompt(e);
-      // Show the install prompt after a delay (don't be too aggressive)
-      setTimeout(() => {
-        setShowInstallPrompt(true);
-      }, 30000); // Show after 30 seconds
-    };
-
-    const handleAppInstalled = () => {
-      // Hide the install prompt
-      setShowInstallPrompt(false);
-      setDeferredPrompt(null);
-      console.log("PWA was installed");
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", handleAppInstalled);
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      );
-      window.removeEventListener("appinstalled", handleAppInstalled);
-    };
-  }, []);
-
-  // Handle PWA install
-  const handleInstallPWA = async () => {
-    if (!deferredPrompt) {
-      return;
-    }
-
-    // Show the install prompt
-    deferredPrompt.prompt();
-
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "accepted") {
-      console.log("User accepted the install prompt");
-    } else {
-      console.log("User dismissed the install prompt");
-    }
-
-    // Clear the deferredPrompt
-    setDeferredPrompt(null);
-    setShowInstallPrompt(false);
-  };
-
-  // Dismiss install prompt
-  const dismissInstallPrompt = () => {
-    setShowInstallPrompt(false);
-    // Don't show again for this session
-    sessionStorage.setItem("pwa-install-dismissed", "true");
-  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -1269,29 +1185,6 @@ function App() {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PWA Install Prompt */}
-      {showInstallPrompt && (
-        <div className="install-prompt-overlay">
-          <div className="install-prompt">
-            <p>Install this app for a better experience!</p>
-            <div className="install-prompt-actions">
-              <button
-                className="install-prompt-button"
-                onClick={handleInstallPWA}
-              >
-                Install
-              </button>
-              <button
-                className="install-prompt-dismiss"
-                onClick={dismissInstallPrompt}
-              >
-                Dismiss
-              </button>
             </div>
           </div>
         </div>
