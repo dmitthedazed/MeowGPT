@@ -373,7 +373,31 @@ function App() {
       }
 
       document.documentElement.setAttribute("data-theme", actualTheme);
-      console.log(`🎨 Theme applied: ${actualTheme} (from ${themeToApply})`);
+
+      // Update theme-color meta tags to match current theme
+      const getThemeColor = (theme) => {
+        return theme === "dark" ? "#181818" : "#ffffff";
+      };
+
+      const themeColor = getThemeColor(actualTheme);
+
+      // Update all theme-color meta tags
+      const themeColorMetas = document.querySelectorAll(
+        'meta[name="theme-color"]'
+      );
+      themeColorMetas.forEach((meta) => {
+        meta.setAttribute("content", themeColor);
+      });
+
+      // Update manifest theme colors dynamically if needed
+      // This ensures the PWA chrome/status bar matches the current theme
+      document
+        .querySelector("html")
+        .style.setProperty("--theme-bg-color", themeColor);
+
+      console.log(
+        `🎨 Theme applied: ${actualTheme} (from ${themeToApply}) - Status bar color: ${themeColor}`
+      );
     };
 
     applyTheme(theme);
@@ -384,7 +408,22 @@ function App() {
       const handleSystemThemeChange = (e) => {
         const newTheme = e.matches ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", newTheme);
-        console.log(`🎨 System theme changed to: ${newTheme}`);
+
+        // Update theme color for system changes too
+        const themeColor = newTheme === "dark" ? "#181818" : "#ffffff";
+        const themeColorMetas = document.querySelectorAll(
+          'meta[name="theme-color"]'
+        );
+        themeColorMetas.forEach((meta) => {
+          meta.setAttribute("content", themeColor);
+        });
+        document
+          .querySelector("html")
+          .style.setProperty("--theme-bg-color", themeColor);
+
+        console.log(
+          `🎨 System theme changed to: ${newTheme} - Status bar color: ${themeColor}`
+        );
       };
 
       mediaQuery.addEventListener("change", handleSystemThemeChange);

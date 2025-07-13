@@ -9,7 +9,7 @@
     />
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#181818" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
@@ -24,18 +24,100 @@
     />
 
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.svg" />
-    <link rel="icon" href="%PUBLIC_URL%/icon.svg" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="%PUBLIC_URL%/apple-touch-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="%PUBLIC_URL%/apple-touch-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="%PUBLIC_URL%/apple-touch-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="%PUBLIC_URL%/apple-touch-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="%PUBLIC_URL%/apple-touch-icon-180x180.png"
+    />
+
+    <!-- Regular favicon for all browsers -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="%PUBLIC_URL%/icon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="%PUBLIC_URL%/icon-16x16.png"
+    />
+    <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/icon.svg" />
+
+    <!-- Android Chrome icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="%PUBLIC_URL%/icon-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="%PUBLIC_URL%/icon-512x512.png"
+    />
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <!-- Microsoft Tiles -->
-    <meta name="msapplication-TileColor" content="#10a37f" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
     <meta
       name="msapplication-TileImage"
-      content="%PUBLIC_URL%/icons/icon-144x144.svg"
+      content="%PUBLIC_URL%/icon-144x144.png"
     />
+
+    <!-- Additional Android optimization -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="MeowGPT" />
+
+    <!-- Google Chrome for Android -->
+    <meta name="msapplication-navbutton-color" content="#ffffff" />
+
+    <!-- Dynamic theme color will be updated by JavaScript -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#181818"
+    />
+
+    <!-- Prevent address bar from appearing on Android -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="address=no" />
+
+    <!-- Windows support -->
+    <meta name="msapplication-starturl" content="/MeowGPT/" />
+    <meta name="msapplication-window" content="width=1024;height=768" />
+    <meta name="msapplication-tooltip" content="MeowGPT - AI Chat Assistant" />
 
     <title>MeowGPT</title>
   </head>
