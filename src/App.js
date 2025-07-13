@@ -7,14 +7,15 @@ import { FiSearch, FiX, FiPlus, FiMessageSquare, FiZap } from "react-icons/fi";
 import { useTranslation } from "./translations";
 
 // Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
       .then((registration) => {
-        console.log('SW registered: ', registration);
+        console.log("SW registered: ", registration);
       })
       .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
+        console.log("SW registration failed: ", registrationError);
       });
   });
 }
@@ -484,16 +485,16 @@ function App() {
   useEffect(() => {
     if (isInitialized) {
       const urlParams = new URLSearchParams(window.location.search);
-      const action = urlParams.get('action');
-      
-      if (action === 'new-chat') {
+      const action = urlParams.get("action");
+
+      if (action === "new-chat") {
         handleNewChat();
         // Clean up the URL
-        window.history.replaceState({}, '', '/');
-      } else if (action === 'year-predictor') {
+        window.history.replaceState({}, "", "/");
+      } else if (action === "year-predictor") {
         setIsYearPredictorOpen(true);
         // Clean up the URL
-        window.history.replaceState({}, '', '/');
+        window.history.replaceState({}, "", "/");
       }
     }
   }, [isInitialized, handleNewChat]);
@@ -515,15 +516,18 @@ function App() {
       // Hide the install prompt
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
-      console.log('PWA was installed');
+      console.log("PWA was installed");
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
@@ -538,11 +542,11 @@ function App() {
 
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
     } else {
-      console.log('User dismissed the install prompt');
+      console.log("User dismissed the install prompt");
     }
 
     // Clear the deferredPrompt
@@ -554,7 +558,7 @@ function App() {
   const dismissInstallPrompt = () => {
     setShowInstallPrompt(false);
     // Don't show again for this session
-    sessionStorage.setItem('pwa-install-dismissed', 'true');
+    sessionStorage.setItem("pwa-install-dismissed", "true");
   };
 
   const toggleSidebar = () => {

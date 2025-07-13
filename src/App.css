@@ -21,7 +21,10 @@ body {
 }
 
 /* Allow text selection for input fields and content areas */
-input, textarea, .message-content, .chat-input {
+input,
+textarea,
+.message-content,
+.chat-input {
   -webkit-user-select: text;
   -khtml-user-select: text;
   -moz-user-select: text;
@@ -2680,7 +2683,7 @@ body {
     max-width: none;
     margin: 0;
   }
-  
+
   .install-prompt-overlay {
     align-items: flex-end;
     padding: 0;

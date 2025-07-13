@@ -61,23 +61,27 @@ MeowGPT is a fully compliant Progressive Web App with the following features:
 ### 🎯 PWA Shortcuts
 
 Long-press the app icon on your home screen to access these quick actions:
+
 - **New Chat**: Start a fresh conversation instantly
 - **Year Predictor**: Jump directly to the year prediction feature
 
 ### 📦 Installation
 
 #### Desktop (Chrome, Edge, Safari)
+
 1. Visit the app in your browser
 2. Look for the install prompt (or click the install icon in the address bar)
 3. Click "Install" to add MeowGPT to your applications
 
 #### Mobile (iOS Safari)
+
 1. Open the app in Safari
 2. Tap the Share button (square with arrow)
 3. Scroll down and tap "Add to Home Screen"
 4. Customize the name if desired and tap "Add"
 
 #### Mobile (Android Chrome)
+
 1. Open the app in Chrome
 2. Tap the three-dot menu
 3. Select "Add to Home Screen" or "Install App"
@@ -86,6 +90,7 @@ Long-press the app icon on your home screen to access these quick actions:
 ### 🔧 PWA Testing & Development
 
 #### Local Testing
+
 ```bash
 # Build the production version
 npm run build
@@ -98,6 +103,7 @@ npx serve -s build -l 3001
 ```
 
 #### PWA Compliance Checklist
+
 - ✅ Web App Manifest with required fields
 - ✅ Service Worker for offline support
 - ✅ Icons in multiple sizes (16px to 512px)
@@ -108,7 +114,9 @@ npx serve -s build -l 3001
 - ✅ Responsive design for all screen sizes
 
 #### Production Deployment
+
 For full PWA functionality, deploy to an HTTPS-enabled server:
+
 - **GitHub Pages**: `npm run deploy`
 - **Netlify**: Connect your repository for auto-deployment
 - **Vercel**: Import your GitHub repository
@@ -117,18 +125,21 @@ For full PWA functionality, deploy to an HTTPS-enabled server:
 ### 🛠 PWA Assets
 
 #### Icons
+
 - **Sizes**: 16x16, 32x32, 48x48, 72x72, 96x96, 128x128, 144x144, 152x152, 192x192, 384x384, 512x512
 - **Formats**: PNG for maximum compatibility
 - **Special**: Maskable icon for Android adaptive icons
 - **Apple**: Dedicated Apple Touch Icon (180x180)
 
 #### Service Worker Features
+
 - **Caching Strategy**: Cache-first for static assets, network-first for API calls
 - **Offline Fallback**: Serves cached content when network is unavailable
 - **Background Sync**: Prepared for future offline message queuing
 - **Push Notifications**: Framework ready for future implementation
 
 #### Manifest Features
+
 - **Display Mode**: Standalone (full-screen app experience)
 - **Orientation**: Portrait-primary optimized
 - **Theme Integration**: Matches system theme preferences
@@ -138,12 +149,15 @@ For full PWA functionality, deploy to an HTTPS-enabled server:
 ### 🎨 Customization
 
 #### Theme Colors
+
 - **Primary**: `#10a37f` (MeowGPT Green)
 - **Background**: `#181818` (Dark theme)
 - **Surface**: `#2a2a2a` (Chat bubbles)
 
 #### Icon Customization
+
 To update app icons:
+
 1. Replace the source SVG in `generate-png-icons.sh`
 2. Run `./generate-png-icons.sh` to regenerate all sizes
 3. Rebuild the app: `npm run build`
@@ -151,6 +165,7 @@ To update app icons:
 ### 🔍 PWA Debugging
 
 #### Chrome DevTools
+
 1. Open DevTools (F12)
 2. Go to "Application" tab
 3. Check "Manifest" for manifest validation
@@ -158,6 +173,7 @@ To update app icons:
 5. Use "Lighthouse" for PWA audit
 
 #### Common Issues
+
 - **Install prompt not showing**: Check HTTPS, manifest validity, and SW registration
 - **Icons not displaying**: Verify icon paths and file existence
 - **Offline not working**: Check service worker registration and caching strategy
@@ -366,20 +382,24 @@ In development mode, open the browser console and use:
 ### 📱 Testing PWA Features
 
 **Service Worker Testing:**
+
 1. Build the app: `npm run build`
 2. Serve the build: `npx serve -s build`
 3. Open in browser and check DevTools → Application → Service Workers
 
 **PWA Install Prompt:**
+
 - Install prompt appears after 30 seconds of usage
 - Can be triggered manually in DevTools → Application → Manifest → "Add to homescreen"
 
 **Offline Testing:**
+
 1. Install the PWA
 2. In DevTools → Network tab, check "Offline"
 3. Refresh - basic functionality should still work
 
 **Icon Testing:**
+
 - Icons are auto-generated SVG files in `/public/icons/`
 - Use `./generate-icons.sh` to regenerate icons if needed
 
