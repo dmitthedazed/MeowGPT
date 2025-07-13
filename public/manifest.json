@@ -2,12 +2,12 @@
   "name": "MeowGPT",
   "short_name": "MeowGPT",
   "display": "standalone",
-  "start_url": "./",
+  "start_url": "https://dmitthedazed.github.io/MeowGPT/",
   "background_color": "#181818",
   "theme_color": "#181818",
   "icons": [
     {
-      "src": "./icon.svg",
+      "src": "https://dmitthedazed.github.io/MeowGPT/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
