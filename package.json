@@ -2,6 +2,7 @@
   "name": "meowgpt",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "homepage": "https://dmitthedazed.github.io/MeowGPT",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
