@@ -8,6 +8,7 @@ node_modules/
 
 # Production
 /build
+/dist
 
 # Misc
 .DS_Store
@@ -26,3 +27,6 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
+
+# Tools
+.sisyphus/

@@ -2,21 +2,20 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   FiSend,
   FiChevronDown,
-  FiSettings,
-  FiHelpCircle,
-  FiLogOut,
-  FiChevronRight,
-  FiZap,
-  FiGithub,
   FiMessageCircle,
   FiCopy,
   FiThumbsUp,
   FiThumbsDown,
   FiRefreshCw,
   FiShare,
-  FiX,
   FiMenu,
   FiCheck,
+  FiImage,
+  FiEdit2,
+  FiGlobe,
+  FiPlus,
+  FiFileText,
+  FiX,
 } from "react-icons/fi";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useTranslation } from "../translations";
@@ -33,22 +32,27 @@ const ChatInterface = ({
   isAiTyping = false,
   setIsAiTyping,
   onRegenerateResponse,
+  onOpenSearch,
+  onNewChat,
+  isTemporaryMode = false,
+  onToggleTemporaryMode,
 }) => {
   const { t } = useTranslation(language);
   const [inputValue, setInputValue] = useState("");
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
-  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState("MeowGPT");
   const [messageRatings, setMessageRatings] = useState({});
   const [copiedMessages, setCopiedMessages] = useState({});
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  const [isAttachDropdownOpen, setIsAttachDropdownOpen] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState([]);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
-  const accountDropdownRef = useRef(null);
-  const settingsModalRef = useRef(null);
+  const attachDropdownRef = useRef(null);
+  const imageInputRef = useRef(null);
+  const documentInputRef = useRef(null);
 
   const models = [
     {
@@ -99,18 +103,8 @@ const ChatInterface = ({
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsModelDropdownOpen(false);
       }
-      if (
-        accountDropdownRef.current &&
-        !accountDropdownRef.current.contains(event.target)
-      ) {
-        setIsAccountDropdownOpen(false);
-      }
-      if (
-        settingsModalRef.current &&
-        !settingsModalRef.current.contains(event.target) &&
-        event.target.classList.contains("settings-modal-overlay")
-      ) {
-        setIsSettingsModalOpen(false);
+      if (attachDropdownRef.current && !attachDropdownRef.current.contains(event.target)) {
+        setIsAttachDropdownOpen(false);
       }
     };
 
@@ -120,25 +114,68 @@ const ChatInterface = ({
     };
   }, []);
 
+  const handleFileSelect = (type) => (e) => {
+    const files = Array.from(e.target.files);
+    const newAttachments = files.map((file) => ({
+      type,
+      name: file.name,
+      url: URL.createObjectURL(file),
+      size: file.size,
+    }));
+    setAttachedFiles((prev) => [...prev, ...newAttachments]);
+    e.target.value = "";
+  };
+
+  const removeAttachment = (index) => {
+    setAttachedFiles((prev) => {
+      const updated = [...prev];
+      URL.revokeObjectURL(updated[index].url);
+      updated.splice(index, 1);
+      return updated;
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (inputValue.trim()) {
+    if (inputValue.trim() || attachedFiles.length > 0) {
       const message = {
         id: Date.now(),
         content: inputValue,
         sender: "user",
-        timestamp: Date.now(), // Use timestamp instead of Date object
+        timestamp: Date.now(),
+        attachments: attachedFiles.length > 0 ? [...attachedFiles] : undefined,
       };
 
       onSendMessage(message);
       setInputValue("");
+      setAttachedFiles([]);
 
-      // Use parent's typing control
       if (setIsAiTyping) {
         setIsAiTyping(true);
       }
     }
   };
+
+  const handleSuggestionClick = (text) => {
+    const message = {
+      id: Date.now(),
+      content: text,
+      sender: "user",
+      timestamp: Date.now(),
+    };
+
+    onSendMessage(message);
+
+    if (setIsAiTyping) {
+      setIsAiTyping(true);
+    }
+  };
+
+  const suggestions = [
+    { icon: <FiImage />, text: "Нарисуй котика" },
+    { icon: <FiEdit2 />, text: "Напиши стих про мышь" },
+    { icon: <FiGlobe />, text: "Почему коты мурчат?" }
+  ];
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -151,7 +188,9 @@ const ChatInterface = ({
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto";
-      textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = Math.min(scrollHeight, 200) + "px";
+      textarea.style.overflowY = scrollHeight > 200 ? "auto" : "hidden";
     }
   };
 
@@ -162,13 +201,11 @@ const ChatInterface = ({
   const handleCopyMessage = (content, messageId) => {
     navigator.clipboard.writeText(content);
 
-    // Show checkmark feedback
     setCopiedMessages((prev) => ({
       ...prev,
       [messageId]: true,
     }));
 
-    // Hide checkmark after 2 seconds
     setTimeout(() => {
       setCopiedMessages((prev) => ({
         ...prev,
@@ -180,8 +217,6 @@ const ChatInterface = ({
   const handleRegenerateResponse = (messageId) => {
     if (onRegenerateResponse) {
       onRegenerateResponse(messageId);
-    } else {
-      console.log("Regenerate function not provided");
     }
   };
 
@@ -192,7 +227,6 @@ const ChatInterface = ({
         text: content,
       });
     } else {
-      // Fallback to clipboard
       navigator.clipboard.writeText(content);
     }
   };
@@ -200,29 +234,15 @@ const ChatInterface = ({
   const handleRateMessage = (messageId, rating) => {
     setMessageRatings((prev) => {
       const newRatings = { ...prev };
-
-      // If clicking the same rating, remove it
       if (newRatings[messageId] === rating) {
         delete newRatings[messageId];
       } else {
-        // Otherwise, set the new rating (this automatically overrides any previous rating)
         newRatings[messageId] = rating;
       }
-
       return newRatings;
     });
   };
 
-  const handleOpenSettings = () => {
-    setIsSettingsModalOpen(true);
-    setIsAccountDropdownOpen(false);
-  };
-
-  const handleCloseSettings = () => {
-    setIsSettingsModalOpen(false);
-  };
-
-  // Touch handlers for swipe gestures
   const handleTouchStart = (e) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
@@ -238,38 +258,30 @@ const ChatInterface = ({
     const distance = touchStart - touchEnd;
     const minSwipeDistance = 50;
 
-    // Swipe right to open sidebar (when closed)
     if (distance < -minSwipeDistance && !isSidebarOpen) {
       onToggleSidebar();
     }
 
-    // Swipe left to close sidebar (when open)
     if (distance > minSwipeDistance && isSidebarOpen) {
       onToggleSidebar();
     }
   };
 
-  // Mobile input focus handler
   const handleInputFocus = () => {
-    // Close sidebar on mobile when input gets focus
     if (window.innerWidth <= 768 && isSidebarOpen) {
       onToggleSidebar();
     }
   };
 
-  // Handle theme change
-  const handleThemeChangeLocal = (newTheme) => {
-    onThemeChange(newTheme);
-  };
-
-  // Handle language change
-  const handleLanguageChangeLocal = (newLanguage) => {
-    onLanguageChange(newLanguage);
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   return (
     <div
-      className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""}`}
+      className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""} ${!currentChat || currentChat.messages.length === 0 ? "is-empty" : ""}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -283,101 +295,25 @@ const ChatInterface = ({
           >
             <FiMenu size={20} />
           </button>
-
-          <div className="model-dropdown" ref={dropdownRef}>
-            <button
-              className="model-dropdown-trigger"
-              onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-            >
-              <span className="model-name">{selectedModel}</span>
-              <FiChevronDown
-                size={16}
-                className={`dropdown-arrow ${
-                  isModelDropdownOpen ? "open" : ""
-                }`}
-              />
-            </button>
-
-            {isModelDropdownOpen && (
-              <div className="model-dropdown-menu">
-                {models.map((model) => (
-                  <div
-                    key={model.id}
-                    className={`model-option ${
-                      selectedModel === model.name ? "selected" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedModel(model.name);
-                      setIsModelDropdownOpen(false);
-                    }}
-                  >
-                    <div className="model-option-name">{model.name}</div>
-                    <div className="model-option-description">
-                      {model.description}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
 
         <div className="header-right">
-          <button className="temporary-chat-btn" title={t("temporaryChat")}>
+          <button
+            className={`temporary-chat-btn${isTemporaryMode ? " active" : ""}`}
+            title={t("temporaryChat")}
+            onClick={onToggleTemporaryMode}
+          >
             <FiMessageCircle size={16} />
           </button>
-
-          <div className="account-dropdown" ref={accountDropdownRef}>
-            <button
-              className="account-dropdown-trigger"
-              onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-            >
-              <div className="account-avatar">A</div>
-            </button>
-
-            {isAccountDropdownOpen && (
-              <div className="account-dropdown-menu">
-                <div className="account-info">
-                  <FiGithub size={16} />
-                  <a
-                    href="https://github.com/dmitthedazed"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "inherit", textDecoration: "none" }}
-                  >
-                    {t("madeBy")}
-                  </a>
-                </div>
-
-                <div className="dropdown-divider"></div>
-
-                <div className="account-menu-item">
-                  <FiZap size={16} />
-                  <span>{t("upgradePlan")}</span>
-                </div>
-
-                <div className="account-menu-item" onClick={handleOpenSettings}>
-                  <FiSettings size={16} />
-                  <span>{t("settings")}</span>
-                </div>
-
-                <div className="dropdown-divider"></div>
-
-                <div className="account-menu-item">
-                  <FiHelpCircle size={16} />
-                  <span>{t("help")}</span>
-                  <FiChevronRight size={16} className="menu-arrow" />
-                </div>
-
-                <div className="account-menu-item">
-                  <FiLogOut size={16} />
-                  <span>{t("logOut")}</span>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
+
+      {isTemporaryMode && (
+        <div className="temporary-chat-banner">
+          <FiMessageCircle size={14} />
+          <span>{t("temporaryChat")} — сообщения не сохраняются</span>
+        </div>
+      )}
 
       <div className="chat-messages">
         {!currentChat || currentChat.messages.length === 0 ? (
@@ -392,7 +328,29 @@ const ChatInterface = ({
               <div key={message.id} className={`message ${message.sender}`}>
                 {message.sender === "user" ? (
                   <div className="user-message-container">
-                    <div className="user-message-bubble">{message.content}</div>
+                    <div className="user-message-bubble">
+                      {message.attachments?.map((att, i) =>
+                        att.type === "image" ? (
+                          <img
+                            key={i}
+                            src={att.url}
+                            alt={att.name}
+                            className="message-image"
+                          />
+                        ) : (
+                          <div key={i} className="message-document-chip">
+                            <FiFileText size={14} />
+                            <div className="message-document-info">
+                              <span className="message-document-name">{att.name}</span>
+                              <span className="message-document-size">{formatFileSize(att.size)}</span>
+                            </div>
+                          </div>
+                        )
+                      )}
+                      {message.content && (
+                        <div className="message-text">{message.content}</div>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className="message-container">
@@ -509,86 +467,157 @@ const ChatInterface = ({
       <div className="chat-input-container">
         <div className="chat-input-wrapper">
           <form onSubmit={handleSubmit}>
-            <textarea
-              ref={textareaRef}
-              className="chat-input"
-              placeholder={t("messagePlaceholder")}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              rows="1"
-              onFocus={handleInputFocus} // Close sidebar on input focus
+            {attachedFiles.length > 0 && (
+              <div className="attachment-preview">
+                {attachedFiles.map((file, i) => (
+                  <div key={i} className="attachment-preview-item">
+                    {file.type === "image" ? (
+                      <img
+                        src={file.url}
+                        alt={file.name}
+                        className="attachment-preview-thumb"
+                      />
+                    ) : (
+                      <div className="attachment-preview-doc">
+                        <FiFileText size={20} />
+                        <span className="attachment-preview-name">{file.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="attachment-remove-btn"
+                      onClick={() => removeAttachment(i)}
+                    >
+                      <FiX size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="input-row">
+              <div className="attach-dropdown-wrapper" ref={attachDropdownRef}>
+                <button
+                  type="button"
+                  className="attach-btn"
+                  onClick={() => setIsAttachDropdownOpen(!isAttachDropdownOpen)}
+                  title="Прикрепить файл"
+                >
+                  <FiPlus size={18} />
+                </button>
+                {isAttachDropdownOpen && (
+                  <div className="attach-dropdown-menu">
+                    <div
+                      className="attach-option"
+                      onClick={() => {
+                        imageInputRef.current.click();
+                        setIsAttachDropdownOpen(false);
+                      }}
+                    >
+                      <FiImage size={16} />
+                      <span>Изображение</span>
+                    </div>
+                    <div
+                      className="attach-option"
+                      onClick={() => {
+                        documentInputRef.current.click();
+                        setIsAttachDropdownOpen(false);
+                      }}
+                    >
+                      <FiFileText size={16} />
+                      <span>Документ</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <textarea
+                ref={textareaRef}
+                className="chat-input"
+                placeholder={t("messagePlaceholder")}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                rows="1"
+                onFocus={handleInputFocus}
+              />
+              <div className="input-actions">
+                <div className="model-dropdown" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    className="model-dropdown-trigger"
+                    onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+                  >
+                    <span className="model-name">{selectedModel}</span>
+                    <FiChevronDown
+                      size={14}
+                      className={`dropdown-arrow ${isModelDropdownOpen ? "open" : ""}`}
+                    />
+                  </button>
+
+                  {isModelDropdownOpen && (
+                    <div className="model-dropdown-menu model-dropdown-menu--up">
+                      {models.map((model) => (
+                        <div
+                          key={model.id}
+                          className={`model-option ${selectedModel === model.name ? "selected" : ""}`}
+                          onClick={() => {
+                            setSelectedModel(model.name);
+                            setIsModelDropdownOpen(false);
+                          }}
+                        >
+                          <div className="model-option-name">{model.name}</div>
+                          <div className="model-option-description">{model.description}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="send-button"
+                  disabled={!inputValue.trim() && attachedFiles.length === 0}
+                >
+                  <FiSend size={16} />
+                </button>
+              </div>
+            </div>
+
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleFileSelect("image")}
             />
-            <button
-              type="submit"
-              className="send-button"
-              disabled={!inputValue.trim()}
-            >
-              <FiSend size={16} />
-            </button>
+            <input
+              ref={documentInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,.md,.csv,.xlsx,.xls,.pptx,.ppt"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleFileSelect("document")}
+            />
           </form>
         </div>
-        <div className="chat-info-text">{t("disclaimer")}</div>
-      </div>
-
-      {/* Settings Modal */}
-      {isSettingsModalOpen && (
-        <div className="settings-modal-overlay" onClick={handleCloseSettings}>
-          <div
-            ref={settingsModalRef}
-            className="settings-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="settings-modal-header">
-              <h2>{t("settingsTitle")}</h2>
+        {(!currentChat || currentChat.messages.length === 0) && (
+          <div className="suggestions-container">
+            {suggestions.map((suggestion, index) => (
               <button
-                className="settings-close-btn"
-                onClick={handleCloseSettings}
+                key={index}
+                className="suggestion-chip"
+                onClick={() => handleSuggestionClick(suggestion.text)}
               >
-                <FiX size={20} />
+                <span className="suggestion-icon">{suggestion.icon}</span>
+                <span className="suggestion-text">{suggestion.text}</span>
               </button>
-            </div>
-
-            <div className="settings-modal-content">
-              <div className="settings-section">
-                <h3>{t("appearance")}</h3>
-                <div className="settings-item">
-                  <label>{t("theme")}</label>
-                  <select
-                    className="settings-select"
-                    value={theme}
-                    onChange={(e) => handleThemeChangeLocal(e.target.value)}
-                  >
-                    {themes.map((themeOption) => (
-                      <option key={themeOption.id} value={themeOption.id}>
-                        {themeOption.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="settings-section">
-                <h3>{t("general")}</h3>
-                <div className="settings-item">
-                  <label>{t("language")}</label>
-                  <select
-                    className="settings-select"
-                    value={language}
-                    onChange={(e) => handleLanguageChangeLocal(e.target.value)}
-                  >
-                    {languages.map((lang) => (
-                      <option key={lang.id} value={lang.id}>
-                        {lang.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="chat-info-text">{t("disclaimer")}</div>
+
     </div>
   );
 };

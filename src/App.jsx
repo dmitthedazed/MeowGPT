@@ -6,20 +6,6 @@ import ImageGeneration from "./components/ImageGeneration";
 import { FiSearch, FiX, FiPlus, FiMessageSquare, FiZap } from "react-icons/fi";
 import { useTranslation } from "./translations";
 
-// Register Service Worker for PWA
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/sw.js")
-      .then((registration) => {
-        console.log("SW registered: ", registration);
-      })
-      .catch((registrationError) => {
-        console.log("SW registration failed: ", registrationError);
-      });
-  });
-}
-
 // LocalStorage keys
 const STORAGE_KEYS = {
   CHATS: "meowgpt-chats",
@@ -302,6 +288,14 @@ function App() {
 
   // View mode state
   const [currentView, setCurrentView] = useState("chat"); // "chat" or "imageGeneration"
+  const [viewTransitionKey, setViewTransitionKey] = useState(0); // bumped on view change to trigger CSS entrance animation
+
+  // Temporary chat mode — messages not saved to history
+  const [isTemporaryMode, setIsTemporaryMode] = useState(false);
+  const [temporaryChat, setTemporaryChat] = useState(null);
+
+  // Chat interaction states
+  const [deletingChatId, setDeletingChatId] = useState(null); // id of chat being animated out
 
   // Year Predictor modal state
   const [isYearPredictorOpen, setIsYearPredictorOpen] = useState(false);
@@ -432,32 +426,51 @@ function App() {
     }
   }, [theme]);
 
-  // Effect to handle keyboard shortcuts for search and image generation modals
+  // Global keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && isSearchOpen) {
-        handleCloseSearch();
+      // Escape — close open panels/views
+      if (e.key === "Escape") {
+        if (isSearchOpen) { handleCloseSearch(); return; }
+        if (currentView === "imageGeneration") { handleCloseImageGeneration(); return; }
+        if (isYearPredictorOpen) { handleCloseYearPredictor(); return; }
       }
-      if (e.key === "Escape" && currentView === "imageGeneration") {
-        handleCloseImageGeneration();
+
+      // Ignore shortcuts when user is typing in an input/textarea
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      const mod = e.ctrlKey || e.metaKey;
+      // Ctrl/Cmd + K  — open search
+      if (mod && e.key === "k") {
+        e.preventDefault();
+        if (!isSearchOpen) handleOpenSearch();
+        return;
       }
-      if (e.key === "Escape" && isYearPredictorOpen) {
-        handleCloseYearPredictor();
+      // Ctrl/Cmd + N  — new chat
+      if (mod && e.key === "n") {
+        e.preventDefault();
+        handleNewChat();
+        return;
+      }
+      // Ctrl/Cmd + B  — toggle sidebar
+      if (mod && e.key === "b") {
+        e.preventDefault();
+        toggleSidebar();
+        return;
+      }
+      // Ctrl/Cmd + I  — image generation
+      if (mod && e.key === "i") {
+        e.preventDefault();
+        if (currentView !== "imageGeneration") handleOpenImageGeneration();
+        else handleCloseImageGeneration();
+        return;
       }
     };
 
-    if (
-      isSearchOpen ||
-      currentView === "imageGeneration" ||
-      isYearPredictorOpen
-    ) {
-      document.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isSearchOpen, currentView, isYearPredictorOpen]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isSearchOpen, currentView, isYearPredictorOpen, isSidebarOpen]);
 
   // Save chats to localStorage
   useEffect(() => {
@@ -520,10 +533,27 @@ function App() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleToggleTemporaryMode = () => {
+    setIsTemporaryMode((prev) => {
+      if (prev) {
+        // Turning off — clear temporary chat
+        setTemporaryChat(null);
+      } else {
+        // Turning on — clear current chat selection
+        setCurrentChat(null);
+        setTemporaryChat(null);
+      }
+      return !prev;
+    });
+  };
+
   const handleSelectChat = (chat) => {
     console.log("📱 Selecting chat:", chat);
     setCurrentChat(chat);
-    setCurrentView("chat"); // Switch back to chat view
+    setCurrentView("chat");
+    if (window.innerWidth <= 768) {
+      setIsSidebarOpen(false);
+    }
   };
 
   const handleReturnHome = () => {
@@ -653,6 +683,7 @@ function App() {
   // Image generation view functions
   const handleOpenImageGeneration = () => {
     setCurrentView("imageGeneration");
+    setViewTransitionKey((k) => k + 1);
     setImagePrompt("");
     setGeneratedImages([]);
     setIsGeneratingImages(false);
@@ -666,6 +697,7 @@ function App() {
 
   const handleCloseImageGeneration = () => {
     setCurrentView("chat");
+    setViewTransitionKey((k) => k + 1);
     setImagePrompt("");
     setGeneratedImages([]);
     setIsGeneratingImages(false);
@@ -740,8 +772,43 @@ function App() {
   const handleSendMessage = (message) => {
     const messageWithTimestamp = {
       ...message,
-      timestamp: Date.now(), // Use timestamp instead of Date object
+      timestamp: Date.now(),
     };
+
+    // --- Temporary chat mode: never touch `chats` ---
+    if (isTemporaryMode) {
+      const baseChat = temporaryChat ?? {
+        id: "temp",
+        title: "Temporary Chat",
+        messages: [],
+        createdAt: Date.now(),
+        temporary: true,
+      };
+      const updatedTemp = {
+        ...baseChat,
+        messages: [...baseChat.messages, messageWithTimestamp],
+      };
+      setTemporaryChat(updatedTemp);
+
+      const aiResponseContent = generateRandomMeowResponse(language);
+      const typingDuration = calculateTypingDuration(aiResponseContent);
+      setIsAiTyping(true);
+
+      setTimeout(() => {
+        const aiResponse = {
+          id: Date.now() + 1,
+          content: aiResponseContent,
+          sender: "ai",
+          timestamp: Date.now(),
+        };
+        setTemporaryChat((prev) => ({
+          ...prev,
+          messages: [...prev.messages, aiResponse],
+        }));
+        setIsAiTyping(false);
+      }, typingDuration);
+      return;
+    }
 
     if (!currentChat) {
       // Create new chat first
@@ -941,6 +1008,28 @@ function App() {
     }, typingDuration);
   };
 
+  const handleDeleteChatAnimated = (chatId) => {
+    setDeletingChatId(chatId);
+    setTimeout(() => {
+      setDeletingChatId(null);
+      if (currentChat?.id === chatId) {
+        setCurrentChat(null);
+      }
+      setChats((prevChats) => prevChats.filter((c) => c.id !== chatId));
+    }, 320);
+  };
+
+  const handleRenameChat = (chatId, newTitle) => {
+    if (!newTitle.trim()) return;
+    const trimmed = newTitle.trim();
+    setChats((prevChats) =>
+      prevChats.map((c) => (c.id === chatId ? { ...c, title: trimmed } : c))
+    );
+    if (currentChat?.id === chatId) {
+      setCurrentChat((prev) => ({ ...prev, title: trimmed }));
+    }
+  };
+
   const handleThemeChange = (newTheme) => {
     console.log("🎨 Theme changing to:", newTheme);
     setTheme(newTheme);
@@ -969,7 +1058,7 @@ function App() {
 
   // Add to window for debugging (remove in production)
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.MODE === "development") {
       window.clearChatData = clearAllData;
       window.showStorageData = () => {
         console.log("📊 Current storage data:");
@@ -1017,7 +1106,7 @@ function App() {
 
   // Add development helper to show storage status
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.MODE === "development") {
       console.log("📊 Current app state:");
       console.log("- Chats:", chats.length);
       console.log("- Current chat:", currentChat?.id || "none");
@@ -1048,6 +1137,8 @@ function App() {
 
   return (
     <div className={`app ${theme}`} data-theme={theme}>
+      {/* AI typing progress bar */}
+      <div className={`ai-progress-bar ${isAiTyping ? "active" : ""}`} />
       <Sidebar
         isOpen={isSidebarOpen}
         onToggle={toggleSidebar}
@@ -1056,11 +1147,17 @@ function App() {
         onNewChat={handleNewChat}
         onSelectChat={handleSelectChat}
         onReturnHome={handleReturnHome}
-        onDeleteChat={handleDeleteChat}
+        onDeleteChat={handleDeleteChatAnimated}
+        onRenameChat={handleRenameChat}
         language={language}
         onOpenSearch={handleOpenSearch}
         onOpenImageGeneration={handleOpenImageGeneration}
         onOpenYearPredictor={handleOpenYearPredictor}
+        currentView={currentView}
+        deletingChatId={deletingChatId}
+        theme={theme}
+        onThemeChange={handleThemeChange}
+        onLanguageChange={handleLanguageChange}
       />
       {/* Mobile overlay */}
       <div
@@ -1068,33 +1165,39 @@ function App() {
         onClick={toggleSidebar}
       />
       {/* Main Content Area */}
-      {currentView === "chat" ? (
-        <ChatInterface
-          currentChat={currentChat}
-          onSendMessage={handleSendMessage}
-          isSidebarOpen={isSidebarOpen}
-          onToggleSidebar={toggleSidebar}
-          theme={theme}
-          language={language}
-          onThemeChange={handleThemeChange}
-          onLanguageChange={handleLanguageChange}
-          isAiTyping={isAiTyping}
-          onRegenerateResponse={handleRegenerateResponse}
-        />
-      ) : (
-        <ImageGeneration
-          language={language}
-          imagePrompt={imagePrompt}
-          setImagePrompt={setImagePrompt}
-          generatedImages={generatedImages}
-          isGeneratingImages={isGeneratingImages}
-          onGenerateImage={handleGenerateImage}
-          imageGallery={imageGallery}
-          setImageGallery={setImageGallery}
-          isSidebarOpen={isSidebarOpen}
-          onToggleSidebar={toggleSidebar}
-        />
-      )}
+      <div key={viewTransitionKey} className="view-content">
+        {currentView === "chat" ? (
+          <ChatInterface
+            currentChat={isTemporaryMode ? temporaryChat : currentChat}
+            onSendMessage={handleSendMessage}
+            isSidebarOpen={isSidebarOpen}
+            onToggleSidebar={toggleSidebar}
+            theme={theme}
+            language={language}
+            onThemeChange={handleThemeChange}
+            onLanguageChange={handleLanguageChange}
+            isAiTyping={isAiTyping}
+            onRegenerateResponse={handleRegenerateResponse}
+            onOpenSearch={handleOpenSearch}
+            onNewChat={handleNewChat}
+            isTemporaryMode={isTemporaryMode}
+            onToggleTemporaryMode={handleToggleTemporaryMode}
+          />
+        ) : (
+          <ImageGeneration
+            language={language}
+            imagePrompt={imagePrompt}
+            setImagePrompt={setImagePrompt}
+            generatedImages={generatedImages}
+            isGeneratingImages={isGeneratingImages}
+            onGenerateImage={handleGenerateImage}
+            imageGallery={imageGallery}
+            setImageGallery={setImageGallery}
+            isSidebarOpen={isSidebarOpen}
+            onToggleSidebar={toggleSidebar}
+          />
+        )}
+      </div>
 
       {/* Search Modal */}
       {isSearchOpen && (
@@ -1119,6 +1222,7 @@ function App() {
                 <FiX size={18} />
               </button>
             </div>
+            <div className="search-modal-divider" />
             <div className="search-modal-content">
               {searchQuery === "" ? (
                 <div className="search-empty-state">
