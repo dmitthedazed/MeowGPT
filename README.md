@@ -8,6 +8,21 @@
 
 A cat-themed chat interface built with React. Inspired by the viral **[CatGPT](https://catgpt.wvd.io)** parody, MeowGPT expands it into a fully-featured app with multi-language support, persistent chat history, and a polished UI.
 
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>Welcome</b></td>
+    <td align="center"><b>Chat</b></td>
+    <td align="center"><b>Mobile</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/welcome.png" alt="Welcome screen" width="400"/></td>
+    <td><img src="public/screenshots/chat.png" alt="Chat view" width="400"/></td>
+    <td><img src="public/screenshots/mobile.png" alt="Mobile view" width="200"/></td>
+  </tr>
+</table>
+
 ## ✨ Features
 
 - 💬 **Chat management** — create, rename, and switch between multiple chat sessions
