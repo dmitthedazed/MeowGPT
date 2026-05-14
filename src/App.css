@@ -1848,6 +1848,8 @@ body {
   min-width: 180px;
   overflow: hidden;
   z-index: 600;
+  animation: slideInUp 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+  will-change: transform, opacity;
 }
 
 .attach-option {
@@ -2608,6 +2610,13 @@ body {
   .model-dropdown-trigger {
     padding: 4px 6px !important;
     gap: 2px !important;
+  }
+
+  /* Align dropdown to right edge so it doesn't go off screen */
+  .model-dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+    min-width: 240px !important;
   }
 
   /* Suggestions: horizontal scrollable row on mobile */
