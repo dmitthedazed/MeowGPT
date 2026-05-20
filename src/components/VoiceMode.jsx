@@ -114,7 +114,7 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
 
     recognition.onend = () => {
       if (!isSpeakingRef.current) {
-        // recognition ended without result (e.g. timeout) — restart
+        startListening();
       }
     };
 
