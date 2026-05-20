@@ -102,130 +102,72 @@ textarea,
 }
 
 /* ============================================================
-   Light theme — M3 baseline (primary = purple/violet)
+   M3 Colors via m3e-theme (seed: #FF7043 — cat orange)
+   Bridge --md-* names to m3e-generated --md-sys-color-* tokens.
+   Light/dark switching handled by M3eTheme scheme prop.
    ============================================================ */
-:root,
-[data-theme="light"] {
-  /* Primary tonal palette (purple) */
-  --md-primary:              #6750a4;  /* primary40 */
-  --md-on-primary:           #ffffff;  /* primary100 */
-  --md-primary-container:    #eaddff;  /* primary90 */
-  --md-on-primary-container: #21005d;  /* primary10 */
+m3e-theme {
+  /* Primary tonal palette */
+  --md-primary:              var(--md-sys-color-primary);
+  --md-on-primary:           var(--md-sys-color-on-primary);
+  --md-primary-container:    var(--md-sys-color-primary-container);
+  --md-on-primary-container: var(--md-sys-color-on-primary-container);
 
-  /* Secondary tonal palette (muted purple) */
-  --md-secondary:              #625b71;
-  --md-on-secondary:           #ffffff;
-  --md-secondary-container:    #e8def8;
-  --md-on-secondary-container: #1d192b;
+  /* Secondary tonal palette */
+  --md-secondary:              var(--md-sys-color-secondary);
+  --md-on-secondary:           var(--md-sys-color-on-secondary);
+  --md-secondary-container:    var(--md-sys-color-secondary-container);
+  --md-on-secondary-container: var(--md-sys-color-on-secondary-container);
 
-  /* Tertiary tonal palette (rose/pink accent) */
-  --md-tertiary:              #7d5260;
-  --md-on-tertiary:           #ffffff;
-  --md-tertiary-container:    #ffd8e4;
-  --md-on-tertiary-container: #31111d;
+  /* Tertiary tonal palette */
+  --md-tertiary:              var(--md-sys-color-tertiary);
+  --md-on-tertiary:           var(--md-sys-color-on-tertiary);
+  --md-tertiary-container:    var(--md-sys-color-tertiary-container);
+  --md-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
 
   /* Error */
-  --md-error:              #b3261e;
-  --md-on-error:           #ffffff;
-  --md-error-container:    #f9dedc;
-  --md-on-error-container: #410e0b;
+  --md-error:              var(--md-sys-color-error);
+  --md-on-error:           var(--md-sys-color-on-error);
+  --md-error-container:    var(--md-sys-color-error-container);
+  --md-on-error-container: var(--md-sys-color-on-error-container);
 
   /* Surface / background */
-  --md-background:           #fffbfe;
-  --md-on-background:        #1c1b1f;
-  --md-surface:              #fffbfe;
-  --md-on-surface:           #1c1b1f;
-  --md-surface-variant:      #e7e0ec;
-  --md-on-surface-variant:   #49454f;
-  --md-surface-container-lowest:  #ffffff;
-  --md-surface-container-low:     #f7f2fa;
-  --md-surface-container:         #f3edf7;
-  --md-surface-container-high:    #ece6f0;
-  --md-surface-container-highest: #e6e0e9;
-  --md-inverse-surface:      #313033;
-  --md-inverse-on-surface:   #f4eff4;
+  --md-background:                var(--md-sys-color-background);
+  --md-on-background:             var(--md-sys-color-on-background);
+  --md-surface:                   var(--md-sys-color-surface);
+  --md-on-surface:                var(--md-sys-color-on-surface);
+  --md-surface-variant:           var(--md-sys-color-surface-variant);
+  --md-on-surface-variant:        var(--md-sys-color-on-surface-variant);
+  --md-surface-container-lowest:  var(--md-sys-color-surface-container-lowest);
+  --md-surface-container-low:     var(--md-sys-color-surface-container-low);
+  --md-surface-container:         var(--md-sys-color-surface-container);
+  --md-surface-container-high:    var(--md-sys-color-surface-container-high);
+  --md-surface-container-highest: var(--md-sys-color-surface-container-highest);
+  --md-inverse-surface:           var(--md-sys-color-inverse-surface);
+  --md-inverse-on-surface:        var(--md-sys-color-inverse-on-surface);
 
   /* Outline */
-  --md-outline:         #79747e;
-  --md-outline-variant: #cac4d0;
+  --md-outline:         var(--md-sys-color-outline);
+  --md-outline-variant: var(--md-sys-color-outline-variant);
 
-  /* Scrim */
-  --md-scrim: rgba(0,0,0,0.32);
-
-  /* Legacy aliases (so existing code doesn't break) */
-  --bg-primary:      var(--md-surface);
-  --bg-secondary:    var(--md-surface-container-low);
-  --bg-tertiary:     var(--md-surface-container);
-  --text-primary:    var(--md-on-surface);
-  --text-secondary:  var(--md-on-surface-variant);
-  --text-tertiary:   var(--md-outline);
-  --border-primary:  var(--md-outline-variant);
-  --border-secondary: var(--md-outline-variant);
-  --border-tertiary:  var(--md-outline);
-  --accent-primary:   var(--md-primary);
-  --accent-secondary: #4f378b;          /* primary30 */
-  --accent-tertiary:  #21005d;          /* primary10 */
-  --hover-bg:   rgba(103, 80, 164, 0.08);  /* state layer primary8% */
-  --active-bg:  rgba(103, 80, 164, 0.12); /* state layer primary12% */
-}
-
-/* ============================================================
-   Dark theme — M3 dark baseline
-   ============================================================ */
-[data-theme="dark"] {
-  --md-primary:              #d0bcff;  /* primary80 */
-  --md-on-primary:           #381e72;  /* primary20 */
-  --md-primary-container:    #4f378b;  /* primary30 */
-  --md-on-primary-container: #eaddff;  /* primary90 */
-
-  --md-secondary:              #ccc2dc;
-  --md-on-secondary:           #332d41;
-  --md-secondary-container:    #4a4458;
-  --md-on-secondary-container: #e8def8;
-
-  --md-tertiary:              #efb8c8;
-  --md-on-tertiary:           #492532;
-  --md-tertiary-container:    #633b48;
-  --md-on-tertiary-container: #ffd8e4;
-
-  --md-error:              #f2b8b5;
-  --md-on-error:           #601410;
-  --md-error-container:    #8c1d18;
-  --md-on-error-container: #f9dedc;
-
-  --md-background:           #141218;
-  --md-on-background:        #e6e1e5;
-  --md-surface:              #141218;
-  --md-on-surface:           #e6e1e5;
-  --md-surface-variant:      #49454f;
-  --md-on-surface-variant:   #cac4d0;
-  --md-surface-container-lowest:  #0f0d13;
-  --md-surface-container-low:     #1d1b20;
-  --md-surface-container:         #211f26;
-  --md-surface-container-high:    #2b2930;
-  --md-surface-container-highest: #36343b;
-  --md-inverse-surface:      #e6e1e5;
-  --md-inverse-on-surface:   #313033;
-
-  --md-outline:         #938f99;
-  --md-outline-variant: #49454f;
-  --md-scrim:           rgba(0,0,0,0.6);
+  /* Scrim — keep as fixed semi-transparent value for overlays */
+  --md-scrim: rgba(0, 0, 0, 0.32);
 
   /* Legacy aliases */
-  --bg-primary:      var(--md-surface);
-  --bg-secondary:    var(--md-surface-container-low);
-  --bg-tertiary:     var(--md-surface-container);
-  --text-primary:    var(--md-on-surface);
-  --text-secondary:  var(--md-on-surface-variant);
-  --text-tertiary:   var(--md-outline);
-  --border-primary:  var(--md-outline-variant);
+  --bg-primary:       var(--md-surface);
+  --bg-secondary:     var(--md-surface-container-low);
+  --bg-tertiary:      var(--md-surface-container);
+  --text-primary:     var(--md-on-surface);
+  --text-secondary:   var(--md-on-surface-variant);
+  --text-tertiary:    var(--md-outline);
+  --border-primary:   var(--md-outline-variant);
   --border-secondary: var(--md-outline-variant);
   --border-tertiary:  var(--md-outline);
   --accent-primary:   var(--md-primary);
-  --accent-secondary: #b69df8;  /* primary70 */
-  --accent-tertiary:  #eaddff;  /* primary90 */
-  --hover-bg:   rgba(208, 188, 255, 0.08);
-  --active-bg:  rgba(208, 188, 255, 0.12);
+  --accent-secondary: var(--md-sys-color-primary-fixed-dim);
+  --accent-tertiary:  var(--md-sys-color-on-primary-container);
+  --hover-bg:  color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+  --active-bg: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
 }
 
 * {

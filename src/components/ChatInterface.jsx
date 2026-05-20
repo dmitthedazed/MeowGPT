@@ -19,6 +19,9 @@ import {
   FiMic,
 } from "react-icons/fi";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
+import { M3eLoadingIndicator } from "@m3e/react/loading-indicator";
+import { M3eSuggestionChip, M3eChipSet } from "@m3e/react/chips";
+import { M3eTextareaAutosize } from "@m3e/react/textarea-autosize";
 import { useTranslation } from "../translations";
 
 const ChatInterface = ({
@@ -186,19 +189,6 @@ const ChatInterface = ({
     }
   };
 
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      const scrollHeight = textarea.scrollHeight;
-      textarea.style.height = Math.min(scrollHeight, 200) + "px";
-      textarea.style.overflowY = scrollHeight > 200 ? "auto" : "hidden";
-    }
-  };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [inputValue]);
 
   const handleCopyMessage = (content, messageId) => {
     navigator.clipboard.writeText(content);
@@ -363,11 +353,7 @@ const ChatInterface = ({
                     </div>
                     <div className="message-content-wrapper">
                       {message.isTyping ? (
-                        <div className="typing-dots">
-                          <div className="typing-dot"></div>
-                          <div className="typing-dot"></div>
-                          <div className="typing-dot"></div>
-                        </div>
+                        <M3eLoadingIndicator />
                       ) : (
                         <div className="message-content">{message.content}</div>
                       )}
@@ -454,11 +440,7 @@ const ChatInterface = ({
                   <div className="message-avatar ai">
                     <span className="ai-avatar">🐱</span>
                   </div>
-                  <div className="typing-dots">
-                    <div className="typing-dot"></div>
-                    <div className="typing-dot"></div>
-                    <div className="typing-dot"></div>
-                  </div>
+                  <M3eLoadingIndicator />
                 </div>
               </div>
             )}
@@ -535,6 +517,7 @@ const ChatInterface = ({
               </div>
 
               <textarea
+                id="chat-input-textarea"
                 ref={textareaRef}
                 className="chat-input"
                 placeholder={t("messagePlaceholder")}
@@ -544,6 +527,7 @@ const ChatInterface = ({
                 rows="1"
                 onFocus={handleInputFocus}
               />
+              <M3eTextareaAutosize htmlFor="chat-input-textarea" maxRows={8} />
               <div className="input-actions">
                 <div className="model-dropdown" ref={dropdownRef}>
                   <button
@@ -614,18 +598,17 @@ const ChatInterface = ({
           </form>
         </div>
         {(!currentChat || currentChat.messages.length === 0) && (
-          <div className="suggestions-container">
+          <M3eChipSet role="group" className="suggestions-container">
             {suggestions.map((suggestion, index) => (
-              <button
+              <M3eSuggestionChip
                 key={index}
-                className="suggestion-chip"
                 onClick={() => handleSuggestionClick(suggestion.text)}
               >
-                <span className="suggestion-icon">{suggestion.icon}</span>
-                <span className="suggestion-text">{suggestion.text}</span>
-              </button>
+                <span slot="icon">{suggestion.icon}</span>
+                {suggestion.text}
+              </M3eSuggestionChip>
             ))}
-          </div>
+          </M3eChipSet>
         )}
       </div>
       <div className="chat-info-text">{t("disclaimer")}</div>

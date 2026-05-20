@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./App.css";
+import { M3eTheme } from "@m3e/react/theme";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
 import ImageGeneration from "./components/ImageGeneration";
@@ -1169,7 +1170,10 @@ function App() {
     );
   }
 
+  const m3eScheme = theme === "system" ? "auto" : theme;
+
   return (
+    <M3eTheme color="#FF7043" scheme={m3eScheme}>
     <div className={`app ${theme}`} data-theme={theme}>
       {/* AI typing progress bar */}
       <div className={`ai-progress-bar ${isAiTyping ? "active" : ""}`} />
@@ -1379,6 +1383,7 @@ function App() {
         />
       )}
     </div>
+    </M3eTheme>
   );
 }
 
