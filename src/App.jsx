@@ -3,6 +3,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
 import ImageGeneration from "./components/ImageGeneration";
+import VoiceMode from "./components/VoiceMode";
 import { FiSearch, FiX, FiPlus, FiMessageSquare, FiZap } from "react-icons/fi";
 import { useTranslation } from "./translations";
 
@@ -296,6 +297,7 @@ function App() {
 
   // Chat interaction states
   const [deletingChatId, setDeletingChatId] = useState(null); // id of chat being animated out
+  const [isVoiceModeOpen, setIsVoiceModeOpen] = useState(false);
 
   // Year Predictor modal state
   const [isYearPredictorOpen, setIsYearPredictorOpen] = useState(false);
@@ -769,7 +771,7 @@ function App() {
     }
   };
 
-  const handleSendMessage = (message) => {
+  const handleSendMessage = (message, { onAiResponse } = {}) => {
     const messageWithTimestamp = {
       ...message,
       timestamp: Date.now(),
@@ -806,6 +808,7 @@ function App() {
           messages: [...prev.messages, aiResponse],
         }));
         setIsAiTyping(false);
+        onAiResponse?.(aiResponseContent);
       }, typingDuration);
       return;
     }
@@ -855,6 +858,7 @@ function App() {
           prevChats.map((chat) => (chat.id === newChat.id ? finalChat : chat))
         );
         setIsAiTyping(false);
+        onAiResponse?.(aiResponseContent);
       }, typingDuration);
       return;
     }
@@ -905,6 +909,7 @@ function App() {
         prevChats.map((chat) => (chat.id === currentChat.id ? finalChat : chat))
       );
       setIsAiTyping(false);
+      onAiResponse?.(aiResponseContent);
     }, typingDuration);
   };
 
@@ -1182,6 +1187,7 @@ function App() {
             onNewChat={handleNewChat}
             isTemporaryMode={isTemporaryMode}
             onToggleTemporaryMode={handleToggleTemporaryMode}
+            onOpenVoiceMode={() => setIsVoiceModeOpen(true)}
           />
         ) : (
           <ImageGeneration
@@ -1331,6 +1337,17 @@ function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Voice Mode Overlay */}
+      {isVoiceModeOpen && (
+        <VoiceMode
+          language={language}
+          currentChat={isTemporaryMode ? temporaryChat : currentChat}
+          isTemporaryMode={isTemporaryMode}
+          onSendMessage={handleSendMessage}
+          onClose={() => setIsVoiceModeOpen(false)}
+        />
       )}
     </div>
   );
