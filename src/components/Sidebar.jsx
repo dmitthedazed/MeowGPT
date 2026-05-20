@@ -14,6 +14,8 @@ import {
   FiHelpCircle,
   FiLogOut,
   FiChevronRight,
+  FiMoreHorizontal,
+  FiCpu,
 } from "react-icons/fi";
 import { useTranslation } from "../translations";
 import MeowGPTIcon from "../assets/icon.svg?react";
@@ -46,6 +48,8 @@ const Sidebar = ({
   const [renameValue, setRenameValue] = useState("");
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isExploreDropdownOpen, setIsExploreDropdownOpen] = useState(false);
+  const exploreDropdownRef = useRef(null);
   const [dropdownPos, setDropdownPos] = useState({ bottom: 0, left: 0 });
   const renameInputRef = useRef(null);
   const accountDropdownRef = useRef(null);
@@ -119,6 +123,9 @@ const Sidebar = ({
       }
       if (settingsModalRef.current && !settingsModalRef.current.contains(event.target) && event.target.classList.contains("settings-modal-overlay")) {
         setIsSettingsModalOpen(false);
+      }
+      if (exploreDropdownRef.current && !exploreDropdownRef.current.contains(event.target)) {
+        setIsExploreDropdownOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -212,26 +219,37 @@ const Sidebar = ({
           <FiSearch size={16} />
           <span>{t("searchChats")}</span>
         </button>
-        <button
-          className={`image-generation-btn${currentView === "imageGeneration" ? " active" : ""}`}
-          onClick={onOpenImageGeneration}
-          title={!isOpen ? t("imageGeneration") : ""}
-        >
-          <FiImage size={16} />
-          <span>{t("imageGeneration")}</span>
-        </button>
-
-        {/* GPTs section */}
-        <div className="sidebar-divider"></div>
-        <div className="gpts-label">{t("gpts")}</div>
-        <button
-          className="gpt-item"
-          onClick={onOpenYearPredictor}
-          title={!isOpen ? t("nextYearPredictor") : ""}
-        >
-          <div className="gpt-icon">🔮</div>
-          <span>{t("nextYearPredictor")}</span>
-        </button>
+        {/* Explore dropdown */}
+        <div className="explore-dropdown-wrapper" ref={exploreDropdownRef}>
+          <button
+            className={`explore-btn${isExploreDropdownOpen ? " active" : ""}`}
+            onClick={() => setIsExploreDropdownOpen((o) => !o)}
+            title={!isOpen ? t("explore") : ""}
+          >
+            <FiMoreHorizontal size={16} />
+            <span>{t("explore")}</span>
+          </button>
+          {isExploreDropdownOpen && isOpen && (
+            <div className="explore-dropdown-menu">
+              <button
+                className={`explore-dropdown-item${currentView === "imageGeneration" ? " active" : ""}`}
+                onClick={() => { onOpenImageGeneration(); setIsExploreDropdownOpen(false); }}
+              >
+                <FiImage size={15} />
+                <span>{t("imageGeneration")}</span>
+              </button>
+              <div className="explore-dropdown-divider" />
+              <div className="explore-dropdown-label">{t("gpts")}</div>
+              <button
+                className="explore-dropdown-item"
+                onClick={() => { onOpenYearPredictor(); setIsExploreDropdownOpen(false); }}
+              >
+                <FiCpu size={15} />
+                <span>{t("nextYearPredictor")}</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="sidebar-content">

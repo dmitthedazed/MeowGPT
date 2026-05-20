@@ -107,6 +107,7 @@ export const translations = {
 
     // Sidebar
     noChats: "No chats yet",
+    explore: "Explore",
     gpts: "GPTs",
     nextYearPredictor: "Next year predictor",
 
@@ -247,6 +248,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Пока нет чатов",
+    explore: "Explore",
     gpts: "GPT",
     nextYearPredictor: "Предсказатель следующего года",
 
@@ -387,6 +389,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Поки немає чатів",
+    explore: "Explore",
     gpts: "GPT",
     nextYearPredictor: "Передбачувач наступного року",
 
@@ -527,6 +530,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Zatiaľ žiadne chaty",
+    explore: "Explore",
     gpts: "GPT",
     nextYearPredictor: "Predikátor budúceho roku",
 
@@ -667,6 +671,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Brak chatów",
+    explore: "Explore",
     gpts: "GPT",
     nextYearPredictor: "Przewidywacz przyszłego roku",
 
@@ -806,6 +811,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Plerg Yibs Nooboo",
+    explore: "Dag dag",
     gpts: "GPT Sul",
     nextYearPredictor: "Firby Yibs Whippna",
 
@@ -944,6 +950,7 @@ export const translations = {
 
     // Sidebar
     noChats: "Meow meow meow",
+    explore: "Мяу больше",
     gpts: "Meow GPT",
     nextYearPredictor: "Meow mrow meow meow",
 
@@ -1082,6 +1089,7 @@ export const translations = {
 
     // Sidebar
     noChats: "SERVING CUNT NO CHATS 💜",
+    explore: "More slay 💜",
     gpts: "DIVA GPT 💜",
     nextYearPredictor: "FUTURE READER ENERGY 💜",
 
@@ -1220,6 +1228,7 @@ export const translations = {
 
     // Sidebar
     noChats: "yo dih sybau 🥀",
+    explore: "more fr fr",
     gpts: "sybau GPT 🥀",
     nextYearPredictor: "hawk tuah future reader 🥀",
 
