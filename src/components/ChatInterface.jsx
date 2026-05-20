@@ -16,6 +16,7 @@ import {
   FiPlus,
   FiFileText,
   FiX,
+  FiMic,
 } from "react-icons/fi";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useTranslation } from "../translations";
@@ -36,6 +37,7 @@ const ChatInterface = ({
   onNewChat,
   isTemporaryMode = false,
   onToggleTemporaryMode,
+  onOpenVoiceMode,
 }) => {
   const { t } = useTranslation(language);
   const [inputValue, setInputValue] = useState("");
@@ -575,6 +577,14 @@ const ChatInterface = ({
                   )}
                 </div>
 
+                <button
+                  type="button"
+                  className="voice-mode-btn"
+                  onClick={onOpenVoiceMode}
+                  title={t("voiceModeTitle")}
+                >
+                  <FiMic size={16} />
+                </button>
                 <button
                   type="submit"
                   className="send-button"
