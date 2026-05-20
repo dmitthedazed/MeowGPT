@@ -283,7 +283,7 @@ const Sidebar = ({
                         e.stopPropagation();
                         handleDoubleClickTitle(e, chat);
                       }}
-                      title={t("rename") || "Rename"}
+                      title={t("rename")}
                     >
                       <FiEdit2 size={13} />
                     </button>
@@ -303,7 +303,7 @@ const Sidebar = ({
                       e.preventDefault();
                       commitRename();
                     }}
-                    title="Save"
+                    title={t("save")}
                   >
                     <FiCheck size={13} />
                   </button>
@@ -329,10 +329,10 @@ const Sidebar = ({
               }
               setIsAccountDropdownOpen(!isAccountDropdownOpen);
             }}
-            title={!isOpen ? "Account" : ""}
+            title={!isOpen ? t("account") : ""}
           >
             <div className="account-avatar">A</div>
-            <span className="sidebar-account-label">Account</span>
+            <span className="sidebar-account-label">{t("account")}</span>
           </button>
 
           {isAccountDropdownOpen && (
@@ -440,4 +440,3 @@ const Sidebar = ({
 };
 
 export default Sidebar;
-

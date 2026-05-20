@@ -10,6 +10,13 @@ export const translations = {
     welcomeTitle: "Chat with MeowGPT",
     welcomeSubtitle: "Ask me anything and I'll respond with meows! 🐾",
     messagePlaceholder: "Message MeowGPT...",
+    temporaryChatNotice: "messages are not saved",
+    attachFile: "Attach file",
+    attachImage: "Image",
+    attachDocument: "Document",
+    suggestionDrawCat: "Draw a cat",
+    suggestionMousePoem: "Write a poem about a mouse",
+    suggestionCatsPurr: "Why do cats purr?",
 
     // Models
     models: {
@@ -74,6 +81,12 @@ export const translations = {
 
     // Common
     close: "Close",
+    loading: "Loading...",
+    rename: "Rename",
+    save: "Save",
+    account: "Account",
+    toggleMenu: "Toggle menu",
+    noChatsFound: "No chats found",
 
     // Image Generation
     imageGenerationTitle: "Image Generation",
@@ -86,6 +99,11 @@ export const translations = {
     galleryTitle: "Gallery",
     galleryEmpty: "No images generated yet",
     clearGallery: "Clear Gallery",
+    clearGalleryConfirm: "Clear all generated images?",
+    preparingImage: "Preparing your image...",
+    generatedImageAlt: "Generated image",
+    generatedImageNumberAlt: "Generated image",
+    imageGenerationHint: "Enter ↵ to generate · Shift+Enter for new line",
 
     // Sidebar
     noChats: "No chats yet",
@@ -122,6 +140,13 @@ export const translations = {
     welcomeTitle: "Чат с MeowGPT",
     welcomeSubtitle: "Спрашивайте что угодно, и я отвечу мяуканьем! 🐾",
     messagePlaceholder: "Сообщение для MeowGPT...",
+    temporaryChatNotice: "сообщения не сохраняются",
+    attachFile: "Прикрепить файл",
+    attachImage: "Изображение",
+    attachDocument: "Документ",
+    suggestionDrawCat: "Нарисуй котика",
+    suggestionMousePoem: "Напиши стих про мышь",
+    suggestionCatsPurr: "Почему коты мурчат?",
 
     // Models
     models: {
@@ -186,6 +211,12 @@ export const translations = {
 
     // Common
     close: "Закрыть",
+    loading: "Загрузка...",
+    rename: "Переименовать",
+    save: "Сохранить",
+    account: "Аккаунт",
+    toggleMenu: "Переключить меню",
+    noChatsFound: "Чаты не найдены",
 
     // Image Generation
     imageGenerationTitle: "Генерация изображений",
@@ -195,6 +226,14 @@ export const translations = {
     downloadImage: "Скачать",
     imageGenerationEmptyState:
       'Нажмите "Создать изображения", чтобы создать изображения из вашего запроса',
+    galleryTitle: "Галерея",
+    galleryEmpty: "Пока нет созданных изображений",
+    clearGallery: "Очистить галерею",
+    clearGalleryConfirm: "Очистить все созданные изображения?",
+    preparingImage: "Подготовка изображения...",
+    generatedImageAlt: "Созданное изображение",
+    generatedImageNumberAlt: "Созданное изображение",
+    imageGenerationHint: "Enter ↵ для создания · Shift+Enter для новой строки",
 
     // Sidebar
     noChats: "Пока нет чатов",
@@ -231,6 +270,13 @@ export const translations = {
     welcomeTitle: "Чат з MeowGPT",
     welcomeSubtitle: "Запитайте що завгодно, і я відповім нявканням! 🐾",
     messagePlaceholder: "Повідомлення для MeowGPT...",
+    temporaryChatNotice: "повідомлення не зберігаються",
+    attachFile: "Прикріпити файл",
+    attachImage: "Зображення",
+    attachDocument: "Документ",
+    suggestionDrawCat: "Намалюй котика",
+    suggestionMousePoem: "Напиши вірш про мишу",
+    suggestionCatsPurr: "Чому коти муркочуть?",
 
     // Models
     models: {
@@ -295,6 +341,12 @@ export const translations = {
 
     // Common
     close: "Закрити",
+    loading: "Завантаження...",
+    rename: "Перейменувати",
+    save: "Зберегти",
+    account: "Акаунт",
+    toggleMenu: "Перемкнути меню",
+    noChatsFound: "Чати не знайдено",
 
     // Image Generation
     imageGenerationTitle: "Генерація зображень",
@@ -304,6 +356,14 @@ export const translations = {
     downloadImage: "Завантажити",
     imageGenerationEmptyState:
       'Натисніть "Створити зображення", щоб створити зображення з вашого запиту',
+    galleryTitle: "Галерея",
+    galleryEmpty: "Поки немає створених зображень",
+    clearGallery: "Очистити галерею",
+    clearGalleryConfirm: "Очистити всі створені зображення?",
+    preparingImage: "Підготовка зображення...",
+    generatedImageAlt: "Створене зображення",
+    generatedImageNumberAlt: "Створене зображення",
+    imageGenerationHint: "Enter ↵ для створення · Shift+Enter для нового рядка",
 
     // Sidebar
     noChats: "Поки немає чатів",
@@ -340,6 +400,13 @@ export const translations = {
     welcomeTitle: "Chat s MeowGPT",
     welcomeSubtitle: "Spýtajte sa na čokoľvek a odpoviem mňauknutím! 🐾",
     messagePlaceholder: "Správa pre MeowGPT...",
+    temporaryChatNotice: "správy sa neukladajú",
+    attachFile: "Priložiť súbor",
+    attachImage: "Obrázok",
+    attachDocument: "Dokument",
+    suggestionDrawCat: "Nakresli mačku",
+    suggestionMousePoem: "Napíš báseň o myši",
+    suggestionCatsPurr: "Prečo mačky pradia?",
 
     // Models
     models: {
@@ -404,6 +471,12 @@ export const translations = {
 
     // Common
     close: "Zavrieť",
+    loading: "Načítava sa...",
+    rename: "Premenovať",
+    save: "Uložiť",
+    account: "Účet",
+    toggleMenu: "Prepnúť menu",
+    noChatsFound: "Nenašli sa žiadne chaty",
 
     // Image Generation
     imageGenerationTitle: "Generovanie obrázkov",
@@ -413,6 +486,14 @@ export const translations = {
     downloadImage: "Stiahnuť",
     imageGenerationEmptyState:
       'Kliknite na "Vytvoriť obrázky" na vytvorenie obrázkov z vášho popisu',
+    galleryTitle: "Galéria",
+    galleryEmpty: "Zatiaľ neboli vytvorené žiadne obrázky",
+    clearGallery: "Vymazať galériu",
+    clearGalleryConfirm: "Vymazať všetky vytvorené obrázky?",
+    preparingImage: "Pripravujem obrázok...",
+    generatedImageAlt: "Vytvorený obrázok",
+    generatedImageNumberAlt: "Vytvorený obrázok",
+    imageGenerationHint: "Enter ↵ na vytvorenie · Shift+Enter pre nový riadok",
 
     // Sidebar
     noChats: "Zatiaľ žiadne chaty",
@@ -449,6 +530,13 @@ export const translations = {
     welcomeTitle: "Chat z MeowGPT",
     welcomeSubtitle: "Zapytaj o cokolwiek, a odpowiem miauczeniem! 🐾",
     messagePlaceholder: "Wiadomość do MeowGPT...",
+    temporaryChatNotice: "wiadomości nie są zapisywane",
+    attachFile: "Dołącz plik",
+    attachImage: "Obraz",
+    attachDocument: "Dokument",
+    suggestionDrawCat: "Narysuj kotka",
+    suggestionMousePoem: "Napisz wiersz o myszy",
+    suggestionCatsPurr: "Dlaczego koty mruczą?",
 
     // Models
     models: {
@@ -513,6 +601,12 @@ export const translations = {
 
     // Common
     close: "Zamknij",
+    loading: "Ładowanie...",
+    rename: "Zmień nazwę",
+    save: "Zapisz",
+    account: "Konto",
+    toggleMenu: "Przełącz menu",
+    noChatsFound: "Nie znaleziono chatów",
 
     // Image Generation
     imageGenerationTitle: "Generowanie obrazów",
@@ -522,6 +616,14 @@ export const translations = {
     downloadImage: "Pobierz",
     imageGenerationEmptyState:
       'Kliknij "Wygeneruj obrazy", aby utworzyć obrazy z Twojego opisu',
+    galleryTitle: "Galeria",
+    galleryEmpty: "Nie wygenerowano jeszcze obrazów",
+    clearGallery: "Wyczyść galerię",
+    clearGalleryConfirm: "Wyczyścić wszystkie wygenerowane obrazy?",
+    preparingImage: "Przygotowywanie obrazu...",
+    generatedImageAlt: "Wygenerowany obraz",
+    generatedImageNumberAlt: "Wygenerowany obraz",
+    imageGenerationHint: "Enter ↵ generuje · Shift+Enter dodaje nową linię",
 
     // Sidebar
     noChats: "Brak chatów",
@@ -558,6 +660,13 @@ export const translations = {
     welcomeTitle: "Plerg Whippna MeowGPT",
     welcomeSubtitle: "Yibs Sul Duh! Plerg mibu whippna mrow! 🐾",
     messagePlaceholder: "Blarfy nooboo MeowGPT...",
+    temporaryChatNotice: "plerg no save nooboo",
+    attachFile: "Blarfy file",
+    attachImage: "Yibs image",
+    attachDocument: "Nooboo doc",
+    suggestionDrawCat: "Blarfy mrow kitty",
+    suggestionMousePoem: "Whippna poem mouse",
+    suggestionCatsPurr: "Why kitty mrow?",
 
     // Models
     models: {
@@ -621,6 +730,12 @@ export const translations = {
 
     // Common
     close: "Nooboo",
+    loading: "Firby...",
+    rename: "Replerg",
+    save: "Meshaloob",
+    account: "Plerg Account",
+    toggleMenu: "Toggle plerg",
+    noChatsFound: "No plerg found",
 
     // Image Generation
     imageGenerationTitle: "Yibs Blarfy Sul",
@@ -630,6 +745,14 @@ export const translations = {
     downloadImage: "Meshaloob",
     imageGenerationEmptyState:
       'Firby "Firby Blarfy" sul meshaloob blarfy yibs whippna',
+    galleryTitle: "Blarfy Gallery",
+    galleryEmpty: "No yibs blarfy yet",
+    clearGallery: "Nooboo Gallery",
+    clearGalleryConfirm: "Nooboo all yibs blarfy?",
+    preparingImage: "Meshaloob yibs blarfy...",
+    generatedImageAlt: "Blarfy yibs",
+    generatedImageNumberAlt: "Blarfy yibs",
+    imageGenerationHint: "Enter ↵ firby · Shift+Enter new line",
 
     // Sidebar
     noChats: "Plerg Yibs Nooboo",
@@ -666,6 +789,13 @@ export const translations = {
     welcomeTitle: "Meow meow MeowGPT",
     welcomeSubtitle: "Meow meow meow meow! Meow meow meow mrow! 🐾",
     messagePlaceholder: "Meow meow MeowGPT...",
+    temporaryChatNotice: "meow meow no save",
+    attachFile: "Meow file",
+    attachImage: "Meow image",
+    attachDocument: "Meow document",
+    suggestionDrawCat: "Meow meow cat",
+    suggestionMousePoem: "Meow poem mouse",
+    suggestionCatsPurr: "Meow cats purr?",
 
     // Models
     models: {
@@ -729,6 +859,12 @@ export const translations = {
 
     // Common
     close: "Meow",
+    loading: "Meow...",
+    rename: "Meow rename",
+    save: "Meow save",
+    account: "Meow account",
+    toggleMenu: "Meow menu",
+    noChatsFound: "No meow chats",
 
     // Image Generation
     imageGenerationTitle: "Meow Mrow Meow",
@@ -737,6 +873,14 @@ export const translations = {
     generatingImages: "Meow mrow meow...",
     downloadImage: "Mrow",
     imageGenerationEmptyState: 'Meow "Meow Mrow" meow mrow meow meow meow',
+    galleryTitle: "Meow Gallery",
+    galleryEmpty: "No meow images yet",
+    clearGallery: "Meow Gallery Clear",
+    clearGalleryConfirm: "Clear all meow images?",
+    preparingImage: "Meow image preparing...",
+    generatedImageAlt: "Meow generated image",
+    generatedImageNumberAlt: "Meow generated image",
+    imageGenerationHint: "Enter ↵ meow · Shift+Enter new line",
 
     // Sidebar
     noChats: "Meow meow meow",
@@ -772,6 +916,13 @@ export const translations = {
     welcomeTitle: "SERVING CUNT WITH MEOWGPT 💜",
     welcomeSubtitle: "QUEEN BADDIE ATE AND LEFT NO CRUMBS 💜",
     messagePlaceholder: "DIVA SPILL THE TEA 💜",
+    temporaryChatNotice: "NO RECEIPTS SAVED 💜",
+    attachFile: "ATTACH THE TEA 💜",
+    attachImage: "VISUAL 💜",
+    attachDocument: "DOCUMENT 💜",
+    suggestionDrawCat: "DRAW KITTY ENERGY 💜",
+    suggestionMousePoem: "WRITE MOUSE POETRY 💜",
+    suggestionCatsPurr: "WHY DO CATS PURR 💜",
 
     // Models
     models: {
@@ -835,6 +986,12 @@ export const translations = {
 
     // Common
     close: "PERIOD 💜",
+    loading: "LOADING 💜",
+    rename: "RENAME DIVA 💜",
+    save: "SAVE IT 💜",
+    account: "ACCOUNT 💜",
+    toggleMenu: "TOGGLE MENU 💜",
+    noChatsFound: "NO CHATS SERVING 💜",
 
     // Image Generation
     imageGenerationTitle: "SERVING VISUALS 💜",
@@ -844,6 +1001,14 @@ export const translations = {
     downloadImage: "ATE 💜",
     imageGenerationEmptyState:
       'YASSS CLICK "SLAY VISUALS" TO SERVE LOOKS FROM YOUR VIBE 💜',
+    galleryTitle: "GALLERY 💜",
+    galleryEmpty: "NO VISUALS SERVED YET 💜",
+    clearGallery: "CLEAR GALLERY 💜",
+    clearGalleryConfirm: "CLEAR ALL SERVED VISUALS 💜?",
+    preparingImage: "PREPARING YOUR VISUAL 💜",
+    generatedImageAlt: "SERVED VISUAL 💜",
+    generatedImageNumberAlt: "SERVED VISUAL 💜",
+    imageGenerationHint: "Enter ↵ TO SERVE · Shift+Enter FOR NEW LINE 💜",
 
     // Sidebar
     noChats: "SERVING CUNT NO CHATS 💜",
@@ -879,6 +1044,13 @@ export const translations = {
     welcomeTitle: "hawk tuah MeowGPT 🥀",
     welcomeSubtitle: "yo dih sybau gurt hawk tuah 🥀",
     messagePlaceholder: "vro ts MeowGPT 🥀",
+    temporaryChatNotice: "no saves rn vro 🥀",
+    attachFile: "attach gurt file 🥀",
+    attachImage: "visual gurt 🥀",
+    attachDocument: "doc gurt 🥀",
+    suggestionDrawCat: "draw cat gurt 🥀",
+    suggestionMousePoem: "write mouse poem 🥀",
+    suggestionCatsPurr: "why cats purr vro 🥀",
 
     // Models
     models: {
@@ -942,6 +1114,12 @@ export const translations = {
 
     // Common
     close: "ts 🥀",
+    loading: "loading vro 🥀",
+    rename: "rename gurt 🥀",
+    save: "save fr 🥀",
+    account: "account vro 🥀",
+    toggleMenu: "toggle menu 🥀",
+    noChatsFound: "no chats found vro 🥀",
 
     // Image Generation
     imageGenerationTitle: "hawk tuah visuals 🥀",
@@ -951,6 +1129,14 @@ export const translations = {
     downloadImage: "gurt 🥀",
     imageGenerationEmptyState:
       'yo click "hawk tuah create" fr make visuals from your vibe 🥀',
+    galleryTitle: "gallery gurt 🥀",
+    galleryEmpty: "no visuals yet vro 🥀",
+    clearGallery: "clear gallery 🥀",
+    clearGalleryConfirm: "clear all visuals vro 🥀?",
+    preparingImage: "preparing visual vro 🥀",
+    generatedImageAlt: "generated visual 🥀",
+    generatedImageNumberAlt: "generated visual 🥀",
+    imageGenerationHint: "Enter ↵ to generate · Shift+Enter new line 🥀",
 
     // Sidebar
     noChats: "yo dih sybau 🥀",

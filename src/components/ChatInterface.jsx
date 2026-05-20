@@ -172,9 +172,9 @@ const ChatInterface = ({
   };
 
   const suggestions = [
-    { icon: <FiImage />, text: "Нарисуй котика" },
-    { icon: <FiEdit2 />, text: "Напиши стих про мышь" },
-    { icon: <FiGlobe />, text: "Почему коты мурчат?" }
+    { icon: <FiImage />, text: t("suggestionDrawCat") },
+    { icon: <FiEdit2 />, text: t("suggestionMousePoem") },
+    { icon: <FiGlobe />, text: t("suggestionCatsPurr") },
   ];
 
   const handleKeyPress = (e) => {
@@ -223,7 +223,7 @@ const ChatInterface = ({
   const handleShareMessage = (content) => {
     if (navigator.share) {
       navigator.share({
-        title: "MeowGPT Message",
+        title: "MeowGPT",
         text: content,
       });
     } else {
@@ -291,7 +291,7 @@ const ChatInterface = ({
           <button
             className="hamburger-menu mobile-only"
             onClick={onToggleSidebar}
-            title="Toggle menu"
+            title={t("toggleMenu")}
           >
             <FiMenu size={20} />
           </button>
@@ -311,7 +311,9 @@ const ChatInterface = ({
       {isTemporaryMode && (
         <div className="temporary-chat-banner">
           <FiMessageCircle size={14} />
-          <span>{t("temporaryChat")} — сообщения не сохраняются</span>
+          <span>
+            {t("temporaryChat")} - {t("temporaryChatNotice")}
+          </span>
         </div>
       )}
 
@@ -500,7 +502,7 @@ const ChatInterface = ({
                   type="button"
                   className="attach-btn"
                   onClick={() => setIsAttachDropdownOpen(!isAttachDropdownOpen)}
-                  title="Прикрепить файл"
+                  title={t("attachFile")}
                 >
                   <FiPlus size={18} />
                 </button>
@@ -514,7 +516,7 @@ const ChatInterface = ({
                       }}
                     >
                       <FiImage size={16} />
-                      <span>Изображение</span>
+                      <span>{t("attachImage")}</span>
                     </div>
                     <div
                       className="attach-option"
@@ -524,7 +526,7 @@ const ChatInterface = ({
                       }}
                     >
                       <FiFileText size={16} />
-                      <span>Документ</span>
+                      <span>{t("attachDocument")}</span>
                     </div>
                   </div>
                 )}

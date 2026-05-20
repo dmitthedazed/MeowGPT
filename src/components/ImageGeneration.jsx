@@ -102,7 +102,7 @@ const ImageGeneration = ({
   };
 
   const handleClearGallery = () => {
-    if (window.confirm("Clear all generated images?")) {
+    if (window.confirm(t("clearGalleryConfirm"))) {
       setImageGallery([]);
       setRevealedImage(null);
     }
@@ -118,7 +118,7 @@ const ImageGeneration = ({
           <button
             className="hamburger-menu mobile-only"
             onClick={onToggleSidebar}
-            title="Toggle menu"
+            title={t("toggleMenu")}
           >
             <FiMenu size={20} />
           </button>
@@ -152,7 +152,7 @@ const ImageGeneration = ({
                     </svg>
                     <span className="img-gen-reveal-countdown">{countdown}</span>
                   </div>
-                  <span className="img-gen-reveal-text">Preparing your image…</span>
+                  <span className="img-gen-reveal-text">{t("preparingImage")}</span>
                 </div>
               ) : (
                 <p className="img-gen-skeleton-label">{t("generatingImages")}</p>
@@ -163,7 +163,7 @@ const ImageGeneration = ({
               <div className="img-gen-reveal-overlay" />
               <img
                 src={revealedImage.url}
-                alt="Generated"
+                alt={t("generatedImageAlt")}
                 className="img-gen-result-img"
               />
               <div className="img-gen-result-footer">
@@ -207,7 +207,7 @@ const ImageGeneration = ({
                     <div className="img-gen-card-img-wrap">
                       <img
                         src={image.url}
-                        alt={`Generated ${index + 1}`}
+                        alt={`${t("generatedImageNumberAlt")} ${index + 1}`}
                         className="img-gen-card-img"
                       />
                       <div className="img-gen-card-overlay">
@@ -259,7 +259,7 @@ const ImageGeneration = ({
             )}
           </button>
         </div>
-        <p className="img-gen-hint">Enter ↵ to generate · Shift+Enter for new line</p>
+        <p className="img-gen-hint">{t("imageGenerationHint")}</p>
       </form>
     </div>
   );

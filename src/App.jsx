@@ -1130,7 +1130,7 @@ function App() {
           color: "#6b7280",
         }}
       >
-        Loading...
+        {t("loading")}
       </div>
     );
   }
@@ -1239,7 +1239,7 @@ function App() {
                 </div>
               ) : searchResults.length === 0 ? (
                 <div className="search-no-results">
-                  <span>No chats found</span>
+                  <span>{t("noChatsFound")}</span>
                 </div>
               ) : (
                 <div className="search-results">
