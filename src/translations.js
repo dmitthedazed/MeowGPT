@@ -128,6 +128,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Upgrade plan",
     upgradeSubtitle: "More access to the best models",
+
+    // Voice Mode
+    voiceModeTitle: "Voice mode",
+    voiceListening: "Listening...",
+    voiceProcessing: "Processing...",
+    voiceSpeaking: "Speaking...",
+    voiceTapToSpeak: "Tap to speak",
+    voiceNotSupported: "Voice mode is not supported in this browser. Please use Chrome or Safari.",
+    voiceMicPaused: "Microphone paused",
+    voiceClose: "Close voice mode",
   },
 
   ru: {
@@ -258,6 +268,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Улучшить тариф",
     upgradeSubtitle: "Больше доступа к лучшим моделям",
+
+    // Voice Mode
+    voiceModeTitle: "Голосовой режим",
+    voiceListening: "Слушаю...",
+    voiceProcessing: "Обрабатываю...",
+    voiceSpeaking: "Говорю...",
+    voiceTapToSpeak: "Нажмите чтобы говорить",
+    voiceNotSupported: "Голосовой режим не поддерживается в этом браузере. Используйте Chrome или Safari.",
+    voiceMicPaused: "Микрофон на паузе",
+    voiceClose: "Закрыть голосовой режим",
   },
 
   uk: {
@@ -388,6 +408,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Покращити план",
     upgradeSubtitle: "Більше доступу до найкращих моделей",
+
+    // Voice Mode
+    voiceModeTitle: "Голосовий режим",
+    voiceListening: "Слухаю...",
+    voiceProcessing: "Обробляю...",
+    voiceSpeaking: "Говорю...",
+    voiceTapToSpeak: "Натисніть, щоб говорити",
+    voiceNotSupported: "Голосовий режим не підтримується у цьому браузері. Використовуйте Chrome або Safari.",
+    voiceMicPaused: "Мікрофон на паузі",
+    voiceClose: "Закрити голосовий режим",
   },
 
   sk: {
@@ -518,6 +548,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Vylepšiť plán",
     upgradeSubtitle: "Viac prístupu k najlepším modelom",
+
+    // Voice Mode
+    voiceModeTitle: "Hlasový režim",
+    voiceListening: "Počúvam...",
+    voiceProcessing: "Spracovávam...",
+    voiceSpeaking: "Hovorím...",
+    voiceTapToSpeak: "Klepnite pre hovorenie",
+    voiceNotSupported: "Hlasový režim nie je podporovaný v tomto prehliadači. Použite Chrome alebo Safari.",
+    voiceMicPaused: "Mikrofón je pozastavený",
+    voiceClose: "Zavrieť hlasový režim",
   },
 
   pl: {
@@ -648,6 +688,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Ulepsz plan",
     upgradeSubtitle: "Więcej dostępu do najlepszych modeli",
+
+    // Voice Mode
+    voiceModeTitle: "Tryb głosowy",
+    voiceListening: "Słucham...",
+    voiceProcessing: "Przetwarzam...",
+    voiceSpeaking: "Mówię...",
+    voiceTapToSpeak: "Dotknij, aby mówić",
+    voiceNotSupported: "Tryb głosowy nie jest obsługiwany w tej przeglądarce. Użyj Chrome lub Safari.",
+    voiceMicPaused: "Mikrofon wstrzymany",
+    voiceClose: "Zamknij tryb głosowy",
   },
 
   sim: {
@@ -777,6 +827,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Meshaloob Plerg",
     upgradeSubtitle: "Sul firby whippna blarfy nooboo",
+
+    // Voice Mode
+    voiceModeTitle: "Veebo Sul",
+    voiceListening: "Nooboo sul...",
+    voiceProcessing: "Wabadebadoo...",
+    voiceSpeaking: "Sul sul...",
+    voiceTapToSpeak: "Dag dag veebo",
+    voiceNotSupported: "Veebo sul no wabadoo! Dag dag Chrome.",
+    voiceMicPaused: "Nooboo zip",
+    voiceClose: "Dag dag sul",
   },
 
   meow: {
@@ -904,6 +964,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "Meow meow",
     upgradeSubtitle: "Meow meow meow meow meow",
+
+    // Voice Mode
+    voiceModeTitle: "Мяу режим",
+    voiceListening: "Мяу... 🎤",
+    voiceProcessing: "Мрр... 🐾",
+    voiceSpeaking: "Мяяяу! 🐱",
+    voiceTapToSpeak: "Мяу чтобы говорить 🐾",
+    voiceNotSupported: "Мяу! Этот браузер не поддерживает голосовой режим 😿",
+    voiceMicPaused: "Тихий мяу 🤫",
+    voiceClose: "Мяу до свидания 👋",
   },
 
   twink: {
@@ -1032,6 +1102,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "SLAY UPGRADE 💜",
     upgradeSubtitle: "QUEEN BADDIE LEFT NO CRUMBS 💜",
+
+    // Voice Mode
+    voiceModeTitle: "Voice Mode 💜",
+    voiceListening: "Listening bestie... 💜",
+    voiceProcessing: "Processing slay... ✨",
+    voiceSpeaking: "Speaking my truth... 💅",
+    voiceTapToSpeak: "Tap to slay 💜",
+    voiceNotSupported: "Bestie your browser doesn't support voice 😭 Try Chrome!",
+    voiceMicPaused: "Mic on pause babe 💜",
+    voiceClose: "Bye bestie 💜",
   },
 
   brainrot: {
@@ -1161,6 +1241,16 @@ export const translations = {
     // Upgrade
     upgradeTitle: "pmo gurt 🥀",
     upgradeSubtitle: "fr yo vro dih hawk tuah sybau 🥀",
+
+    // Voice Mode
+    voiceModeTitle: "voice mode fr fr",
+    voiceListening: "no cap listening rn...",
+    voiceProcessing: "big brain processing...",
+    voiceSpeaking: "spitting fr fr...",
+    voiceTapToSpeak: "tap to yap bestie",
+    voiceNotSupported: "bro your browser is cooked 💀 use chrome no cap",
+    voiceMicPaused: "mic said nah fr",
+    voiceClose: "lowkey closing this",
   },
 };
 
