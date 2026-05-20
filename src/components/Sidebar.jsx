@@ -16,6 +16,12 @@ import {
   FiChevronRight,
   FiMoreHorizontal,
   FiCpu,
+  FiDivideCircle,
+  FiTrendingUp,
+  FiSliders,
+  FiEye,
+  FiVolume2,
+  FiAward,
 } from "react-icons/fi";
 import { useTranslation } from "../translations";
 import MeowGPTIcon from "../assets/icon.svg?react";
@@ -35,11 +41,23 @@ const Sidebar = ({
   onOpenSearch,
   onOpenImageGeneration,
   onOpenYearPredictor,
+  onOpenCalculator,
+  onOpenHeightCounter,
   currentView,
   deletingChatId,
   theme,
   onThemeChange,
   onLanguageChange,
+  onOpenPaywall,
+  isPremium = false,
+  fontSize,
+  onFontSizeChange,
+  bubbleStyle,
+  onBubbleStyleChange,
+  voiceActor,
+  onVoiceActorChange,
+  onCancelSubscription,
+  onClearAllData,
 }) => {
   const { t } = useTranslation(language);
   const [hoveredChatId, setHoveredChatId] = useState(null);
@@ -48,6 +66,7 @@ const Sidebar = ({
   const [renameValue, setRenameValue] = useState("");
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [settingsActiveTab, setSettingsActiveTab] = useState("general");
   const [isExploreDropdownOpen, setIsExploreDropdownOpen] = useState(false);
   const exploreDropdownRef = useRef(null);
   const [dropdownPos, setDropdownPos] = useState({ bottom: 0, left: 0 });
@@ -247,6 +266,20 @@ const Sidebar = ({
                 <FiCpu size={15} />
                 <span>{t("nextYearPredictor")}</span>
               </button>
+              <button
+                className="explore-dropdown-item"
+                onClick={() => { onOpenHeightCounter(); setIsExploreDropdownOpen(false); }}
+              >
+                <FiTrendingUp size={15} />
+                <span>{t("heightCounter")}</span>
+              </button>
+              <button
+                className="explore-dropdown-item"
+                onClick={() => { onOpenCalculator(); setIsExploreDropdownOpen(false); }}
+              >
+                <FiDivideCircle size={15} />
+                <span>{t("calculator")}</span>
+              </button>
             </div>
           )}
         </div>
@@ -349,7 +382,9 @@ const Sidebar = ({
             }}
             title={!isOpen ? t("account") : ""}
           >
-            <div className="account-avatar">A</div>
+            <div className={`account-avatar ${isPremium ? "premium" : ""}`}>
+              {isPremium ? "👑" : "A"}
+            </div>
             <span className="sidebar-account-label">{t("account")}</span>
           </button>
 
@@ -372,10 +407,18 @@ const Sidebar = ({
 
               <div className="dropdown-divider"></div>
 
-              <div className="account-menu-item">
-                <FiZap size={16} />
-                <span>{t("upgradePlan")}</span>
-              </div>
+              {!isPremium && (
+                <div
+                  className="account-menu-item"
+                  onClick={() => {
+                    onOpenPaywall();
+                    setIsAccountDropdownOpen(false);
+                  }}
+                >
+                  <FiZap size={16} />
+                  <span>{t("upgradePlan")}</span>
+                </div>
+              )}
 
               <div className="account-menu-item" onClick={handleOpenSettings}>
                 <FiSettings size={16} />
@@ -403,7 +446,7 @@ const Sidebar = ({
         <div className="settings-modal-overlay" onClick={handleCloseSettings}>
           <div
             ref={settingsModalRef}
-            className="settings-modal"
+            className="settings-modal settings-modal--tabbed"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="settings-modal-header">
@@ -413,41 +456,271 @@ const Sidebar = ({
               </button>
             </div>
 
-            <div className="settings-modal-content">
-              <div className="settings-section">
-                <h3>{t("appearance")}</h3>
-                <div className="settings-item">
-                  <label>{t("theme")}</label>
-                  <select
-                    className="settings-select"
-                    value={theme}
-                    onChange={(e) => onThemeChange(e.target.value)}
-                  >
-                    {themes.map((themeOption) => (
-                      <option key={themeOption.id} value={themeOption.id}>
-                        {themeOption.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+            <div className="settings-modal-body">
+              {/* Left Navigation Tabs */}
+              <div className="settings-sidebar">
+                <button
+                  className={`settings-tab-btn ${settingsActiveTab === "general" ? "active" : ""}`}
+                  onClick={() => setSettingsActiveTab("general")}
+                >
+                  <FiSliders size={16} />
+                  <span>{t("general")}</span>
+                </button>
+                <button
+                  className={`settings-tab-btn ${settingsActiveTab === "appearance" ? "active" : ""}`}
+                  onClick={() => setSettingsActiveTab("appearance")}
+                >
+                  <FiEye size={16} />
+                  <span>{t("appearance")}</span>
+                </button>
+                <button
+                  className={`settings-tab-btn ${settingsActiveTab === "voice" ? "active" : ""}`}
+                  onClick={() => setSettingsActiveTab("voice")}
+                >
+                  <FiVolume2 size={16} />
+                  <span>Voice & Audio</span>
+                </button>
+                <button
+                  className={`settings-tab-btn ${settingsActiveTab === "subscription" ? "active" : ""}`}
+                  onClick={() => setSettingsActiveTab("subscription")}
+                >
+                  <FiAward size={16} />
+                  <span>Subscription</span>
+                </button>
               </div>
 
-              <div className="settings-section">
-                <h3>{t("general")}</h3>
-                <div className="settings-item">
-                  <label>{t("language")}</label>
-                  <select
-                    className="settings-select"
-                    value={language}
-                    onChange={(e) => onLanguageChange(e.target.value)}
-                  >
-                    {languages.map((lang) => (
-                      <option key={lang.id} value={lang.id}>
-                        {lang.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Right Tab Content */}
+              <div className="settings-tab-content">
+                {settingsActiveTab === "general" && (
+                  <div className="settings-pane animate-fade-in">
+                    <div className="settings-pane-header">
+                      <h3>{t("general")}</h3>
+                    </div>
+                    
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>{t("language")}</label>
+                        <span className="settings-item-desc">Change the display language of MeowGPT</span>
+                      </div>
+                      <select
+                        className="settings-select"
+                        value={language}
+                        onChange={(e) => onLanguageChange(e.target.value)}
+                      >
+                        {languages.map((lang) => (
+                          <option key={lang.id} value={lang.id}>
+                            {lang.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="dropdown-divider"></div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label style={{ color: "var(--md-error, #ffb4ab)" }}>Wipe All Data</label>
+                        <span className="settings-item-desc">Delete all custom chats, generated image cache and preferences</span>
+                      </div>
+                      <button
+                        className="settings-action-btn danger-btn"
+                        onClick={() => {
+                          if (onClearAllData()) {
+                            handleCloseSettings();
+                          }
+                        }}
+                      >
+                        <FiTrash2 size={14} />
+                        <span>Reset App</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {settingsActiveTab === "appearance" && (
+                  <div className="settings-pane animate-fade-in">
+                    <div className="settings-pane-header">
+                      <h3>{t("appearance")}</h3>
+                    </div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>{t("theme")}</label>
+                        <span className="settings-item-desc">Choose between light, dark, or system setting</span>
+                      </div>
+                      <select
+                        className="settings-select"
+                        value={theme}
+                        onChange={(e) => onThemeChange(e.target.value)}
+                      >
+                        {themes.map((themeOption) => (
+                          <option key={themeOption.id} value={themeOption.id}>
+                            {themeOption.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="dropdown-divider"></div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>Message Scale</label>
+                        <span className="settings-item-desc">Adjust the typography font size of dialogue bubbles</span>
+                      </div>
+                      <select
+                        className="settings-select"
+                        value={fontSize}
+                        onChange={(e) => onFontSizeChange(e.target.value)}
+                      >
+                        <option value="compact">Compact (14px)</option>
+                        <option value="cozy">Cozy (16px)</option>
+                        <option value="large">Large (18px)</option>
+                      </select>
+                    </div>
+
+                    <div className="dropdown-divider"></div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>Chat Layout Style</label>
+                        <span className="settings-item-desc">Choose between standard cozy bubbles or flat minimalist lines</span>
+                      </div>
+                      <select
+                        className="settings-select"
+                        value={bubbleStyle}
+                        onChange={(e) => onBubbleStyleChange(e.target.value)}
+                      >
+                        <option value="modern">Cozy Rounded Bubbles</option>
+                        <option value="minimalist">Minimalist Layout</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {settingsActiveTab === "voice" && (
+                  <div className="settings-pane animate-fade-in">
+                    <div className="settings-pane-header">
+                      <h3>Voice & Audio Preferences</h3>
+                    </div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>Active Voice Speaker</label>
+                        <span className="settings-item-desc">Choose a different kitten persona for audio responses</span>
+                      </div>
+                      <select
+                        className="settings-select"
+                        value={voiceActor}
+                        onChange={(e) => onVoiceActorChange(e.target.value)}
+                      >
+                        <option value="meow-classic">Classic Siamese Vocal (Meow!)</option>
+                        <option value="cat-whisperer">Calm British Purr (Mellow)</option>
+                        <option value="kitty-turbo">Playful Munchkin (High-Pitch)</option>
+                      </select>
+                    </div>
+
+                    <div className="dropdown-divider"></div>
+
+                    <div className="settings-item">
+                      <div className="settings-item-label">
+                        <label>Speech Auto-readback</label>
+                        <span className="settings-item-desc">Automatically read back generated AI responses out loud</span>
+                      </div>
+                      <div className="settings-toggle-wrapper">
+                        <input type="checkbox" defaultChecked={true} className="settings-checkbox" id="autoread-chk" />
+                        <label htmlFor="autoread-chk" className="toggle-slider"></label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settingsActiveTab === "subscription" && (
+                  <div className="settings-pane animate-fade-in">
+                    <div className="settings-pane-header">
+                      <h3>Subscription Management</h3>
+                    </div>
+
+                    <div className="settings-sub-status-card">
+                      <div className="status-card-header">
+                        <span className="current-plan-title">Current Active Plan</span>
+                        <span className={`plan-pill ${isPremium ? "plus" : "free"}`}>
+                          {isPremium ? "👑 Meow Plus" : "Free"}
+                        </span>
+                      </div>
+
+                      <div className="status-card-body">
+                        {isPremium ? (
+                          <>
+                            <div className="status-row">
+                              <span>Billing Status</span>
+                              <span className="status-badge-active">Active</span>
+                            </div>
+                            <div className="status-row">
+                              <span>Renews Next On</span>
+                              <span>June 20, 2026</span>
+                            </div>
+                            <div className="status-row">
+                              <span>Payment Card</span>
+                              <span>Mastercard ending in 4242</span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="status-row">
+                              <span>Standard Turn Delay</span>
+                              <span>None (Queued message queue)</span>
+                            </div>
+                            <div className="status-row">
+                              <span>Purr Privileges</span>
+                              <span>Standard models</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="subscription-controls">
+                      {isPremium ? (
+                        <div className="settings-item">
+                          <div className="settings-item-label">
+                            <label>Cancel Subscription</label>
+                            <span className="settings-item-desc">Stop auto-renewal and return user status back to Free tier</span>
+                          </div>
+                          <button
+                            className="settings-action-btn danger-btn-outline"
+                            onClick={() => {
+                              if (onCancelSubscription()) {
+                                handleCloseSettings();
+                              }
+                            }}
+                          >
+                            Cancel Plan
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="settings-item">
+                          <div className="settings-item-label">
+                            <label>Upgrade to Meow Plus</label>
+                            <span className="settings-item-desc">Unlock turbo speeds, premium models and custom features!</span>
+                          </div>
+                          <button
+                            className="settings-action-btn upgrade-plus-action"
+                            onClick={() => {
+                              handleCloseSettings();
+                              setTimeout(() => {
+                                onOpenPaywall();
+                              }, 150);
+                            }}
+                          >
+                            <FiZap size={14} />
+                            <span>Upgrade Now</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

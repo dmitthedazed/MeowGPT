@@ -14,6 +14,25 @@ export default function VoiceMode({ language, onSendMessage, onClose }) {
   const timerRef = useRef(null);
   const audioCtxRef = useRef(null);
   const closedRef = useRef(false);
+  const onSendMessageRef = useRef(onSendMessage);
+
+  useEffect(() => {
+    onSendMessageRef.current = onSendMessage;
+  }, [onSendMessage]);
+
+  function clearVoiceTimer() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }
+
+  function stopVoiceMode() {
+    closedRef.current = true;
+    clearVoiceTimer();
+    audioCtxRef.current?.close().catch(() => {});
+    audioCtxRef.current = null;
+  }
 
   function playMeow(onEnd) {
     try {
@@ -66,14 +85,19 @@ export default function VoiceMode({ language, onSendMessage, onClose }) {
       osc2.stop(now + duration);
 
       timerRef.current = setTimeout(() => {
+        timerRef.current = null;
         osc1.disconnect();
         osc2.disconnect();
         filter.disconnect();
         gain.disconnect();
-        onEnd?.();
+        if (!closedRef.current) {
+          onEnd?.();
+        }
       }, (duration + 0.1) * 1000);
     } catch {
-      onEnd?.();
+      if (!closedRef.current) {
+        onEnd?.();
+      }
     }
   }
 
@@ -83,13 +107,13 @@ export default function VoiceMode({ language, onSendMessage, onClose }) {
     const listenDuration = 2500 + Math.random() * 2500;
 
     timerRef.current = setTimeout(() => {
+      timerRef.current = null;
       if (closedRef.current) return;
       setStatus("processing");
 
       timerRef.current = setTimeout(() => {
+        timerRef.current = null;
         if (closedRef.current) return;
-        setStatus("speaking");
-
         const meow = MEOW_VARIANTS[Math.floor(Math.random() * MEOW_VARIANTS.length)];
         const userMsg = {
           id: Date.now(),
@@ -97,29 +121,31 @@ export default function VoiceMode({ language, onSendMessage, onClose }) {
           sender: "user",
           timestamp: Date.now(),
         };
-        onSendMessage(userMsg);
 
-        playMeow(() => {
-          timerRef.current = setTimeout(() => startCycle(), 600);
+        onSendMessageRef.current(userMsg, {
+          onAiResponse: () => {
+            if (closedRef.current) return;
+            setStatus("speaking");
+            playMeow(() => {
+              timerRef.current = setTimeout(() => {
+                timerRef.current = null;
+                startCycle();
+              }, 600);
+            });
+          },
         });
       }, 700 + Math.random() * 400);
     }, listenDuration);
   }
 
   useEffect(() => {
+    closedRef.current = false;
     startCycle();
-    return () => {
-      closedRef.current = true;
-      clearTimeout(timerRef.current);
-      audioCtxRef.current?.close().catch(() => {});
-    };
+    return stopVoiceMode;
   }, []);
 
   function handleClose() {
-    closedRef.current = true;
-    clearTimeout(timerRef.current);
-    audioCtxRef.current?.close().catch(() => {});
-    audioCtxRef.current = null;
+    stopVoiceMode();
     onClose();
   }
 

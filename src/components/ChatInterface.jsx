@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   FiSend,
   FiChevronDown,
+  FiChevronLeft,
+  FiChevronRight,
   FiMessageCircle,
   FiCopy,
   FiThumbsUp,
@@ -24,6 +26,8 @@ import { M3eSuggestionChip, M3eChipSet } from "@m3e/react/chips";
 import { M3eTextareaAutosize } from "@m3e/react/textarea-autosize";
 import { useTranslation } from "../translations";
 
+const WELCOME_CAT_EMOJIS = ["🐱", "😺", "😸", "😻", "😼", "😽", "🐈", "🐈‍⬛"];
+
 const ChatInterface = ({
   currentChat,
   onSendMessage,
@@ -36,6 +40,7 @@ const ChatInterface = ({
   isAiTyping = false,
   setIsAiTyping,
   onRegenerateResponse,
+  onSwitchMessageVersion,
   onOpenSearch,
   onNewChat,
   isTemporaryMode = false,
@@ -52,12 +57,16 @@ const ChatInterface = ({
   const [touchEnd, setTouchEnd] = useState(null);
   const [isAttachDropdownOpen, setIsAttachDropdownOpen] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState([]);
+  const [isCompactComposer, setIsCompactComposer] = useState(
+    () => window.innerWidth <= 480
+  );
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const dropdownRef = useRef(null);
   const attachDropdownRef = useRef(null);
   const imageInputRef = useRef(null);
   const documentInputRef = useRef(null);
+  const lastSubmitTimeRef = useRef(0);
 
   const models = [
     {
@@ -94,6 +103,15 @@ const ChatInterface = ({
     { id: "twink", name: t("languages.twink") },
     { id: "brainrot", name: t("languages.brainrot") },
   ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCompactComposer(window.innerWidth <= 480);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -142,7 +160,13 @@ const ChatInterface = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const now = Date.now();
+    if (now - lastSubmitTimeRef.current < 300) {
+      return;
+    }
+
     if (inputValue.trim() || attachedFiles.length > 0) {
+      lastSubmitTimeRef.current = now;
       const message = {
         id: Date.now(),
         content: inputValue,
@@ -162,6 +186,12 @@ const ChatInterface = ({
   };
 
   const handleSuggestionClick = (text) => {
+    const now = Date.now();
+    if (now - lastSubmitTimeRef.current < 300) {
+      return;
+    }
+    lastSubmitTimeRef.current = now;
+
     const message = {
       id: Date.now(),
       content: text,
@@ -181,6 +211,18 @@ const ChatInterface = ({
     { icon: <FiEdit2 />, text: t("suggestionMousePoem") },
     { icon: <FiGlobe />, text: t("suggestionCatsPurr") },
   ];
+
+  const welcomeCatEmoji = useMemo(
+    () =>
+      WELCOME_CAT_EMOJIS[
+        Math.floor(Math.random() * WELCOME_CAT_EMOJIS.length)
+      ],
+    []
+  );
+
+  const messagePlaceholder = isCompactComposer
+    ? t("messagePlaceholderShort")
+    : t("messagePlaceholder");
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -271,9 +313,196 @@ const ChatInterface = ({
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  const isEmptyChat = !currentChat || currentChat.messages.length === 0;
+
+  const renderComposer = (isLanding = false) => (
+    <div
+      className={`chat-input-container${
+        isLanding ? " chat-input-container--landing" : ""
+      }`}
+    >
+      <div className="chat-composer-row">
+        <div className="chat-input-wrapper">
+          <form onSubmit={handleSubmit}>
+            {attachedFiles.length > 0 && (
+              <div className="attachment-preview">
+                {attachedFiles.map((file, i) => (
+                  <div key={i} className="attachment-preview-item">
+                    {file.type === "image" ? (
+                      <img
+                        src={file.url}
+                        alt={file.name}
+                        className="attachment-preview-thumb"
+                      />
+                    ) : (
+                      <div className="attachment-preview-doc">
+                        <FiFileText size={20} />
+                        <span className="attachment-preview-name">
+                          {file.name}
+                        </span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="attachment-remove-btn"
+                      onClick={() => removeAttachment(i)}
+                    >
+                      <FiX size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="input-row">
+              <div className="attach-dropdown-wrapper" ref={attachDropdownRef}>
+                <button
+                  type="button"
+                  className="attach-btn"
+                  onClick={() => setIsAttachDropdownOpen(!isAttachDropdownOpen)}
+                  title={t("attachFile")}
+                >
+                  <FiPlus size={18} />
+                </button>
+                {isAttachDropdownOpen && (
+                  <div className="attach-dropdown-menu">
+                    <div
+                      className="attach-option"
+                      onClick={() => {
+                        imageInputRef.current.click();
+                        setIsAttachDropdownOpen(false);
+                      }}
+                    >
+                      <FiImage size={16} />
+                      <span>{t("attachImage")}</span>
+                    </div>
+                    <div
+                      className="attach-option"
+                      onClick={() => {
+                        documentInputRef.current.click();
+                        setIsAttachDropdownOpen(false);
+                      }}
+                    >
+                      <FiFileText size={16} />
+                      <span>{t("attachDocument")}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <textarea
+                id="chat-input-textarea"
+                ref={textareaRef}
+                className="chat-input"
+                placeholder={isAiTyping ? t("loading") : messagePlaceholder}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                rows="1"
+                onFocus={handleInputFocus}
+                disabled={isAiTyping}
+              />
+              <M3eTextareaAutosize htmlFor="chat-input-textarea" maxRows={8} />
+              <div className="input-actions">
+                <div className="model-dropdown" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    className="model-dropdown-trigger"
+                    onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+                    disabled={isAiTyping}
+                  >
+                    <span className="model-name">{selectedModel}</span>
+                    <FiChevronDown
+                      size={14}
+                      className={`dropdown-arrow ${
+                        isModelDropdownOpen ? "open" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isModelDropdownOpen && (
+                    <div className="model-dropdown-menu model-dropdown-menu--up">
+                      {models.map((model) => (
+                        <div
+                          key={model.id}
+                          className={`model-option ${
+                            selectedModel === model.name ? "selected" : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedModel(model.name);
+                            setIsModelDropdownOpen(false);
+                          }}
+                        >
+                          <div className="model-option-name">{model.name}</div>
+                          <div className="model-option-description">
+                            {model.description}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="send-button"
+                  disabled={isAiTyping || (!inputValue.trim() && attachedFiles.length === 0)}
+                >
+                  <FiSend size={16} />
+                </button>
+              </div>
+            </div>
+
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleFileSelect("image")}
+            />
+            <input
+              ref={documentInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,.md,.csv,.xlsx,.xls,.pptx,.ppt"
+              multiple
+              style={{ display: "none" }}
+              onChange={handleFileSelect("document")}
+            />
+          </form>
+        </div>
+        <div className="voice-mode-container">
+          <button
+            type="button"
+            className="voice-mode-btn"
+            onClick={onOpenVoiceMode}
+            title={t("voiceModeTitle")}
+            disabled={isAiTyping}
+          >
+            <FiMic size={16} />
+          </button>
+        </div>
+      </div>
+      {isEmptyChat && (
+        <M3eChipSet role="group" className="suggestions-container">
+          {suggestions.map((suggestion, index) => (
+            <M3eSuggestionChip
+              key={index}
+              onClick={() => handleSuggestionClick(suggestion.text)}
+            >
+              <span slot="icon">{suggestion.icon}</span>
+              {suggestion.text}
+            </M3eSuggestionChip>
+          ))}
+        </M3eChipSet>
+      )}
+    </div>
+  );
+
   return (
     <div
-      className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""} ${!currentChat || currentChat.messages.length === 0 ? "is-empty" : ""}`}
+      className={`chat-interface ${!isSidebarOpen ? "sidebar-closed" : ""} ${
+        isEmptyChat ? "is-empty" : ""
+      }`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -310,11 +539,16 @@ const ChatInterface = ({
       )}
 
       <div className="chat-messages">
-        {!currentChat || currentChat.messages.length === 0 ? (
-          <div className="welcome-screen">
-            <div className="welcome-cat">🐱</div>
-            <h1 className="welcome-title">{t("welcomeTitle")}</h1>
-            <p className="welcome-subtitle">{t("welcomeSubtitle")}</p>
+        {isEmptyChat ? (
+          <div className="empty-chat-landing">
+            <div className="welcome-screen">
+              <div className="welcome-cat">
+                <span className="welcome-cat-emoji">{welcomeCatEmoji}</span>
+              </div>
+              <h1 className="welcome-title">{t("welcomeTitle")}</h1>
+              <p className="welcome-subtitle">{t("welcomeSubtitle")}</p>
+            </div>
+            {renderComposer(true)}
           </div>
         ) : (
           <>
@@ -359,6 +593,31 @@ const ChatInterface = ({
                       )}
                       {!message.isTyping && (
                         <div className="message-actions">
+                          {message.versions && message.versions.length > 1 && (
+                            <div className="message-version-switcher">
+                              <button
+                                type="button"
+                                className="version-btn"
+                                disabled={message.activeVersionIndex === 0}
+                                onClick={() => onSwitchMessageVersion(message.id, message.activeVersionIndex - 1)}
+                                title={t("previousVersion") || "Previous version"}
+                              >
+                                <FiChevronLeft size={12} />
+                              </button>
+                              <span className="version-info">
+                                {(message.activeVersionIndex ?? 0) + 1} / {message.versions.length}
+                              </span>
+                              <button
+                                type="button"
+                                className="version-btn"
+                                disabled={message.activeVersionIndex === message.versions.length - 1}
+                                onClick={() => onSwitchMessageVersion(message.id, message.activeVersionIndex + 1)}
+                                title={t("nextVersion") || "Next version"}
+                              >
+                                <FiChevronRight size={12} />
+                              </button>
+                            </div>
+                          )}
                           <button
                             className={`action-btn ${
                               copiedMessages[message.id] ? "copy-success" : ""
@@ -434,7 +693,7 @@ const ChatInterface = ({
               </div>
             ))}
 
-            {isAiTyping && (
+            {isAiTyping && !currentChat?.messages?.some((msg) => msg.isTyping) && (
               <div className="typing-indicator">
                 <div className="message-container">
                   <div className="message-avatar ai">
@@ -450,167 +709,7 @@ const ChatInterface = ({
         )}
       </div>
 
-      <div className="chat-input-container">
-        <div className="chat-input-wrapper">
-          <form onSubmit={handleSubmit}>
-            {attachedFiles.length > 0 && (
-              <div className="attachment-preview">
-                {attachedFiles.map((file, i) => (
-                  <div key={i} className="attachment-preview-item">
-                    {file.type === "image" ? (
-                      <img
-                        src={file.url}
-                        alt={file.name}
-                        className="attachment-preview-thumb"
-                      />
-                    ) : (
-                      <div className="attachment-preview-doc">
-                        <FiFileText size={20} />
-                        <span className="attachment-preview-name">{file.name}</span>
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      className="attachment-remove-btn"
-                      onClick={() => removeAttachment(i)}
-                    >
-                      <FiX size={12} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="input-row">
-              <div className="attach-dropdown-wrapper" ref={attachDropdownRef}>
-                <button
-                  type="button"
-                  className="attach-btn"
-                  onClick={() => setIsAttachDropdownOpen(!isAttachDropdownOpen)}
-                  title={t("attachFile")}
-                >
-                  <FiPlus size={18} />
-                </button>
-                {isAttachDropdownOpen && (
-                  <div className="attach-dropdown-menu">
-                    <div
-                      className="attach-option"
-                      onClick={() => {
-                        imageInputRef.current.click();
-                        setIsAttachDropdownOpen(false);
-                      }}
-                    >
-                      <FiImage size={16} />
-                      <span>{t("attachImage")}</span>
-                    </div>
-                    <div
-                      className="attach-option"
-                      onClick={() => {
-                        documentInputRef.current.click();
-                        setIsAttachDropdownOpen(false);
-                      }}
-                    >
-                      <FiFileText size={16} />
-                      <span>{t("attachDocument")}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <textarea
-                id="chat-input-textarea"
-                ref={textareaRef}
-                className="chat-input"
-                placeholder={t("messagePlaceholder")}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                rows="1"
-                onFocus={handleInputFocus}
-              />
-              <M3eTextareaAutosize htmlFor="chat-input-textarea" maxRows={8} />
-              <div className="input-actions">
-                <div className="model-dropdown" ref={dropdownRef}>
-                  <button
-                    type="button"
-                    className="model-dropdown-trigger"
-                    onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                  >
-                    <span className="model-name">{selectedModel}</span>
-                    <FiChevronDown
-                      size={14}
-                      className={`dropdown-arrow ${isModelDropdownOpen ? "open" : ""}`}
-                    />
-                  </button>
-
-                  {isModelDropdownOpen && (
-                    <div className="model-dropdown-menu model-dropdown-menu--up">
-                      {models.map((model) => (
-                        <div
-                          key={model.id}
-                          className={`model-option ${selectedModel === model.name ? "selected" : ""}`}
-                          onClick={() => {
-                            setSelectedModel(model.name);
-                            setIsModelDropdownOpen(false);
-                          }}
-                        >
-                          <div className="model-option-name">{model.name}</div>
-                          <div className="model-option-description">{model.description}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  className="voice-mode-btn"
-                  onClick={onOpenVoiceMode}
-                  title={t("voiceModeTitle")}
-                >
-                  <FiMic size={16} />
-                </button>
-                <button
-                  type="submit"
-                  className="send-button"
-                  disabled={!inputValue.trim() && attachedFiles.length === 0}
-                >
-                  <FiSend size={16} />
-                </button>
-              </div>
-            </div>
-
-            <input
-              ref={imageInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              style={{ display: "none" }}
-              onChange={handleFileSelect("image")}
-            />
-            <input
-              ref={documentInputRef}
-              type="file"
-              accept=".pdf,.doc,.docx,.txt,.md,.csv,.xlsx,.xls,.pptx,.ppt"
-              multiple
-              style={{ display: "none" }}
-              onChange={handleFileSelect("document")}
-            />
-          </form>
-        </div>
-        {(!currentChat || currentChat.messages.length === 0) && (
-          <M3eChipSet role="group" className="suggestions-container">
-            {suggestions.map((suggestion, index) => (
-              <M3eSuggestionChip
-                key={index}
-                onClick={() => handleSuggestionClick(suggestion.text)}
-              >
-                <span slot="icon">{suggestion.icon}</span>
-                {suggestion.text}
-              </M3eSuggestionChip>
-            ))}
-          </M3eChipSet>
-        )}
-      </div>
+      {!isEmptyChat && renderComposer()}
       <div className="chat-info-text">{t("disclaimer")}</div>
 
     </div>

@@ -5,8 +5,14 @@ import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
 import ImageGeneration from "./components/ImageGeneration";
 import VoiceMode from "./components/VoiceMode";
+import PaywallModal from "./components/PaywallModal";
 import { FiSearch, FiX, FiPlus, FiMessageSquare, FiZap } from "react-icons/fi";
 import { useTranslation } from "./translations";
+import {
+  applyCalculatorInput,
+  calculateExpression,
+  formatCalculationResult,
+} from "./utils/calculator";
 
 // LocalStorage keys
 const STORAGE_KEYS = {
@@ -14,6 +20,7 @@ const STORAGE_KEYS = {
   CURRENT_CHAT: "meowgpt-current-chat",
   THEME: "meowgpt-theme",
   LANGUAGE: "meowgpt-language",
+  PREMIUM: "meowgpt-is-premium",
 };
 
 // Supported languages
@@ -27,6 +34,45 @@ const SUPPORTED_LANGUAGES = [
   "meow",
   "twink",
   "brainrot",
+];
+
+const CALCULATOR_BUTTONS = [
+  [
+    { label: "C", value: "clear", variant: "muted" },
+    { label: "⌫", value: "backspace", variant: "muted" },
+    { label: "(", value: "(", variant: "muted" },
+    { label: ")", value: ")", variant: "muted" },
+  ],
+  [
+    { label: "7", value: "7" },
+    { label: "8", value: "8" },
+    { label: "9", value: "9" },
+    { label: "÷", value: "/", variant: "operator" },
+  ],
+  [
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+    { label: "6", value: "6" },
+    { label: "×", value: "*", variant: "operator" },
+  ],
+  [
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "−", value: "-", variant: "operator" },
+  ],
+  [
+    { label: "0", value: "0" },
+    { label: ".", value: "." },
+    { label: "=", value: "equals", variant: "equals" },
+    { label: "+", value: "+", variant: "operator" },
+  ],
+];
+
+const CALCULATOR_PAYWALL_TIERS = [
+  { id: "basic", nameKey: "calculatorTierBasic", priceKey: "calculatorTierBasicPrice" },
+  { id: "plus", nameKey: "calculatorTierPlus", priceKey: "calculatorTierPlusPrice" },
+  { id: "pro", nameKey: "calculatorTierPro", priceKey: "calculatorTierProPrice" },
 ];
 
 // Function to detect user's preferred language
@@ -276,6 +322,13 @@ function App() {
   const [language, setLanguage] = useState(detectUserLanguage());
   const [isInitialized, setIsInitialized] = useState(false);
   const [isAiTyping, setIsAiTyping] = useState(false);
+  const [isPaywallOpen, setIsPaywallOpen] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
+
+  // Custom Settings States
+  const [fontSize, setFontSize] = useState("cozy");
+  const [bubbleStyle, setBubbleStyle] = useState("modern");
+  const [voiceActor, setVoiceActor] = useState("meow-classic");
 
   // Search modal state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -311,8 +364,58 @@ function App() {
   const [isPredicting, setIsPredicting] = useState(false);
   const [predictionMessage, setPredictionMessage] = useState("");
   const [predictionError, setPredictionError] = useState("");
+  const [isHeightCounterOpen, setIsHeightCounterOpen] = useState(false);
+  const [heightInput, setHeightInput] = useState("");
+  const [heightResult, setHeightResult] = useState("");
+  const [heightError, setHeightError] = useState("");
+  const [isHeightThinking, setIsHeightThinking] = useState(false);
+  const [heightThinkingMessage, setHeightThinkingMessage] = useState("");
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+  const [calculatorExpression, setCalculatorExpression] = useState("");
+  const [calculatorResult, setCalculatorResult] = useState("");
+  const [calculatorError, setCalculatorError] = useState("");
+  const [calculatorPendingResult, setCalculatorPendingResult] = useState("");
+  const [isCalculatorThinking, setIsCalculatorThinking] = useState(false);
+  const [isCalculatorPaywallOpen, setIsCalculatorPaywallOpen] = useState(false);
+  const [isCalculatorConfettiVisible, setIsCalculatorConfettiVisible] = useState(false);
+  const [calculatorConfettiPieces, setCalculatorConfettiPieces] = useState([]);
+  const calculatorThinkingTimerRef = useRef(null);
+  const calculatorConfettiTimerRef = useRef(null);
+  const heightThinkingTimerRef = useRef(null);
 
   const { t } = useTranslation(language);
+
+  // Spam protection and Toast states
+  const messageTimestampsRef = useRef([]);
+  const [toast, setToast] = useState(null);
+  const toastTimerRef = useRef(null);
+  const currentChatRef = useRef(null);
+
+  useEffect(() => {
+    currentChatRef.current = currentChat;
+  }, [currentChat]);
+
+  const showToast = useCallback((message, type = "info") => {
+    setToast((prev) => {
+      if (prev && prev.message === message) return prev;
+      return { message, type };
+    });
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, 4000);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
 
   // Initialize app data from localStorage
   useEffect(() => {
@@ -325,9 +428,17 @@ function App() {
         STORAGE_KEYS.LANGUAGE,
         detectUserLanguage()
       );
+      const savedPremium = StorageUtils.load(STORAGE_KEYS.PREMIUM, false);
+      const savedFontSize = StorageUtils.load("meowgpt-font-size", "cozy");
+      const savedBubbleStyle = StorageUtils.load("meowgpt-bubble-style", "modern");
+      const savedVoiceActor = StorageUtils.load("meowgpt-voice-actor", "meow-classic");
 
       setTheme(savedTheme);
       setLanguage(savedLanguage);
+      setIsPremium(savedPremium);
+      setFontSize(savedFontSize);
+      setBubbleStyle(savedBubbleStyle);
+      setVoiceActor(savedVoiceActor);
 
       // Load chats
       const savedChats = StorageUtils.load(STORAGE_KEYS.CHATS, []);
@@ -433,6 +544,21 @@ function App() {
     }
   }, [theme]);
 
+  // Apply preferences
+  useEffect(() => {
+    document.documentElement.setAttribute("data-font-size", fontSize);
+    StorageUtils.save("meowgpt-font-size", fontSize);
+  }, [fontSize]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-bubble-style", bubbleStyle);
+    StorageUtils.save("meowgpt-bubble-style", bubbleStyle);
+  }, [bubbleStyle]);
+
+  useEffect(() => {
+    StorageUtils.save("meowgpt-voice-actor", voiceActor);
+  }, [voiceActor]);
+
   // Global keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -440,7 +566,9 @@ function App() {
       if (e.key === "Escape") {
         if (isSearchOpen) { handleCloseSearch(); return; }
         if (currentView === "imageGeneration") { handleCloseImageGeneration(); return; }
+        if (isCalculatorOpen) { handleCloseCalculator(); return; }
         if (isYearPredictorOpen) { handleCloseYearPredictor(); return; }
+        if (isHeightCounterOpen) { handleCloseHeightCounter(); return; }
       }
 
       // Ignore shortcuts when user is typing in an input/textarea
@@ -477,7 +605,14 @@ function App() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isSearchOpen, currentView, isYearPredictorOpen, isSidebarOpen]);
+  }, [
+    isSearchOpen,
+    currentView,
+    isCalculatorOpen,
+    isYearPredictorOpen,
+    isHeightCounterOpen,
+    isSidebarOpen,
+  ]);
 
   // Save chats to localStorage
   useEffect(() => {
@@ -510,6 +645,20 @@ function App() {
 
     StorageUtils.save(STORAGE_KEYS.LANGUAGE, language);
   }, [language, isInitialized]);
+
+  useEffect(() => {
+    return () => {
+      if (calculatorThinkingTimerRef.current) {
+        clearTimeout(calculatorThinkingTimerRef.current);
+      }
+      if (calculatorConfettiTimerRef.current) {
+        clearTimeout(calculatorConfettiTimerRef.current);
+      }
+      if (heightThinkingTimerRef.current) {
+        clearTimeout(heightThinkingTimerRef.current);
+      }
+    };
+  }, []);
 
   // Define handleNewChat before it's used in the next useEffect
   const handleNewChat = useCallback(() => {
@@ -687,6 +836,216 @@ function App() {
     }, 6000);
   };
 
+  const handleOpenHeightCounter = () => {
+    setIsHeightCounterOpen(true);
+    setHeightInput("");
+    setHeightResult("");
+    setHeightError("");
+    setIsHeightThinking(false);
+    setHeightThinkingMessage("");
+  };
+
+  const handleCloseHeightCounter = () => {
+    if (heightThinkingTimerRef.current) {
+      clearTimeout(heightThinkingTimerRef.current);
+      heightThinkingTimerRef.current = null;
+    }
+
+    setIsHeightCounterOpen(false);
+    setHeightInput("");
+    setHeightResult("");
+    setHeightError("");
+    setIsHeightThinking(false);
+    setHeightThinkingMessage("");
+  };
+
+  const handleHeightInputChange = (e) => {
+    setHeightInput(e.target.value);
+  };
+
+  const handleHeightCounter = () => {
+    const trimmedInput = heightInput.trim();
+    if (!trimmedInput) {
+      setHeightError(t("heightCounterError"));
+      setHeightResult("");
+      setIsHeightThinking(false);
+      setHeightThinkingMessage("");
+      return;
+    }
+
+    const normalizedInput = trimmedInput.replace(",", ".");
+    const heightMatch = normalizedInput.match(/-?\d+(?:\.\d+)?/);
+    const heightValue = heightMatch ? Number(heightMatch[0]) : Number.NaN;
+
+    if (!Number.isFinite(heightValue) || heightValue <= 0) {
+      setHeightError(t("heightCounterError"));
+      setHeightResult("");
+      setIsHeightThinking(false);
+      setHeightThinkingMessage("");
+      return;
+    }
+
+    const thinkingMessage =
+      heightValue < 150
+        ? t("heightCounterLowMessage")
+        : heightValue > 200
+          ? t("heightCounterHighMessage")
+          : t("heightCounterThinking");
+
+    setHeightError("");
+    setHeightResult("");
+    setIsHeightThinking(true);
+    setHeightThinkingMessage(thinkingMessage);
+
+    if (heightThinkingTimerRef.current) {
+      clearTimeout(heightThinkingTimerRef.current);
+    }
+
+    heightThinkingTimerRef.current = setTimeout(() => {
+      setHeightResult(trimmedInput);
+      setIsHeightThinking(false);
+      setHeightThinkingMessage("");
+      heightThinkingTimerRef.current = null;
+    }, 1800);
+  };
+
+  const handleOpenCalculator = () => {
+    setIsCalculatorOpen(true);
+    setCalculatorExpression("");
+    setCalculatorResult("");
+    setCalculatorError("");
+  };
+
+  const handleCloseCalculator = () => {
+    if (calculatorThinkingTimerRef.current) {
+      clearTimeout(calculatorThinkingTimerRef.current);
+      calculatorThinkingTimerRef.current = null;
+    }
+    if (calculatorConfettiTimerRef.current) {
+      clearTimeout(calculatorConfettiTimerRef.current);
+      calculatorConfettiTimerRef.current = null;
+    }
+
+    setIsCalculatorOpen(false);
+    setCalculatorExpression("");
+    setCalculatorResult("");
+    setCalculatorError("");
+    setCalculatorPendingResult("");
+    setIsCalculatorThinking(false);
+    setIsCalculatorPaywallOpen(false);
+    setIsCalculatorConfettiVisible(false);
+    setCalculatorConfettiPieces([]);
+  };
+
+  const handleCalculatorSubmit = (e) => {
+    e.preventDefault();
+    handleCalculatorEquals();
+  };
+
+  const handleCalculatorEquals = () => {
+    if (!calculatorExpression.trim()) return;
+
+    try {
+      const result = calculateExpression(calculatorExpression);
+      const formattedResult = formatCalculationResult(result);
+      setCalculatorResult("");
+      setCalculatorPendingResult(formattedResult);
+      setCalculatorError("");
+      setIsCalculatorThinking(true);
+      setIsCalculatorPaywallOpen(false);
+
+      if (calculatorThinkingTimerRef.current) {
+        clearTimeout(calculatorThinkingTimerRef.current);
+      }
+
+      calculatorThinkingTimerRef.current = setTimeout(() => {
+        setIsCalculatorThinking(false);
+        setIsCalculatorPaywallOpen(true);
+        calculatorThinkingTimerRef.current = null;
+      }, 1800);
+    } catch (error) {
+      setCalculatorResult("");
+      setCalculatorPendingResult("");
+      setCalculatorError(t("calculatorError"));
+      setIsCalculatorThinking(false);
+      setIsCalculatorPaywallOpen(false);
+    }
+  };
+
+  const handleCalculatorButtonPress = (input) => {
+    if (input === "equals") {
+      handleCalculatorEquals();
+      return;
+    }
+
+    setCalculatorExpression((previousExpression) => {
+      const startsNewExpression =
+        calculatorResult && (/^\d$/.test(input) || input === "." || input === "(");
+      const baseExpression = startsNewExpression ? "" : previousExpression;
+      return applyCalculatorInput(baseExpression, input);
+    });
+
+    setCalculatorResult("");
+    setCalculatorPendingResult("");
+    setCalculatorError("");
+    setIsCalculatorThinking(false);
+    setIsCalculatorPaywallOpen(false);
+
+    if (calculatorThinkingTimerRef.current) {
+      clearTimeout(calculatorThinkingTimerRef.current);
+      calculatorThinkingTimerRef.current = null;
+    }
+  };
+
+  const createCalculatorConfettiPieces = (count = 90) => {
+    const colors = [
+      "#ff6b6b",
+      "#ffd93d",
+      "#6bcBef",
+      "#6bcb77",
+      "#c77dff",
+      "#ff9f1c",
+      "#4cc9f0",
+      "#f72585",
+    ];
+
+    return Array.from({ length: count }, (_, index) => {
+      const size = 14 + Math.random() * 14;
+      return {
+        id: `calculator-confetti-${Date.now()}-${index}`,
+        left: Math.random() * 100,
+        size,
+        delay: Math.random() * 0.25,
+        duration: 1.6 + Math.random() * 1.2,
+        rotation: Math.random() * 720 - 360,
+        drift: (Math.random() * 2 - 1) * 180,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      };
+    });
+  };
+
+  const triggerCalculatorConfetti = () => {
+    setCalculatorConfettiPieces(createCalculatorConfettiPieces());
+    setIsCalculatorConfettiVisible(true);
+
+    if (calculatorConfettiTimerRef.current) {
+      clearTimeout(calculatorConfettiTimerRef.current);
+    }
+
+    calculatorConfettiTimerRef.current = setTimeout(() => {
+      setIsCalculatorConfettiVisible(false);
+      setCalculatorConfettiPieces([]);
+      calculatorConfettiTimerRef.current = null;
+    }, 2400);
+  };
+
+  const handleCalculatorTierSelect = () => {
+    setCalculatorResult(calculatorPendingResult);
+    setCalculatorPendingResult("");
+    setIsCalculatorPaywallOpen(false);
+    triggerCalculatorConfetti();
+  };
+
   // Image generation view functions
   const handleOpenImageGeneration = () => {
     setCurrentView("imageGeneration");
@@ -776,15 +1135,26 @@ function App() {
     }
   };
 
-  // Updated every render so setTimeout callbacks always call the latest version
-  const processQueueRef = useRef(null);
-
   const handleSendMessage = (message, { onAiResponse } = {}) => {
-    // Queue the message if AI is already responding
-    if (isAiTypingRef.current) {
-      messageQueueRef.current.push({ message, options: { onAiResponse } });
+    const now = Date.now();
+
+    // Sliding window rate limiter
+    messageTimestampsRef.current = messageTimestampsRef.current.filter(
+      (t) => now - t < 5000
+    );
+
+    if (messageTimestampsRef.current.length >= 5) {
+      showToast(t("tooManyMessages"), "error");
       return;
     }
+
+    // Strictly reject submissions if AI is already active responding
+    if (isAiTypingRef.current) {
+      showToast(t("tooManyMessages"), "error");
+      return;
+    }
+
+    messageTimestampsRef.current.push(now);
 
     const messageWithTimestamp = {
       ...message,
@@ -825,12 +1195,12 @@ function App() {
         isAiTypingRef.current = false;
         setIsAiTyping(false);
         onAiResponse?.(aiResponseContent);
-        processQueueRef.current?.();
       }, typingDuration);
       return;
     }
 
-    if (!currentChat) {
+    const activeChat = currentChatRef.current;
+    if (!activeChat) {
       // Create new chat first
       const newChat = {
         id: Date.now(),
@@ -841,9 +1211,7 @@ function App() {
         messages: [messageWithTimestamp],
         createdAt: Date.now(),
       };
-
-      console.log("💬 Creating new chat with message:", newChat);
-
+      currentChatRef.current = newChat; // Sync ref synchronously!
       setChats((prevChats) => [newChat, ...prevChats]);
       setCurrentChat(newChat);
 
@@ -869,8 +1237,7 @@ function App() {
           messages: [...newChat.messages, aiResponse],
         };
 
-        console.log("🤖 Adding AI response to new chat:", finalChat);
-
+        currentChatRef.current = finalChat;
         setCurrentChat(finalChat);
         setChats((prevChats) =>
           prevChats.map((chat) => (chat.id === newChat.id ? finalChat : chat))
@@ -878,27 +1245,25 @@ function App() {
         isAiTypingRef.current = false;
         setIsAiTyping(false);
         onAiResponse?.(aiResponseContent);
-        processQueueRef.current?.();
       }, typingDuration);
       return;
     }
 
     const updatedChat = {
-      ...currentChat,
-      messages: [...currentChat.messages, messageWithTimestamp],
+      ...activeChat,
+      messages: [...activeChat.messages, messageWithTimestamp],
       title:
-        currentChat.title === "New Chat"
+        activeChat.title === "New Chat"
           ? message.content.length > 30
             ? message.content.slice(0, 30) + "..."
             : message.content
-          : currentChat.title,
+          : activeChat.title,
     };
 
-    console.log("💬 Adding message to existing chat:", updatedChat);
-
+    currentChatRef.current = updatedChat; // Sync ref synchronously!
     setCurrentChat(updatedChat);
     setChats((prevChats) =>
-      prevChats.map((chat) => (chat.id === currentChat.id ? updatedChat : chat))
+      prevChats.map((chat) => (chat.id === activeChat.id ? updatedChat : chat))
     );
 
     // Generate AI response content first to calculate typing duration
@@ -918,29 +1283,23 @@ function App() {
         timestamp: Date.now(),
       };
 
-      const finalChat = {
-        ...updatedChat,
-        messages: [...updatedChat.messages, aiResponse],
-      };
+      setCurrentChat((prevCurrent) => {
+        if (!prevCurrent) return null;
+        const finalChat = {
+          ...prevCurrent,
+          messages: [...prevCurrent.messages, aiResponse],
+        };
+        currentChatRef.current = finalChat; // Sync ref synchronously!
+        setChats((prevChats) =>
+          prevChats.map((chat) => (chat.id === prevCurrent.id ? finalChat : chat))
+        );
+        return finalChat;
+      });
 
-      console.log("🤖 Adding AI response to existing chat:", finalChat);
-
-      setCurrentChat(finalChat);
-      setChats((prevChats) =>
-        prevChats.map((chat) => (chat.id === currentChat.id ? finalChat : chat))
-      );
       isAiTypingRef.current = false;
       setIsAiTyping(false);
       onAiResponse?.(aiResponseContent);
-      processQueueRef.current?.();
     }, typingDuration);
-  };
-
-  // Always points to latest handleSendMessage to avoid stale closure in queue processing
-  processQueueRef.current = () => {
-    if (messageQueueRef.current.length === 0) return;
-    const next = messageQueueRef.current.shift();
-    handleSendMessage(next.message, next.options);
   };
 
   // Calculate typing duration based on message content
@@ -974,73 +1333,133 @@ function App() {
     return calculatedTime;
   };
 
-  // Regenerate AI response for a specific message
+  // Regenerate AI response for a specific message, supporting version arrays
   const handleRegenerateResponse = (messageId) => {
-    if (!currentChat) return;
+    const activeChat = isTemporaryMode ? temporaryChat : currentChatRef.current;
+    if (!activeChat) return;
+    if (isAiTypingRef.current) return;
 
-    console.log("🔄 Regenerating response for message:", messageId);
+    console.log("🔄 Regenerating response for messageId:", messageId);
 
-    // Find the message to regenerate
-    const messageIndex = currentChat.messages.findIndex(
+    const messageIndex = activeChat.messages.findIndex(
       (msg) => msg.id === messageId
     );
     if (
       messageIndex === -1 ||
-      currentChat.messages[messageIndex].sender !== "ai"
+      activeChat.messages[messageIndex].sender !== "ai"
     ) {
-      console.log("❌ Message not found or not an AI message");
       return;
     }
 
-    // Generate new AI response content
+    const targetMsg = activeChat.messages[messageIndex];
     const newAiResponseContent = generateRandomMeowResponse(language);
     const typingDuration = calculateTypingDuration(newAiResponseContent);
 
-    // Immediately replace the message with typing indicator
-    const updatedMessagesWithTyping = [...currentChat.messages];
+    isAiTypingRef.current = true;
+    setIsAiTyping(true);
+
+    // Set message to typing loading
+    const updatedMessagesWithTyping = [...activeChat.messages];
     updatedMessagesWithTyping[messageIndex] = {
-      ...updatedMessagesWithTyping[messageIndex],
-      content: "typing",
+      ...targetMsg,
       isTyping: true,
       timestamp: Date.now(),
     };
 
-    const chatWithTyping = {
-      ...currentChat,
-      messages: updatedMessagesWithTyping,
-    };
+    if (isTemporaryMode) {
+      setTemporaryChat({
+        ...activeChat,
+        messages: updatedMessagesWithTyping,
+      });
+    } else {
+      const chatWithTyping = {
+        ...activeChat,
+        messages: updatedMessagesWithTyping,
+      };
+      currentChatRef.current = chatWithTyping;
+      setCurrentChat(chatWithTyping);
+      setChats((prevChats) =>
+        prevChats.map((chat) => (chat.id === activeChat.id ? chatWithTyping : chat))
+      );
+    }
 
-    setCurrentChat(chatWithTyping);
-    setChats((prevChats) =>
-      prevChats.map((chat) =>
-        chat.id === currentChat.id ? chatWithTyping : chat
-      )
-    );
-
-    // Replace with actual content after calculated delay
     setTimeout(() => {
-      const updatedMessages = [...currentChat.messages];
+      const latestChat = isTemporaryMode ? temporaryChat : (currentChatRef.current || currentChat);
+      if (!latestChat) return;
+
+      const latestMsg = latestChat.messages[messageIndex];
+      const originalContent = targetMsg.versions 
+        ? targetMsg.versions[targetMsg.activeVersionIndex ?? 0] 
+        : targetMsg.content;
+      const versions = targetMsg.versions || [originalContent];
+      const newVersions = [...versions, newAiResponseContent];
+      const newActiveIndex = newVersions.length - 1;
+
+      const updatedMessages = [...latestChat.messages];
       updatedMessages[messageIndex] = {
-        ...updatedMessages[messageIndex],
+        ...latestMsg,
         content: newAiResponseContent,
+        versions: newVersions,
+        activeVersionIndex: newActiveIndex,
         isTyping: false,
-        timestamp: Date.now(), // Update timestamp to show it's regenerated
+        timestamp: Date.now(),
       };
 
+      if (isTemporaryMode) {
+        setTemporaryChat({
+          ...latestChat,
+          messages: updatedMessages,
+        });
+      } else {
+        const updatedChat = {
+          ...latestChat,
+          messages: updatedMessages,
+        };
+        currentChatRef.current = updatedChat;
+        setCurrentChat(updatedChat);
+        setChats((prevChats) =>
+          prevChats.map((chat) => (chat.id === latestChat.id ? updatedChat : chat))
+        );
+      }
+
+      isAiTypingRef.current = false;
+      setIsAiTyping(false);
+    }, typingDuration);
+  };
+
+  // Switch between message response versions
+  const handleSwitchMessageVersion = (messageId, newIndex) => {
+    const activeChat = isTemporaryMode ? temporaryChat : currentChatRef.current;
+    if (!activeChat) return;
+
+    const updatedMessages = activeChat.messages.map((msg) => {
+      if (msg.id === messageId && msg.versions) {
+        const idx = Math.max(0, Math.min(msg.versions.length - 1, newIndex));
+        return {
+          ...msg,
+          activeVersionIndex: idx,
+          content: msg.versions[idx],
+        };
+      }
+      return msg;
+    });
+
+    if (isTemporaryMode) {
+      setTemporaryChat({
+        ...activeChat,
+        messages: updatedMessages,
+      });
+    } else {
       const updatedChat = {
-        ...currentChat,
+        ...activeChat,
         messages: updatedMessages,
       };
-
-      console.log("🔄 Regenerated AI response:", newAiResponseContent);
-
+      currentChatRef.current = updatedChat;
       setCurrentChat(updatedChat);
       setChats((prevChats) =>
-        prevChats.map((chat) =>
-          chat.id === currentChat.id ? updatedChat : chat
-        )
+        prevChats.map((chat) => (chat.id === activeChat.id ? updatedChat : chat))
       );
-    }, typingDuration);
+    }
   };
 
   const handleDeleteChatAnimated = (chatId) => {
@@ -1073,6 +1492,53 @@ function App() {
   const handleLanguageChange = (newLanguage) => {
     console.log("🌐 Language changing to:", newLanguage);
     setLanguage(newLanguage);
+  };
+
+  const handleCancelSubscription = () => {
+    const localizedConfirmMsg = 
+      language === "ru" ? "Вы уверены, что хотите отменить подписку Meow Plus и потерять все привилегии? 😿" :
+      language === "uk" ? "Ви впевнені, що хочете скасувати підписку Meow Plus та втратити всі привілеї? 😿" :
+      "Are you sure you want to cancel your Meow Plus subscription and lose all active perks? 😿";
+
+    if (window.confirm(localizedConfirmMsg)) {
+      setIsPremium(false);
+      StorageUtils.save(STORAGE_KEYS.PREMIUM, false);
+      
+      const localizedToastMsg = 
+        language === "ru" ? "Подписка Meow Plus успешно отменена. 😿" :
+        language === "uk" ? "Підписку Meow Plus успішно скасовано. 😿" :
+        "Meow Plus subscription successfully cancelled. 😿";
+
+      setToast({
+        message: localizedToastMsg,
+        type: "info",
+      });
+
+      setTimeout(() => setToast(null), 4000);
+      return true;
+    }
+    return false;
+  };
+
+  const handleUpgradeSuccess = () => {
+    console.log("👑 User successfully upgraded to MeowGPT Plus!");
+    setIsPremium(true);
+    StorageUtils.save(STORAGE_KEYS.PREMIUM, true);
+    
+    const localizedToastMsg = 
+      language === "ru" ? "Добро пожаловать в Meow Plus! 👑🐱✨" :
+      language === "uk" ? "Ласкаво просимо до Meow Plus! 👑🐱✨" :
+      "Welcome to Meow Plus! 👑🐱✨";
+
+    setToast({
+      message: localizedToastMsg,
+      type: "success",
+    });
+
+    // Auto dismiss toast after 5 seconds
+    setTimeout(() => {
+      setToast(null);
+    }, 5000);
   };
 
   // Debug function to clear all localStorage data
@@ -1191,11 +1657,23 @@ function App() {
         onOpenSearch={handleOpenSearch}
         onOpenImageGeneration={handleOpenImageGeneration}
         onOpenYearPredictor={handleOpenYearPredictor}
+        onOpenHeightCounter={handleOpenHeightCounter}
+        onOpenCalculator={handleOpenCalculator}
         currentView={currentView}
         deletingChatId={deletingChatId}
         theme={theme}
         onThemeChange={handleThemeChange}
         onLanguageChange={handleLanguageChange}
+        onOpenPaywall={() => setIsPaywallOpen(true)}
+        isPremium={isPremium}
+        fontSize={fontSize}
+        onFontSizeChange={setFontSize}
+        bubbleStyle={bubbleStyle}
+        onBubbleStyleChange={setBubbleStyle}
+        voiceActor={voiceActor}
+        onVoiceActorChange={setVoiceActor}
+        onCancelSubscription={handleCancelSubscription}
+        onClearAllData={clearAllData}
       />
       {/* Mobile overlay */}
       <div
@@ -1216,6 +1694,7 @@ function App() {
             onLanguageChange={handleLanguageChange}
             isAiTyping={isAiTyping}
             onRegenerateResponse={handleRegenerateResponse}
+            onSwitchMessageVersion={handleSwitchMessageVersion}
             onOpenSearch={handleOpenSearch}
             onNewChat={handleNewChat}
             isTemporaryMode={isTemporaryMode}
@@ -1372,6 +1851,178 @@ function App() {
         </div>
       )}
 
+      {/* Height Counter Modal */}
+      {isHeightCounterOpen && (
+        <div
+          className="height-counter-modal-overlay"
+          onClick={handleCloseHeightCounter}
+        >
+          <div
+            className="height-counter-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="height-counter-modal-header">
+              <h2>{t("heightCounter")}</h2>
+              <button
+                className="height-counter-modal-close"
+                onClick={handleCloseHeightCounter}
+              >
+                <FiX size={18} />
+              </button>
+            </div>
+            <div className="height-counter-modal-content">
+              <div className="height-input-section">
+                <label htmlFor="height-input">{t("heightCounterQuestion")}</label>
+                <input
+                  id="height-input"
+                  type="text"
+                  value={heightInput}
+                  onChange={handleHeightInputChange}
+                  placeholder={t("heightCounterPlaceholder")}
+                  className="height-input"
+                />
+                <button
+                  className="height-btn"
+                  onClick={handleHeightCounter}
+                  disabled={!heightInput.trim() || isHeightThinking}
+                >
+                  {isHeightThinking
+                    ? t("heightCounterChecking")
+                    : t("heightCounterCheck")}
+                </button>
+              </div>
+
+              {heightError && (
+                <div className="height-error">
+                  <p>{heightError}</p>
+                </div>
+              )}
+
+              {(heightResult || isHeightThinking) && (
+                <div className="height-output">
+                  <h3>{t("heightCounterResult")}</h3>
+                  <div className="height-text">
+                    {isHeightThinking ? (
+                      <div className="prediction-loading">
+                        <div className="loading-spinner">
+                          <FiZap className="spinner" size={20} />
+                        </div>
+                        <span>{heightThinkingMessage}</span>
+                      </div>
+                    ) : (
+                      <p>{heightResult}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Calculator Modal */}
+      {isCalculatorOpen && (
+        <div
+          className="calculator-modal-overlay"
+          onClick={handleCloseCalculator}
+        >
+          <div
+            className="calculator-modal-shell"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="calculator-modal">
+              <div className="calculator-modal-header">
+                <h2>{t("calculator")}</h2>
+                <button
+                  className="calculator-modal-close"
+                  onClick={handleCloseCalculator}
+                >
+                  <FiX size={18} />
+                </button>
+              </div>
+              <form className="calculator-modal-content" onSubmit={handleCalculatorSubmit}>
+                <div className="calculator-screen" aria-live="polite">
+                  <div className="calculator-expression">
+                    {calculatorExpression || "0"}
+                  </div>
+                  <div className={`calculator-screen-footer${calculatorError ? " is-error" : ""}`}>
+                    {calculatorError ||
+                      (isCalculatorThinking ? t("calculatorThinking") : "") ||
+                      calculatorResult ||
+                      (isCalculatorPaywallOpen ? t("calculatorLocked") : t("calculatorReady"))}
+                  </div>
+                  {isCalculatorThinking && (
+                    <div className="calculator-thinking" aria-hidden="true">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                  )}
+                </div>
+
+                <div className="calculator-keypad">
+                  {CALCULATOR_BUTTONS.flat().map((button) => (
+                    <button
+                      key={`${button.label}-${button.value}`}
+                      type="button"
+                      className={`calculator-key calculator-key--${button.variant || "number"}${
+                        button.wide ? " calculator-key--wide" : ""
+                      }`}
+                      onClick={() => handleCalculatorButtonPress(button.value)}
+                    >
+                      {button.label}
+                    </button>
+                  ))}
+                </div>
+              </form>
+            </div>
+
+            {isCalculatorPaywallOpen && (
+              <div className="calculator-paywall-overlay">
+                <div className="calculator-paywall">
+                  <div className="calculator-paywall-header">
+                    <h3>{t("calculatorPaywallTitle")}</h3>
+                    <p>{t("calculatorPaywallSubtitle")}</p>
+                  </div>
+                  <div className="calculator-tier-list">
+                    {CALCULATOR_PAYWALL_TIERS.map((tier) => (
+                      <button
+                        key={tier.id}
+                        type="button"
+                        className="calculator-tier"
+                        onClick={handleCalculatorTierSelect}
+                      >
+                        <span>{t(tier.nameKey)}</span>
+                        <strong>{t(tier.priceKey)}</strong>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {isCalculatorConfettiVisible && (
+            <div className="calculator-confetti-overlay" aria-hidden="true">
+              {calculatorConfettiPieces.map((piece) => (
+                <span
+                  key={piece.id}
+                  className="calculator-confetti-piece"
+                  style={{
+                    left: `${piece.left}%`,
+                    "--confetti-size": `${piece.size}px`,
+                    "--confetti-color": piece.color,
+                    "--confetti-delay": `${piece.delay}s`,
+                    "--confetti-duration": `${piece.duration}s`,
+                    "--confetti-rotate": `${piece.rotation}deg`,
+                    "--confetti-drift": `${piece.drift}px`,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Voice Mode Overlay */}
       {isVoiceModeOpen && (
         <VoiceMode
@@ -1381,6 +2032,26 @@ function App() {
           onSendMessage={handleSendMessage}
           onClose={() => setIsVoiceModeOpen(false)}
         />
+      )}
+
+      {/* Fake Paywall Modal Overlay */}
+      <PaywallModal
+        isOpen={isPaywallOpen}
+        onClose={() => setIsPaywallOpen(false)}
+        onUpgradeSuccess={handleUpgradeSuccess}
+        language={language}
+      />
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`toast-container ${toast.type}`}>
+          <div className="toast-content">
+            <span className="toast-message">{toast.message}</span>
+            <button className="toast-close" onClick={() => setToast(null)} title={t("close")}>
+              <FiX size={16} />
+            </button>
+          </div>
+        </div>
       )}
     </div>
     </M3eTheme>

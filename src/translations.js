@@ -9,7 +9,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Chat with MeowGPT",
     welcomeSubtitle: "Ask me anything and I'll respond with meows! 🐾",
+    tooManyMessages: "Too many messages! Please slow down. 🐾",
     messagePlaceholder: "Message MeowGPT...",
+    messagePlaceholderShort: "Message...",
     temporaryChatNotice: "messages are not saved",
     attachFile: "Attach file",
     attachImage: "Image",
@@ -110,6 +112,7 @@ export const translations = {
     explore: "Explore",
     gpts: "GPTs",
     nextYearPredictor: "Next year predictor",
+    calculator: "Calculator",
 
     // Year Predictor
     enterYear: "Enter the current year to predict the next year",
@@ -122,6 +125,34 @@ export const translations = {
     loadingMessage3: "Analyzing spacetime vortexes",
     errorMessage:
       "Error: Please enter the current year to predict the next year.",
+
+    // Calculator
+    calculatorInputLabel: "Enter an expression",
+    calculatorPlaceholder: "2 + 2 * (3 + 1)",
+    calculate: "Calculate",
+    result: "Result",
+    calculatorReady: "Ready",
+    calculatorThinking: "Thinking extremely hard...",
+    calculatorLocked: "Answer locked",
+    calculatorPaywallTitle: "Unlock Calculator GPT",
+    calculatorPaywallSubtitle: "Subscribe to reveal this premium calculation.",
+    calculatorTierBasic: "Basic",
+    calculatorTierBasicPrice: "$4.99/mo",
+    calculatorTierPlus: "Plus",
+    calculatorTierPlusPrice: "$14.99/mo",
+    calculatorTierPro: "Pro",
+    calculatorTierProPrice: "$49.99/mo",
+    calculatorError: "Enter a valid expression.",
+    heightCounter: "Height counter",
+    heightCounterQuestion: "What is your height?",
+    heightCounterPlaceholder: "e.g. 180 cm",
+    heightCounterCheck: "Measure",
+    heightCounterChecking: "Measuring...",
+    heightCounterResult: "Your height",
+    heightCounterThinking: "Measuring your height...",
+    heightCounterError: "Please enter your height.",
+    heightCounterLowMessage: "Small but mighty —",
+    heightCounterHighMessage: "Sky-high —",
 
     // Account Menu
     logOut: "Log out",
@@ -150,7 +181,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Чат с MeowGPT",
     welcomeSubtitle: "Спрашивайте что угодно, и я отвечу мяуканьем! 🐾",
+    tooManyMessages: "Слишком много сообщений! Пожалуйста, помедленнее. 🐾",
     messagePlaceholder: "Сообщение для MeowGPT...",
+    messagePlaceholderShort: "Сообщение...",
     temporaryChatNotice: "сообщения не сохраняются",
     attachFile: "Прикрепить файл",
     attachImage: "Изображение",
@@ -251,6 +284,7 @@ export const translations = {
     explore: "Explore",
     gpts: "GPT",
     nextYearPredictor: "Предсказатель следующего года",
+    calculator: "Калькулятор",
 
     // Year Predictor
     enterYear: "Введите текущий год для предсказания следующего года",
@@ -263,6 +297,34 @@ export const translations = {
     loadingMessage3: "Анализирую пространственно-временные вихри",
     errorMessage:
       "Ошибка: Пожалуйста, введите текущий год для предсказания следующего года.",
+
+    // Calculator
+    calculatorInputLabel: "Введите выражение",
+    calculatorPlaceholder: "2 + 2 * (3 + 1)",
+    calculate: "Посчитать",
+    result: "Результат",
+    calculatorReady: "Готов",
+    calculatorThinking: "Очень серьёзно думаю...",
+    calculatorLocked: "Ответ заблокирован",
+    calculatorPaywallTitle: "Разблокировать Calculator GPT",
+    calculatorPaywallSubtitle: "Оформите подписку, чтобы увидеть премиум-вычисление.",
+    calculatorTierBasic: "Базовый",
+    calculatorTierBasicPrice: "$4.99/мес",
+    calculatorTierPlus: "Плюс",
+    calculatorTierPlusPrice: "$14.99/мес",
+    calculatorTierPro: "Про",
+    calculatorTierProPrice: "$49.99/мес",
+    calculatorError: "Введите корректное выражение.",
+    heightCounter: "Счетчик роста",
+    heightCounterQuestion: "Какой у вас рост?",
+    heightCounterPlaceholder: "например 180 см",
+    heightCounterCheck: "Считать",
+    heightCounterChecking: "Считаем...",
+    heightCounterResult: "Ваш рост",
+    heightCounterThinking: "Измеряем рост...",
+    heightCounterError: "Введите рост.",
+    heightCounterLowMessage: "Мал, да удал —",
+    heightCounterHighMessage: "Ого, высокий рост —",
 
     // Account Menu
     logOut: "Выйти",
@@ -291,7 +353,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Чат з MeowGPT",
     welcomeSubtitle: "Запитайте що завгодно, і я відповім нявканням! 🐾",
+    tooManyMessages: "Забагато повідомлень! Будь ласка, повільніше. 🐾",
     messagePlaceholder: "Повідомлення для MeowGPT...",
+    messagePlaceholderShort: "Повідомлення...",
     temporaryChatNotice: "повідомлення не зберігаються",
     attachFile: "Прикріпити файл",
     attachImage: "Зображення",
@@ -432,7 +496,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Chat s MeowGPT",
     welcomeSubtitle: "Spýtajte sa na čokoľvek a odpoviem mňauknutím! 🐾",
+    tooManyMessages: "Príliš veľa správ! Prosím, spomaľte. 🐾",
     messagePlaceholder: "Správa pre MeowGPT...",
+    messagePlaceholderShort: "Správa...",
     temporaryChatNotice: "správy sa neukladajú",
     attachFile: "Priložiť súbor",
     attachImage: "Obrázok",
@@ -573,7 +639,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Chat z MeowGPT",
     welcomeSubtitle: "Zapytaj o cokolwiek, a odpowiem miauczeniem! 🐾",
+    tooManyMessages: "Za dużo wiadomości! Proszę zwolnić. 🐾",
     messagePlaceholder: "Wiadomość do MeowGPT...",
+    messagePlaceholderShort: "Wiadomość...",
     temporaryChatNotice: "wiadomości nie są zapisywane",
     attachFile: "Dołącz plik",
     attachImage: "Obraz",
@@ -714,7 +782,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Plerg Whippna MeowGPT",
     welcomeSubtitle: "Yibs Sul Duh! Plerg mibu whippna mrow! 🐾",
+    tooManyMessages: "Blarfy plerg yibs! Slow down plerg. 🐾",
     messagePlaceholder: "Blarfy nooboo MeowGPT...",
+    messagePlaceholderShort: "Blarfy...",
     temporaryChatNotice: "plerg no save nooboo",
     attachFile: "Blarfy file",
     attachImage: "Yibs image",
@@ -854,7 +924,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "Meow meow MeowGPT",
     welcomeSubtitle: "Meow meow meow meow! Meow meow meow mrow! 🐾",
+    tooManyMessages: "Meow meow meow! Meow. 🐾",
     messagePlaceholder: "Meow meow MeowGPT...",
+    messagePlaceholderShort: "Meow...",
     temporaryChatNotice: "meow meow no save",
     attachFile: "Meow file",
     attachImage: "Meow image",
@@ -992,7 +1064,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "SERVING CUNT WITH MEOWGPT 💜",
     welcomeSubtitle: "QUEEN BADDIE ATE AND LEFT NO CRUMBS 💜",
+    tooManyMessages: "Too many texts bestie! Slow down~ 🐾",
     messagePlaceholder: "DIVA SPILL THE TEA 💜",
+    messagePlaceholderShort: "SPILL 💜",
     temporaryChatNotice: "NO RECEIPTS SAVED 💜",
     attachFile: "ATTACH THE TEA 💜",
     attachImage: "VISUAL 💜",
@@ -1131,7 +1205,9 @@ export const translations = {
     // Chat Interface
     welcomeTitle: "hawk tuah MeowGPT 🥀",
     welcomeSubtitle: "yo dih sybau gurt hawk tuah 🥀",
+    tooManyMessages: "Bro is spamming, touch grass fr. 🐾",
     messagePlaceholder: "vro ts MeowGPT 🥀",
+    messagePlaceholderShort: "yap 🥀",
     temporaryChatNotice: "no saves rn vro 🥀",
     attachFile: "attach gurt file 🥀",
     attachImage: "visual gurt 🥀",
