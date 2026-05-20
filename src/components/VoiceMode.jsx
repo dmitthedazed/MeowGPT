@@ -75,6 +75,10 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
       osc2.stop(now + duration);
 
       setTimeout(() => {
+        osc1.disconnect();
+        osc2.disconnect();
+        filter.disconnect();
+        gain.disconnect();
         isSpeakingRef.current = false;
         startListening();
       }, (duration + 0.1) * 1000);
@@ -88,6 +92,7 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
   function startListening() {
     if (isSpeakingRef.current) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setStatus('unsupported'); return; }
     const recognition = new SR();
     recognition.lang = LANG_MAP[language] || "en-US";
     recognition.interimResults = false;
@@ -99,6 +104,7 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
         startListening();
         return;
       }
+      isSpeakingRef.current = true;
       setStatus("processing");
       const msg = { id: Date.now(), content: transcript, sender: "user", timestamp: Date.now() };
       onSendMessage(msg, { onAiResponse: playMeow });
@@ -109,6 +115,8 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
         setStatus("error");
       } else if (event.error === "no-speech") {
         startListening();
+      } else {
+        if (!isSpeakingRef.current) startListening();
       }
     };
 
