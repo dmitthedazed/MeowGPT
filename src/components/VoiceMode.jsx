@@ -2,29 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { useTranslation } from "../translations";
 
-const LANG_MAP = {
-  en: "en-US",
-  ru: "ru-RU",
-  uk: "uk-UA",
-  sk: "sk-SK",
-  pl: "pl-PL",
-  sim: "en-US",
-  meow: "ru-RU",
-  twink: "en-US",
-  brainrot: "en-US",
-};
+const MEOW_VARIANTS = [
+  "meow", "meow meow", "mrrrow", "purrr", "mew", "MEOW", "meow?", "meow!",
+  "mrow mrow", "*purrs*", "meeeow", "nya", "mraow", "prrrp", "meow meow meow",
+  "*tail flick* meow", "...meow", "MEOWWW", "mrrp?", "purr purr",
+];
 
-export default function VoiceMode({ language, currentChat, isTemporaryMode, onSendMessage, onClose }) {
+export default function VoiceMode({ language, onSendMessage, onClose }) {
   const { t } = useTranslation(language);
   const [status, setStatus] = useState("listening");
-
-  const recognitionRef = useRef(null);
-  const isSpeakingRef = useRef(false);
+  const timerRef = useRef(null);
   const audioCtxRef = useRef(null);
+  const closedRef = useRef(false);
 
-  function playMeow() {
-    isSpeakingRef.current = true;
-    setStatus("speaking");
+  function playMeow(onEnd) {
     try {
       if (!audioCtxRef.current) {
         audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -74,97 +65,69 @@ export default function VoiceMode({ language, currentChat, isTemporaryMode, onSe
       osc1.stop(now + duration);
       osc2.stop(now + duration);
 
-      setTimeout(() => {
+      timerRef.current = setTimeout(() => {
         osc1.disconnect();
         osc2.disconnect();
         filter.disconnect();
         gain.disconnect();
-        isSpeakingRef.current = false;
-        startListening();
+        onEnd?.();
       }, (duration + 0.1) * 1000);
-    } catch (e) {
-      console.log("audio unavailable");
-      isSpeakingRef.current = false;
-      startListening();
+    } catch {
+      onEnd?.();
     }
   }
 
-  function startListening() {
-    if (isSpeakingRef.current) return;
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { setStatus('unsupported'); return; }
-    const recognition = new SR();
-    recognition.lang = LANG_MAP[language] || "en-US";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript.trim();
-      if (!transcript) {
-        startListening();
-        return;
-      }
-      isSpeakingRef.current = true;
-      setStatus("processing");
-      const msg = { id: Date.now(), content: transcript, sender: "user", timestamp: Date.now() };
-      onSendMessage(msg, { onAiResponse: playMeow });
-    };
-
-    recognition.onerror = (event) => {
-      if (event.error === "not-allowed") {
-        setStatus("error");
-      } else if (event.error === "no-speech") {
-        startListening();
-      } else {
-        if (!isSpeakingRef.current) startListening();
-      }
-    };
-
-    recognition.onend = () => {
-      if (!isSpeakingRef.current) {
-        startListening();
-      }
-    };
-
-    recognitionRef.current = recognition;
+  function startCycle() {
+    if (closedRef.current) return;
     setStatus("listening");
-    recognition.start();
-  }
+    const listenDuration = 2500 + Math.random() * 2500;
 
-  function handleClose() {
-    if (recognitionRef.current) {
-      recognitionRef.current.abort();
-      recognitionRef.current = null;
-    }
-    if (audioCtxRef.current) {
-      audioCtxRef.current.close().catch(() => {});
-      audioCtxRef.current = null;
-    }
-    isSpeakingRef.current = false;
-    onClose();
+    timerRef.current = setTimeout(() => {
+      if (closedRef.current) return;
+      setStatus("processing");
+
+      timerRef.current = setTimeout(() => {
+        if (closedRef.current) return;
+        setStatus("speaking");
+
+        const meow = MEOW_VARIANTS[Math.floor(Math.random() * MEOW_VARIANTS.length)];
+        const userMsg = {
+          id: Date.now(),
+          content: "🎤 " + meow,
+          sender: "user",
+          timestamp: Date.now(),
+        };
+        onSendMessage(userMsg);
+
+        playMeow(() => {
+          timerRef.current = setTimeout(() => startCycle(), 600);
+        });
+      }, 700 + Math.random() * 400);
+    }, listenDuration);
   }
 
   useEffect(() => {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-      setStatus("unsupported");
-      return;
-    }
-    startListening();
-
+    startCycle();
     return () => {
-      if (recognitionRef.current) recognitionRef.current.abort();
-      if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {});
+      closedRef.current = true;
+      clearTimeout(timerRef.current);
+      audioCtxRef.current?.close().catch(() => {});
     };
   }, []);
+
+  function handleClose() {
+    closedRef.current = true;
+    clearTimeout(timerRef.current);
+    audioCtxRef.current?.close().catch(() => {});
+    audioCtxRef.current = null;
+    onClose();
+  }
 
   const statusText = {
     listening: t("voiceListening"),
     processing: t("voiceProcessing"),
     speaking: t("voiceSpeaking"),
-    error: t("voiceNotSupported"),
-    unsupported: t("voiceNotSupported"),
-  }[status];
+  }[status] ?? t("voiceListening");
 
   return (
     <div

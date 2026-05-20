@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import ChatInterface from "./components/ChatInterface";
@@ -298,6 +298,10 @@ function App() {
   // Chat interaction states
   const [deletingChatId, setDeletingChatId] = useState(null); // id of chat being animated out
   const [isVoiceModeOpen, setIsVoiceModeOpen] = useState(false);
+
+  // Message queue — holds pending messages while AI is responding
+  const messageQueueRef = useRef([]);
+  const isAiTypingRef = useRef(false);
 
   // Year Predictor modal state
   const [isYearPredictorOpen, setIsYearPredictorOpen] = useState(false);
@@ -771,7 +775,16 @@ function App() {
     }
   };
 
+  // Updated every render so setTimeout callbacks always call the latest version
+  const processQueueRef = useRef(null);
+
   const handleSendMessage = (message, { onAiResponse } = {}) => {
+    // Queue the message if AI is already responding
+    if (isAiTypingRef.current) {
+      messageQueueRef.current.push({ message, options: { onAiResponse } });
+      return;
+    }
+
     const messageWithTimestamp = {
       ...message,
       timestamp: Date.now(),
@@ -794,6 +807,7 @@ function App() {
 
       const aiResponseContent = generateRandomMeowResponse(language);
       const typingDuration = calculateTypingDuration(aiResponseContent);
+      isAiTypingRef.current = true;
       setIsAiTyping(true);
 
       setTimeout(() => {
@@ -807,8 +821,10 @@ function App() {
           ...prev,
           messages: [...prev.messages, aiResponse],
         }));
+        isAiTypingRef.current = false;
         setIsAiTyping(false);
         onAiResponse?.(aiResponseContent);
+        processQueueRef.current?.();
       }, typingDuration);
       return;
     }
@@ -835,6 +851,7 @@ function App() {
       const typingDuration = calculateTypingDuration(aiResponseContent);
 
       // Show typing indicator
+      isAiTypingRef.current = true;
       setIsAiTyping(true);
 
       // Add AI response after calculated delay
@@ -857,8 +874,10 @@ function App() {
         setChats((prevChats) =>
           prevChats.map((chat) => (chat.id === newChat.id ? finalChat : chat))
         );
+        isAiTypingRef.current = false;
         setIsAiTyping(false);
         onAiResponse?.(aiResponseContent);
+        processQueueRef.current?.();
       }, typingDuration);
       return;
     }
@@ -886,6 +905,7 @@ function App() {
     const typingDuration = calculateTypingDuration(aiResponseContent);
 
     // Show typing indicator
+    isAiTypingRef.current = true;
     setIsAiTyping(true);
 
     // Add AI response after a delay
@@ -908,9 +928,18 @@ function App() {
       setChats((prevChats) =>
         prevChats.map((chat) => (chat.id === currentChat.id ? finalChat : chat))
       );
+      isAiTypingRef.current = false;
       setIsAiTyping(false);
       onAiResponse?.(aiResponseContent);
+      processQueueRef.current?.();
     }, typingDuration);
+  };
+
+  // Always points to latest handleSendMessage to avoid stale closure in queue processing
+  processQueueRef.current = () => {
+    if (messageQueueRef.current.length === 0) return;
+    const next = messageQueueRef.current.shift();
+    handleSendMessage(next.message, next.options);
   };
 
   // Calculate typing duration based on message content
